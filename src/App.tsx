@@ -1,7 +1,12 @@
 import { Outlet } from "react-router-dom";
+import HomePage from "./pages/home";
 
 const App = () => {
-  return <div>{/* <Outlet/> */}</div>;
+  return (
+    <div className="flex justify-center">
+      <HomePage />
+    </div>
+  );
 };
 
 export default App;
