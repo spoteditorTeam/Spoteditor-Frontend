@@ -1,13 +1,13 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
+import { createBrowserRouter } from 'react-router-dom';
+import App from './App';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />, // 레이아웃 컴포넌트
     children: [
       {
-        path: "",
+        path: '',
         //   element: <Home />,
       },
     ],
