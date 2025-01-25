@@ -6,8 +6,12 @@ const HomePage = () => {
     <div className="w-[1440px] h-screen bg-red-50">
       <MainHeader />
       <HomePageIntroContent />
-
-      <div className="w-full h-[2720px] mt-16 mb-36 bg-red-700"></div>
+      <div className="flex flex-col w-full h-[2720px] mt-16 mb-36 px-50px bg-red-700">
+        <div className="w-full h-[603px] bg-white mb-20"></div>
+        <div className="w-full h-[234px] bg-white mb-20 py-5"></div>
+        <div className="w-full h-[1524px] bg-white"></div>
+      </div>
+      <footer className=""></footer>
     </div>
   );
 };
