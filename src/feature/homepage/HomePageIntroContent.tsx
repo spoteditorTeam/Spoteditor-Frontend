@@ -10,8 +10,9 @@ const HomePageIntroContent = () => {
     "찐하게 소비한 하루",
     "친구랑 다양하고 알차게 보낸 하루",
   ];
+
   return (
-    <div className="flex py-10 h-[325px] gap-7">
+    <div className="w-full flex pt-24 py-10 h-[387px] gap-7 bg-black px-50px">
       <div className="w-[655px] flex flex-col gap-9">
         <div className="font-pretendard text-32 text-white font-500">
           반가워요!

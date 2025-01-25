@@ -4,10 +4,10 @@ import HomePageIntroContent from "../../feature/homepage/HomePageIntroContent";
 const HomePage = () => {
   return (
     <div className="w-[1440px] h-screen bg-red-50">
-      <div className="w-full h-[388px] bg-black px-50px">
-        <MainHeader />
-        <HomePageIntroContent />
-      </div>
+      <MainHeader />
+      <HomePageIntroContent />
+
+      <div className="w-full h-[2720px] mt-16 mb-36 bg-red-700"></div>
     </div>
   );
 };

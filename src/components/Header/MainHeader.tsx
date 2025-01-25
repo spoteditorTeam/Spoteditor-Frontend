@@ -5,7 +5,7 @@ import signup from "../../assets/homepage/signup.png";
 
 const MainHeader = () => {
   return (
-    <header className="flex justify-between py-5 ">
+    <header className="fixed top-0 left-7.1 w-[1440px] bg-black z-50 flex justify-between py-5 px-50px">
       <img src={logo} alt="logo" />
       <div className="flex gap-12 w-[222px]">
         <img src={search} alt="search_logo" />
