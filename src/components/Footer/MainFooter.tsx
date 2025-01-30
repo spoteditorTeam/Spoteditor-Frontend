@@ -13,8 +13,8 @@ const MainFooter = () => {
       </div>
       <div className="h-6 flex justify-between font-pretendard text-16 font-normal text-[#575A63] mt-6">
         <span>©2025 Spoteditor. All Rights are reserved️</span>
-        <div className="w-[285px] flex justify-between">
-          <span className="mr-3">Privacy Policy</span>
+        <div className="w-[265px] flex justify-between">
+          <span>Privacy Policy</span>
           Terms & Conditions
         </div>
       </div>
