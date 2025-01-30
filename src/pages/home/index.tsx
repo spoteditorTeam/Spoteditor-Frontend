@@ -1,3 +1,4 @@
+import MainFooter from "../../components/Footer/MainFooter";
 import MainHeader from "../../components/Header/MainHeader";
 import HomePageIntroContent from "../../feature/homepage/HomePageIntroContent";
 
@@ -11,7 +12,7 @@ const HomePage = () => {
         <div className="w-full h-[234px] bg-white mb-20 py-5"></div>
         <div className="w-full h-[1524px] bg-white"></div>
       </div>
-      <footer className="w-full h-[306px] px-50px pb-14 pt-36 bg-black"></footer>
+      <MainFooter />
     </div>
   );
 };

@@ -2,3 +2,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: "UntitledSansLight";
+  src: url("../fonts/TestUntitledSans-Light.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}

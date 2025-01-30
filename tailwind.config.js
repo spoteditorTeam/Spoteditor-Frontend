@@ -6,7 +6,8 @@ module.exports = {
         "50px": "50px",
       },
       fontFamily: {
-        pretendard: ["Pretendard", "sans-serif"], // Pretendard 추가
+        pretendard: ["Pretendard", "sans-serif"],
+        untitled: ["UntitledSansLight", "sans-serif"],
       },
       fontSize: {
         32: "32px",
