@@ -1,6 +1,7 @@
 import MainFooter from "../../components/Footer/MainFooter";
 import MainHeader from "../../components/Header/MainHeader";
 import HomePageIntroContent from "../../feature/homepage/HomePageIntroContent";
+import SortByLog from "../../feature/homepage/SortByLog";
 import SortByPopularity from "../../feature/homepage/SortByPopularity";
 import YouCanBeSpecialEditor from "../../feature/homepage/YouCanBeSpecialEditor";
 
@@ -12,7 +13,7 @@ const HomePage = () => {
       <div className="flex flex-col w-full h-[2720px] mt-16 px-50px bg-white">
         <SortByPopularity />
         <YouCanBeSpecialEditor />
-        <div className="w-full h-[1524px] bg-red-400 "></div>
+        <SortByLog />
       </div>
       <MainFooter />
     </div>
