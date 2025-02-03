@@ -1,5 +1,4 @@
 import MainFooter from '../../components/Footer/MainFooter';
-import MainHeader from '../../components/Header/MainHeader';
 import HomePageIntroContent from '../../feature/homepage/HomePageIntroContent';
 import SortByLog from '../../feature/homepage/SortByLog';
 import SortByPopularity from '../../feature/homepage/SortByPopularity';

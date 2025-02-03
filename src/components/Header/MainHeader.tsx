@@ -8,7 +8,7 @@ import LoginModal from '../Login/LoginModal';
 const MainHeader = () => {
   const { openLoginModal } = useLoginMoalStore();
   return (
-    <header className="fixed top-0 left-7.1 w-[1440px] bg-black z-50 flex justify-between py-5 px-50px">
+    <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[1440px] bg-black z-50 flex justify-between py-5 px-12">
       <img src={logo} alt="logo" />
       <div className="flex gap-12 w-[222px]">
         <img src={search} alt="search_logo" />
