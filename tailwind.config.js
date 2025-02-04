@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       screens: {
         mobile: { max: '768px' }, // 480px ~ 768px
-        web: '769px', // 769px 이상
+        web: '769px', // 769px 이상,
       },
       spacing: {
         '50px': '50px',

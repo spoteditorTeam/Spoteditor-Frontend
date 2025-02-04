@@ -4,14 +4,17 @@ import global from '../../assets/homepage/global.png';
 import signup from '../../assets/homepage/signup.png';
 import { useLoginMoalStore } from '@/store/loginStore';
 import LoginModal from '../Login/LoginModal';
+import { useSearchStore } from '@/store/searchStore';
 
 const MainHeader = () => {
   const { openLoginModal } = useLoginMoalStore();
+  const { toggleSearchBar } = useSearchStore();
+
   return (
     <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[1440px] bg-black z-50 flex justify-between py-5 px-12">
       <img src={logo} alt="logo" />
       <div className="flex gap-12 w-[222px]">
-        <img src={search} alt="search_logo" />
+        <img onClick={toggleSearchBar} src={search} alt="search_logo" />
         <img src={global} alt="global_logo" />
         <img
           onClick={openLoginModal}
