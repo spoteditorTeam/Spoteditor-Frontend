@@ -1,24 +1,19 @@
-import UserIcon from '@/components/Icons/UserIcon';
-import global from '@/assets/homepage/global.png';
+import { BellIcon } from 'lucide-react';
+import UserProfileButton from './UserProfileButton';
 import { useLoginMoalStore } from '@/store/loginStore';
-import BellIcon from '@/components/Icons/BellIconIcon';
 
 function LoginStatusButtons() {
   const { openLoginModal } = useLoginMoalStore();
 
   return (
     <>
-      <button>
-        <img src={global} alt="global_logo" className="object-contain w-[20px] h-[20px]" />
-      </button>
-      <button onClick={openLoginModal} className="font-bold text-14">
-        회원가입/로그인
-      </button>
+      {/* 추후 로그인 상태에 따라 버튼이 다르게 보임 */}
       <button>
         <BellIcon />
       </button>
-      <button>
-        <UserIcon />
+      <UserProfileButton />
+      <button onClick={openLoginModal} className="font-bold text-14">
+        회원가입/로그인
       </button>
     </>
   );
