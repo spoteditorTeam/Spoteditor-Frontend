@@ -1,12 +1,16 @@
 import { cn } from '@/lib/utils';
 
 interface SectionHeaderProps {
-  labelText: string;
+  labelText?: string;
   queryText: string;
   bottomLine?: boolean;
 }
 
-function SectionHeader({ labelText, queryText, bottomLine = false }: SectionHeaderProps) {
+function SectionHeader({
+  labelText = 'Sort by',
+  queryText,
+  bottomLine = false,
+}: SectionHeaderProps) {
   return (
     <section
       className={cn(
