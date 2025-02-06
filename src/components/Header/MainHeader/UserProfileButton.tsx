@@ -54,10 +54,12 @@ function UserProfileButton() {
           </Link>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center justify-start gap-2 text-14">
-          <SettingIcon />
-          설정
-        </DropdownMenuItem>
+        <Link to="/profile-setting">
+          <DropdownMenuItem className="flex items-center justify-start gap-2 text-14">
+            <SettingIcon />
+            설정
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="flex items-center justify-start gap-2 text-14">
           <HeadPhoneIcon />

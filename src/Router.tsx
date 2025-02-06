@@ -6,6 +6,7 @@ import Profile from './pages/profile';
 import SavedSpaces from './pages/profile/saved-spaces';
 import SavedLogs from './pages/profile/saved-logs';
 import MyLogs from './pages/profile/my-logs';
+import ProfileSetting from './pages/profile-setting';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
             element: <SavedSpaces />,
           },
         ],
+      },
+      {
+        path: 'profile-setting',
+        element: <ProfileSetting />,
       },
     ],
   },
