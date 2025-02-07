@@ -2,6 +2,7 @@ import VerifiedLabelIcon from '@/components/Icons/VerifiedLabelIcon';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import FollowButton from './FollowButton';
 
 function ProfileHeader() {
   return (
@@ -16,17 +17,11 @@ function ProfileHeader() {
         <VerifiedLabelIcon className="w-[22px] h-[21px] mobile:w-[16.075px] mobile:h-[15.921px]" />
       </section>
       <section className="flex gap-[15px] py-1 text-18 mobile:text-16">
-        <div className="flex space-x-1">
-          <p>팔로워</p>
-          <span className="font-bold">321</span>
-        </div>
+        <FollowButton label="팔로워" count={321} />
         <div className="flex items-center">
           <Separator orientation="vertical" className="h-3 bg-primarySlate" />
         </div>
-        <div className="flex space-x-1">
-          <p>팔로잉</p>
-          <span className="font-bold">123</span>
-        </div>
+        <FollowButton label="팔로잉" count={321} />
       </section>
       <section className="flex my-[7px] flex-col web:gap-[15px] mobile:gap-[10px] items-center text-primarySlate text-14 mobile:text-12">
         <h3 className="font-medium text-center ">
