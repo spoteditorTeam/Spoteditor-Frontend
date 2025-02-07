@@ -10,7 +10,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import SettingIcon from '@/components/Icons/SettingIcon';
 import HeadPhoneIcon from '@/components/Icons/HeadPhoneIcon';
-import LogoutIcon from '@/components/Icons/LogoutIcon';
 import VerifiedLabelIcon from '@/components/Icons/VerifiedLabelIcon';
 import { Link } from 'react-router-dom';
 import LogoutButton from '@/feature/profile/LogoutButton';
@@ -47,13 +46,13 @@ function UserProfileButton() {
           </span>
           {!isTruncated && <VerifiedLabelIcon />}
         </DropdownMenuItem>
-        <div className="px-4 py-5">
-          <Link to="/profile/12/my-logs">
+        <Link to="/profile/12/my-logs">
+          <DropdownMenuItem className="px-4 py-5 focus:bg-white">
             <Button className="w-full h-full rounded-[60px] bg-[#F7F7F7] text-14 font-medium hover:bg-[#F7F7F7]">
               프로필 보기
             </Button>
-          </Link>
-        </div>
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <Link to="/profile-setting">
           <DropdownMenuItem className="flex items-center justify-start gap-2 text-14">
@@ -67,7 +66,7 @@ function UserProfileButton() {
           고객센터
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center justify-start gap-2 text-14">
+        <DropdownMenuItem asChild className="flex items-center justify-start gap-2 text-14">
           <LogoutButton />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
