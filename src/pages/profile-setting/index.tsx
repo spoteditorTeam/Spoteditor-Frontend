@@ -2,7 +2,8 @@ import PenIcon from '@/components/Icons/PenIcon';
 import PageContentLayout from '@/components/Layout/PageContentLayout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import DeleteAccountConfirm from '@/feature/profile-setting/DeleteAccountConfirm';
+import DeleteAccountConfirmButton from '@/feature/profile-setting/DeleteAccountConfirmButton';
+import SaveProfileButton from '@/feature/profile-setting/SaveProfileButton';
 
 function ProfileSetting() {
   return (
@@ -57,7 +58,7 @@ function ProfileSetting() {
           <p className="mb-4 font-bold text-18">계정 설정</p>
           <div className="flex items-center justify-between py-[5px]">
             <p className="form-label">계정 삭제</p>
-            <DeleteAccountConfirm text="삭제하기" />
+            <DeleteAccountConfirmButton />
           </div>
           <p className="text-primarySlate font-12 leading-[18px] font-medium">
             계정 삭제시 등록된 로그는 삭제되지 않습니다. <br /> 로그를 삭제하시려면 개별 삭제를
@@ -68,7 +69,7 @@ function ProfileSetting() {
           <Button variant="outline" className="rounded-[6px] w-[120px] h-[42px]">
             취소
           </Button>
-          <Button className="rounded-[6px] w-[120px] h-[42px]">저장</Button>
+          <SaveProfileButton />
         </section>
       </div>
     </PageContentLayout>

@@ -1,31 +1,23 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { DialogClose } from '@radix-ui/react-dialog';
 
-interface DeleteAccountConfirmProps {
-  text: string;
-}
-
-function DeleteAccountConfirm({ text }: DeleteAccountConfirmProps) {
+function SaveProfileButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="text-red-600 text-12">{text}</button>
+        <Button className="rounded-[6px] w-[120px] h-[42px]">저장</Button>
       </DialogTrigger>
       <DialogContent className="web:w-[390px] mobile:w-[300px] p-6">
-        <DialogTitle className="w-full mb-2 section-heading">계정삭제</DialogTitle>
+        <DialogTitle className="w-full mb-2 section-heading">저장이 완료 되었습니다.</DialogTitle>
         <DialogDescription className="text-12 text-[#6D727D] text-start w-full mb-4">
-          계정 삭제시 등록된 로그는 삭제되지 않습니다.
-          <br />
-          로그를 삭제하시려면 개별 삭제를 해주세요.
-          <br />
-          이외 정보는 영구삭제 됩니다.
+          수정된 프로필 정보가 저장되었습니다.
         </DialogDescription>
         <DialogClose asChild className="flex justify-end w-full">
           <div className="space-x-[15px]">
@@ -40,4 +32,4 @@ function DeleteAccountConfirm({ text }: DeleteAccountConfirmProps) {
   );
 }
 
-export default DeleteAccountConfirm;
+export default SaveProfileButton;
