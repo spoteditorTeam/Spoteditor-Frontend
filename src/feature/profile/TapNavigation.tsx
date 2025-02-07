@@ -5,7 +5,7 @@ import TabNavButton from './TabNavButton';
 function TapNavigation() {
   return (
     <nav className="w-full flex web:justify-start mobile:justify-center items-center web:gap-[30px] mobile:gap-[21px] web:mb-[30px] mobile:mb-[20px]">
-      <TabNavButton params="logs" navText="나의 로그" />
+      <TabNavButton params="my-logs" navText="나의 로그" />
       <TabNavButton params="saved-logs" navText="저장된 공간" />
       <TabNavButton params="saved-spaces" navText="저장된 로그" />
       <div>

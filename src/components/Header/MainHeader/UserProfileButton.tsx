@@ -47,7 +47,7 @@ function UserProfileButton() {
           {!isTruncated && <VerifiedLabelIcon />}
         </DropdownMenuItem>
         <div className="px-4 py-5">
-          <Link to="/profile/12">
+          <Link to="/profile/12/my-logs">
             <Button className="w-full h-full rounded-[60px] bg-[#F7F7F7] text-14 font-medium hover:bg-[#F7F7F7]">
               프로필 보기
             </Button>
