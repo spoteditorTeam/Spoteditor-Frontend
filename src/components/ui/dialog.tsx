@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import XIcon from '../Icons/XIcon';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -59,7 +59,7 @@ const DialogContent = React.forwardRef<
               followCloseBtnPosition ? 'top-[9px] right-[22px]' : 'top-4 right-4'
             )}
           >
-            <X className="w-[32px] h-[32px]" />
+            <XIcon className="w-[34px] h-[34px]" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}

@@ -13,6 +13,7 @@ import HeadPhoneIcon from '@/components/Icons/HeadPhoneIcon';
 import LogoutIcon from '@/components/Icons/LogoutIcon';
 import VerifiedLabelIcon from '@/components/Icons/VerifiedLabelIcon';
 import { Link } from 'react-router-dom';
+import LogoutButton from '@/feature/profile/LogoutButton';
 
 function UserProfileButton() {
   const textRef = useRef<HTMLSpanElement>(null);
@@ -67,8 +68,7 @@ function UserProfileButton() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="flex items-center justify-start gap-2 text-14">
-          <LogoutIcon />
-          로그아웃
+          <LogoutButton />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="flex items-center justify-start px-4 py-[10px] gap-[15px] text-[#81858F]">

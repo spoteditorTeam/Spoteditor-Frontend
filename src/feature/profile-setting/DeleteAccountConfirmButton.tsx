@@ -14,7 +14,7 @@ function DeleteAccountConfirmButton() {
       <DialogTrigger asChild>
         <button className="text-red-600 text-12">삭제하기</button>
       </DialogTrigger>
-      <DialogContent className="web:w-[390px] mobile:w-[300px] p-6">
+      <DialogContent hideCloseButton className="web:w-[390px] mobile:w-[300px] p-6">
         <DialogTitle className="w-full mb-2 section-heading">계정삭제</DialogTitle>
         <DialogDescription className="text-12 text-[#6D727D] text-start w-full mb-4">
           계정 삭제시 등록된 로그는 삭제되지 않습니다.
