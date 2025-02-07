@@ -57,8 +57,7 @@ function ProfileSetting() {
           <p className="mb-4 font-bold text-18">계정 설정</p>
           <div className="flex items-center justify-between py-[5px]">
             <p className="form-label">계정 삭제</p>
-            <button className="text-red-600 text-12">삭제하기</button>
-            {/* <DeleteAccountConfirm /> */}
+            <DeleteAccountConfirm text="삭제하기" />
           </div>
           <p className="text-primarySlate font-12 leading-[18px] font-medium">
             계정 삭제시 등록된 로그는 삭제되지 않습니다. <br /> 로그를 삭제하시려면 개별 삭제를
