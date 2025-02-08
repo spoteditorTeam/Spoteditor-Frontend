@@ -1,4 +1,6 @@
 import BellIcon from '@/components/Icons/BellIconIcon';
+import XIcon from '@/components/Icons/XIcon';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import {
   Sheet,
   SheetClose,
@@ -7,6 +9,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+import { AvatarFallback } from '@radix-ui/react-avatar';
 
 function NotificationButton() {
   return (
@@ -23,14 +27,27 @@ function NotificationButton() {
             <XIcon className="w-[34px] h-[34px]" />
           </SheetClose>
         </SheetHeader>
+        {/* 알림이 없을 경우
+        <NotNotification /> */}
         <section>
           {Array.from({ length: 7 }).map((_, idx) => (
-            <article key={idx} className="w-full px-2.5 py-5 flex justify-start items-center">
-              <figure></figure>
-              <figcaption className="text-12">
+            <article
+              key={idx}
+              className={cn(
+                'w-full web:px-5 mobile:px-4 py-2.5 flex justify-start gap-3 items-center border-y border-white',
+                idx % 2 === 0 ? 'bg-[#EFF6FF]' : ''
+              )}
+            >
+              <figure>
+                <Avatar className="w-9 h-9">
+                  <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </figure>
+              <figcaption className="flex text-12 web:max-w-[342px]">
                 <span className="font-semibold">EDITOR_H</span>
                 <p>님이 팔로우 했습니다.</p>
-                <time>5분 전</time>
+                <time className="ml-1 text-12 font-medium text-[#81858F]">5분 전</time>
               </figcaption>
             </article>
           ))}
