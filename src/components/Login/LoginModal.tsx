@@ -8,13 +8,15 @@ import {
 import kakaoLoginButton from '@/assets/login/kakao-login-button.png';
 import { Button } from '../ui/button';
 import { useLoginMoalStore } from '@/store/loginStore';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 function LoginModal() {
   const { isOpen, closeLoginModal } = useLoginMoalStore();
   return (
     /* onClose(): 모달이 닫힐 때 호출되어 open을 false로 변경 */
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeLoginModal()} modal={true}>
-      <DialogContent>
+      <DialogPrimitive.Overlay className=" mobile:bg-white" />
+      <DialogContent className="mobile:top-0 mobile:left-[50%] mobile:w-[375px] mobile:translate-x-[-50%] mobile:translate-y-0">
         <div className="w-full h-[50px]" />
         <div className="flex w-[339px] flex-col items-center gap-[20px]">
           <DialogHeader>
@@ -34,6 +36,7 @@ function LoginModal() {
             의미하며, 서비스 이용을 위해 이메일과 이름, 프로필 이미지를 수집합니다.
           </p>
         </div>
+        <div className="mobile:fixed mobile:top-0 mobile:-z-10 mobile:w-screen mobile:h-screen mobile:bg-white" />
       </DialogContent>
     </Dialog>
   );

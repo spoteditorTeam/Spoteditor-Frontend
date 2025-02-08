@@ -15,3 +15,22 @@
     --radius: 0.5rem;
   }
 }
+
+.section-heading {
+  @apply text-18 font-bold leading-[27px] tracking-[-0.36px];
+}
+
+@layer components {
+  .form-section-heading {
+    @apply font-bold web:text-18 mobile:text-14;
+  }
+  .form-label {
+    @apply font-bold text-14;
+  }
+  .form-count {
+    @apply text-11 text-[#ABAFB5];
+  }
+  .form-field-border-bttom {
+    @apply border-b border-b-[#E5E6E8];
+  }
+}
