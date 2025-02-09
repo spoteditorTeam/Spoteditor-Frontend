@@ -1,4 +1,6 @@
 import MainFooter from '@/components/Footer/MainFooter';
+import ArrowIcon from '@/components/Icons/ArrowIcon';
+import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import CitySearchForm from '@/feature/homepage/CitySearchForm';
 import CourseButton from '@/feature/homepage/CourseButton';
@@ -21,11 +23,11 @@ const HomePage = () => {
           <div className="text-white text-md web:text-xl">
             반가워요! <br />
             Spoteditor는 "어디 가서 놀지?"
-            <br className="block web:hidden" />
+            <br className="web:hidden" />
             하고 고민하는
             <br className="hidden web:block" />
             여러분을 위해
-            <br className="block web:hidden" />
+            <br className="web:hidden" />
             만들어졌어요.
           </div>
 
@@ -70,9 +72,30 @@ const HomePage = () => {
         </Carousel>
 
         {/* 에디터 설명 */}
-        <div></div>
+        <div className="flex flex-col web:grid web:grid-cols-2 border-primary-100 my-20 web:gap-7 justify-center">
+          <div className="py-[18px] border-t border-b flex flex-col justify-center web:py-10">
+            <h3 className="text-md font-bold web:text-xl">
+              모든 유저가 <br className="web:hidden" />
+              특별한 "에디터"가 될 수 있어요!
+            </h3>
 
-        {/* <YouCanBeSpecialEditor /> */}
+            <div className="flex my-[15px]">
+              <Button className="rounded-full text-text-sm text-white py-2.5 px-6 web:text-text-md web:py-3">
+                나의 추천 코스 등록하기
+              </Button>
+              <div className="rounded-full w-10 h-10 bg-black flex justify-center items-center">
+                <ArrowIcon />
+              </div>
+            </div>
+          </div>
+
+          <p className="text-primary-300 text-text-sm web:border-t border-b border-primary-100 py-[18px] web:h-full flex items-center web:text-text-lg web:font-regular">
+            내가 좋아하는 숨은 명소와 맛집을 공유하고, 다른 유저들이 여러분의 루트를 참고하며 "내가
+            만든 코스로 누군가 즐거운 하루를 보냈구나!" 하는 느낌, 상상만 해도 행복하지 않나요? 🥰
+            다른 유저들이 참고할 수 있도록 여러분만의 코스를 나눠보세요. 여러분이 만들어준 코스는
+            많은 사람들에게 새로운 영감을 줄 거예요!
+          </p>
+        </div>
         {/* <SortByLog /> */}
       </div>
       <MainFooter />
