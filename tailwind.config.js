@@ -19,7 +19,7 @@ module.exports = {
           '32px',
           {
             lineHeight: '130%',
-            fontWeight: '400',
+            fontWeight: '500',
           },
         ],
         xl: [

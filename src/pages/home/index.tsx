@@ -1,9 +1,9 @@
 import MainFooter from '@/components/Footer/MainFooter';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import CitySearchForm from '@/feature/homepage/CitySearchForm';
 import CourseButton from '@/feature/homepage/CourseButton';
-import SortByLog from '@/feature/homepage/SortByLog';
-import SortByPopularity from '@/feature/homepage/SortByPopularity';
-import YouCanBeSpecialEditor from '@/feature/homepage/YouCanBeSpecialEditor';
+import PlaceCard from '@/feature/homepage/PlaceCard';
+
 const categories: string[] = [
   '로.맨.틱 데이트 코스!',
   '가성비 굿 하루',
@@ -48,10 +48,32 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col w-full h-[2720px] mt-16 px-50px bg-white">
-        <SortByPopularity />
-        <YouCanBeSpecialEditor />
-        <SortByLog />
+      <div className="flex flex-col px-4 web:px-[50px]">
+        {/* 제목 */}
+        <div className="flex justify-between items-end mt-10 mb-6">
+          <div>
+            <h3 className="text-primary-300 text-xl font-semibold">Sort by</h3>
+            <h3 className="text-primary-950 text-xl font-semibold">Popularity</h3>
+          </div>
+          <div className="hidden web:block">--------</div>
+        </div>
+
+        {/* 컨테이너 */}
+        <Carousel>
+          <CarouselContent className="gap-4 flex">
+            {[...Array(5)].map((_, idx) => (
+              <CarouselItem className="flex-none web:basis-1/4" key={idx}>
+                <PlaceCard />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+
+        {/* 에디터 설명 */}
+        <div></div>
+
+        {/* <YouCanBeSpecialEditor /> */}
+        {/* <SortByLog /> */}
       </div>
       <MainFooter />
     </div>
