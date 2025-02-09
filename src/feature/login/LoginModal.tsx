@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import kakaoLoginButton from '@/assets/login/kakao-login-button.png';
-import { Button } from '../ui/button';
+import { Button } from '../../components/ui/button';
 import { useLoginMoalStore } from '@/store/loginStore';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 

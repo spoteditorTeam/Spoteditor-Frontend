@@ -28,11 +28,15 @@ function SearchBar() {
     });
     toggleSearchBar();
   };
+
+  const onCloseOverlayClick = () => {
+    toggleSearchBar();
+  };
   return (
     <>
       {isOpen ? (
         <>
-          <nav className="web:px-[50px] z-20 py-[30px] fixed top-[60px] mobile:px-4 web:w-[1440px] mobile:w-full flex justify-center items-center bg-black">
+          <nav className="web:px-[50px] z-30 py-[30px] fixed top-[60px] mobile:px-4 web:w-[1440px] mobile:w-full flex justify-center items-center bg-black">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSearchSubmit)}
@@ -61,7 +65,10 @@ function SearchBar() {
               </form>
             </Form>
           </nav>
-          <main className="fixed z-10 w-full h-screen web:w-[1440px] mobile:max-w-[768px] bg-black/80" />
+          <main
+            onClick={onCloseOverlayClick}
+            className="fixed z-20 w-full h-screen web:w-[1440px] mobile:max-w-[768px] bg-black/80"
+          />
         </>
       ) : null}
     </>
