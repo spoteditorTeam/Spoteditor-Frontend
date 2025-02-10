@@ -1,9 +1,10 @@
-import MainFooter from '@/components/Footer/MainFooter';
 import ArrowIcon from '@/components/Icons/ArrowIcon';
+import MainPagination from '@/components/Pagination/MainPagination';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import CitySearchForm from '@/feature/homepage/CitySearchForm';
 import CourseButton from '@/feature/homepage/CourseButton';
+import LogCard from '@/feature/homepage/LogCard';
 import PlaceCard from '@/feature/homepage/PlaceCard';
 
 const categories: string[] = [
@@ -96,9 +97,29 @@ const HomePage = () => {
             많은 사람들에게 새로운 영감을 줄 거예요!
           </p>
         </div>
-        {/* <SortByLog /> */}
+
+        {/* 로그 */}
+        <div>
+          <h3 className="text-primary-300 text-xl font-semibold">Latest</h3>
+          <h3 className="text-primary-950 text-xl font-semibold">Log</h3>
+        </div>
+
+        <div className="flex flex-col gap-8 web:grid web:grid-cols-4 web:grid-rows-4 web:gap-x-[15px] web:gap-y-[55px]">
+          {[...Array(13)].map((_, idx) =>
+            idx === 2 ? (
+              <div key={idx} className="col-span-2 row-span-2 h-full w-full">
+                <LogCard isLarge />
+              </div>
+            ) : (
+              <div key={idx}>
+                <LogCard />
+              </div>
+            )
+          )}
+        </div>
+
+        <MainPagination />
       </div>
-      <MainFooter />
     </div>
   );
 };
