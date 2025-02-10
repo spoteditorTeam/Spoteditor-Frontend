@@ -1,4 +1,4 @@
-import MainLayout from '@/layout/MainLayout';
+import MainLayout from '@/layouts/MainLayout';
 import DetailPage from '@/pages/detail';
 import HomePage from '@/pages/home';
 import Profile from '@/pages/profile';

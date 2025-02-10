@@ -2,10 +2,10 @@ import ArrowIcon from '@/components/Icons/ArrowIcon';
 import MainPagination from '@/components/Pagination/MainPagination';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import CitySearchForm from '@/feature/homepage/CitySearchForm';
-import CourseButton from '@/feature/homepage/CourseButton';
-import LogCard from '@/feature/homepage/LogCard';
-import PlaceCard from '@/feature/homepage/PlaceCard';
+import CitySearchForm from '@/features/homepage/CitySearchForm';
+import CourseButton from '@/features/homepage/CourseButton';
+import LogCard from '@/features/homepage/LogCard';
+import PlaceCard from '@/features/homepage/PlaceCard';
 
 const categories: string[] = [
   '로.맨.틱 데이트 코스!',
