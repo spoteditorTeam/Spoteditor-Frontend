@@ -1,6 +1,11 @@
 import PostCardLayout from '@/components/Layout/PostCardLayout';
 import MainPagination from '@/components/Pagination/MainPagination';
-import { PostCard, PostCardImage, PostCardLocation, PostCardTitle } from '@/components/PostCard';
+import {
+  PostCard,
+  PostCardImage,
+  PostCardLocation,
+  PostCardTitle,
+} from '@/features/profile/PostCard';
 
 function SavedSpaces() {
   return (

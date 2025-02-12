@@ -1,7 +1,7 @@
 import MainFooter from '@/components/Footer/MainFooter';
 import { Outlet } from 'react-router-dom';
 import MainHeader from '../components/Header/MainHeader/MainHeader';
-import SearchBar from '@/feature/search/SearchBar/SearchBar';
+import SearchBar from '@/features/search/SearchBar';
 
 const MainLayout = () => {
   return (

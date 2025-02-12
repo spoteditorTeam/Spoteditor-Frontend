@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
-import SearchIcon from '../../../components/Icons/SearchIcon';
+import SearchIcon from '../../components/Icons/SearchIcon';
 import { useSearchStore } from '@/store/searchStore';
 
 function SearchBar() {

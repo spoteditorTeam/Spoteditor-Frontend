@@ -1,6 +1,6 @@
+import NotificationButton from '@/features/notification/NotificationButton';
 import UserProfileButton from './UserProfileButton';
 import { useLoginMoalStore } from '@/store/loginStore';
-import NotificationButton from '@/feature/notification/NotificationButton';
 
 function LoginStatusButtons() {
   const { openLoginModal } = useLoginMoalStore();
