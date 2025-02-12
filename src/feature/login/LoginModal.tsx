@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -9,6 +10,7 @@ import kakaoLoginButton from '@/assets/login/kakao-login-button.png';
 import { Button } from '../../components/ui/button';
 import { useLoginMoalStore } from '@/store/loginStore';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import XIcon from '@/components/Icons/XIcon';
 
 function LoginModal() {
   const { isOpen, closeLoginModal } = useLoginMoalStore();
@@ -17,7 +19,14 @@ function LoginModal() {
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeLoginModal()} modal={true}>
       <DialogPrimitive.Overlay className=" mobile:bg-white" />
       <DialogContent className="mobile:top-0 mobile:left-[50%] mobile:w-[375px] mobile:translate-x-[-50%] mobile:translate-y-0">
-        <div className="w-full h-[50px]" />
+        <DialogClose
+          asChild
+          className="flex items-center justify-end w-full web:py-2 mobile:py-[13px]"
+        >
+          <button>
+            <XIcon className="w-[34px] h-[34px]" />
+          </button>
+        </DialogClose>
         <div className="flex w-[339px] flex-col items-center gap-[20px]">
           <DialogHeader>
             <DialogTitle>Spoteditor</DialogTitle>
