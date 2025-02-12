@@ -55,7 +55,7 @@ function ProfileSetting() {
           </form>
         </section>
         <section>
-          <p className="mb-4 font-bold text-18">계정 설정</p>
+          <p className="mb-4 font-bold text-text-2xl">계정 설정</p>
           <div className="flex items-center justify-between py-[5px]">
             <p className="form-label">계정 삭제</p>
             <DeleteAccountConfirmButton />

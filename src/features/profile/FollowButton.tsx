@@ -45,7 +45,7 @@ function FollowButton({ label, count }: FollowButtonProps) {
                   <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                <span className="font-bold text-12">user name</span>
+                <span className="font-bold text-text-xs">user name</span>
               </div>
               {label === '팔로잉' && (
                 <Button variant="secondary" className="font-medium h-7 w-[62px] rounded-[60px]">

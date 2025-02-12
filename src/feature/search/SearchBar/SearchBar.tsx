@@ -52,7 +52,7 @@ function SearchBar() {
                           placeholder="제가 찾는 건..."
                           {...field}
                           style={{ color: 'white' }}
-                          className="bg-inherit pl-[25px] caret-white text-white placeholder:text-[#575A63] text-17"
+                          className="bg-inherit pl-[25px] caret-white text-white placeholder:text-[#575A63] text-text-xl"
                         />
                       </FormControl>
                       <FormMessage />
