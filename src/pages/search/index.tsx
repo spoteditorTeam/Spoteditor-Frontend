@@ -1,8 +1,8 @@
-import PageContentLayout from '@/components/Layout/PageContentLayout';
 import SectionHeader from '@/components/Header/SectionHeader';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CustomPagination from '@/components/CustomPagination';
+import PageLayout from '@/layouts/PageLayout';
 
 function Search() {
   const location = useLocation();
@@ -15,7 +15,7 @@ function Search() {
     }
   }, [title, nav]);
   return (
-    <PageContentLayout className="web:gap-[50px]">
+    <PageLayout className="web:gap-[50px]">
       <SectionHeader labelText="Searching for" queryText={title} bottomLine />
       <SectionHeader labelText="Sort by" queryText="Popularity" />
       {/* <SearchNotFound /> */}
@@ -149,7 +149,7 @@ function Search() {
         </div>
       </div>
       <CustomPagination current={2} total={12} />
-    </PageContentLayout>
+    </PageLayout>
   );
 }
 

@@ -1,13 +1,13 @@
 import PenIcon from '@/components/Icons/PenIcon';
-import PageContentLayout from '@/components/Layout/PageContentLayout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import DeleteAccountConfirmButton from '@/features/profile-setting/DeleteAccountConfirmButton';
 import SaveProfileButton from '@/features/profile-setting/SaveProfileButton';
+import PageLayout from '@/layouts/PageLayout';
 
 function ProfileSetting() {
   return (
-    <PageContentLayout className="">
+    <PageLayout className="">
       <div className="web:w-[661px] mobile:w-screen flex flex-col mobile:px-[16px]">
         <article className=" flex justify-center mb-[32px]">
           <div className="relative">
@@ -72,7 +72,7 @@ function ProfileSetting() {
           <SaveProfileButton />
         </section>
       </div>
-    </PageContentLayout>
+    </PageLayout>
   );
 }
 
