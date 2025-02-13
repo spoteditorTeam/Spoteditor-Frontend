@@ -40,9 +40,11 @@ const LogCard = ({
           </span>
         )}
 
-        <div className="w-8 h-8 bg-white absolute top-1 right-1 p-1.5 flex items-center justify-center">
-          <BookMarkIcon />
-        </div>
+        {isModal && (
+          <div className="w-8 h-8 bg-white absolute top-1 right-1 p-1.5 flex items-center justify-center">
+            <BookMarkIcon />
+          </div>
+        )}
       </div>
 
       {/* 설명 */}
