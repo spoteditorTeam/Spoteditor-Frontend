@@ -1,4 +1,4 @@
-import { SubtractIcon } from '@/components/Icons';
+import { BookMarkIcon, SubtractIcon } from '@/components/Icons';
 import { cn } from '@/lib/utils';
 
 type LogCardProps = {
@@ -8,9 +8,18 @@ type LogCardProps = {
   location2: string;
   isLarge?: boolean;
   vertical?: boolean;
+  isModal?: boolean;
 };
 
-const LogCard = ({ title, image, location1, location2, isLarge, vertical }: LogCardProps) => {
+const LogCard = ({
+  title,
+  image,
+  location1,
+  location2,
+  isLarge,
+  vertical,
+  isModal,
+}: LogCardProps) => {
   return (
     <div
       className={cn(
@@ -25,9 +34,15 @@ const LogCard = ({ title, image, location1, location2, isLarge, vertical }: LogC
           alt="장소 이미지"
           className={cn('object-cover w-full h-full aspect-[3/2]', vertical && 'aspect-[3/4]')}
         />
-        <span className="flex items-center gap-1 p-2.5 text-white text-text-2xs font-semibold absolute bottom-0">
-          teamluddy <SubtractIcon />
-        </span>
+        {!isModal && (
+          <span className="flex items-center gap-1 p-2.5 text-white text-text-2xs font-semibold absolute bottom-0">
+            teamluddy <SubtractIcon />
+          </span>
+        )}
+
+        <div className="w-8 h-8 bg-white absolute top-1 right-1 p-1.5 flex items-center justify-center">
+          <BookMarkIcon />
+        </div>
       </div>
 
       {/* 설명 */}
