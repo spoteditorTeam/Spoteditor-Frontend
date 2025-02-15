@@ -33,7 +33,7 @@ function UserProfileButton() {
   }, []);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="focus:outline-none" asChild>
         <button>
           <UserIcon />
