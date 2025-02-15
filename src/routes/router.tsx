@@ -38,6 +38,10 @@ const router = createBrowserRouter([
         path: 'profile-setting',
         element: <ProfileSetting />,
       },
+      {
+        path: 'notice',
+        element: <Notice />,
+      },
     ],
   },
 ]);

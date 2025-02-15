@@ -39,7 +39,7 @@ function UserProfileButton() {
           <UserIcon />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[230px]">
+      <DropdownMenuContent>
         <DropdownMenuItem className="font-bold text-text-lg flex justify-start gap-[5px] px-4 items-center">
           <span ref={textRef} className="truncate">
             Teamspoteditor
@@ -54,25 +54,31 @@ function UserProfileButton() {
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
-        <Link to="/profile-setting">
-          <DropdownMenuItem className="flex items-center justify-start gap-2 text-text-sm">
-            <SettingIcon />
-            설정
+        <div className="m-1">
+          <Link to="/profile-setting">
+            <DropdownMenuItem className="flex items-center justify-start gap-2 px-4 py-3 text-text-sm">
+              <SettingIcon />
+              설정
+            </DropdownMenuItem>
+          </Link>
+          <DropdownMenuItem className="flex items-center justify-start gap-2 px-4 py-3 text-text-sm">
+            <HeadPhoneIcon />
+            문의하기
           </DropdownMenuItem>
-        </Link>
+        </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center justify-start gap-2 text-text-sm">
-          <HeadPhoneIcon />
-          고객센터
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="flex items-center justify-start gap-2 text-text-sm">
-          <LogoutButton />
-        </DropdownMenuItem>
+        <div className="m-1">
+          <DropdownMenuItem asChild className="flex items-center justify-start text-text-sm">
+            <LogoutButton />
+          </DropdownMenuItem>
+        </div>
         <DropdownMenuSeparator />
         <div className="flex items-center justify-start px-4 py-[10px] gap-[15px] text-[#81858F]">
+          <Link to="/notice" className="flex">
+            <button className="text-text-xs">공지사항</button>
+          </Link>
           <button className="text-text-xs">이용약관</button>
-          <button className="text-text-xs">개인 정보 처리방침</button>
+          <button className="text-text-xs">개인정보처리방침</button>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
