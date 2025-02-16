@@ -75,7 +75,9 @@ function UserProfileButton() {
         <DropdownMenuSeparator />
         <div className="flex items-center justify-start px-4 py-[10px] gap-[15px] text-[#81858F]">
           <Link to="/notice" className="flex">
-            <button className="text-text-xs">공지사항</button>
+            <DropdownMenuItem>
+              <button className="text-text-xs">공지사항</button>
+            </DropdownMenuItem>
           </Link>
           <button className="text-text-xs">이용약관</button>
           <button className="text-text-xs">개인정보처리방침</button>
