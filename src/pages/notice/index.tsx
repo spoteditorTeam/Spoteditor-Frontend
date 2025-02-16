@@ -1,6 +1,8 @@
 import NoticeHeader from '@/features/notice/NoticeHeader';
+import { useNavigate } from 'react-router-dom';
 
 function Notice() {
+  const nav = useNavigate();
   return (
     <div className="flex justify-center w-full">
       <div className="max-w-[724px] w-full">
@@ -9,6 +11,7 @@ function Notice() {
           {Array.from({ length: 7 }).map((_, idx) => (
             <article
               key={idx}
+              onClick={() => nav(`${idx}`)}
               className="w-full px-4 py-5 gap-[3px] flex flex-col border-b-[1px] border-b-primary-50 hover:cursor-pointer"
             >
               <h3 className="font-medium text-text-sm">
