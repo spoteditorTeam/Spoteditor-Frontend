@@ -22,7 +22,9 @@ function ProfileSetting() {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof profileSettingSchema>) => console.log(data);
+  const onSubmit = (data: z.infer<typeof profileSettingSchema>) => {
+    console.log(data);
+  };
 
   const handleSaveClick = useCallback(() => {
     //즉시실행함수를 이용해 검증을 마치고 바로 제출
@@ -31,11 +33,11 @@ function ProfileSetting() {
 
   return (
     <PageLayout>
-      <div className="web:w-[661px] mobile:w-screen flex flex-col mobile:px-[16px]">
+      <div className="w-screen web:w-[661px] flex flex-col px-4 web:px-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full">
             <ProfileSettingAvatar imageUrl="https://github.com/shadcn.png" />
-            <p className="mb-4 font-bold text-text-lg web:text-text-2xl">프로필 편집</p>
+            <p className="mt-8 mb-4 font-bold text-text-lg web:text-text-2xl">프로필 편집</p>
             <ProfileSettingForm />
             <AccountSettings />
             <section className="flex justify-between mt-[50px]">
