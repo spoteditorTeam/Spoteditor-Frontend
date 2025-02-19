@@ -1,22 +1,13 @@
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { REGISTER_SEARCH } from '@/constants/pathname';
+import { REGISTER_DETAILS } from '@/constants/pathname';
 import PlaceListItem from '@/features/registerpage/PlaceListItem';
-import { ArrowLeft, Search } from 'lucide-react';
+import RegisterSearchBar from '@/features/registerpage/RegisterSearchBar';
 import { Link } from 'react-router-dom';
 
 const SearchPage = () => {
   return (
-    <div className="h-full flex flex-col py-5">
-      <header className="border-b flex items-center">
-        <ArrowLeft size={24} />
-        <Input
-          placeholder="장소를 검색해보세요."
-          className="placeholder:text-primary-300 text-text-lg font-medium"
-        />
-        {/* 클릭시 카카오맵 연결 */}
-        <Search />
-      </header>
+    <div className="h-full flex flex-col">
+      <RegisterSearchBar />
 
       <main className="flex flex-col items-center grow">
         {/* 최근 검색 */}
@@ -41,11 +32,9 @@ const SearchPage = () => {
       </main>
 
       {/* 버튼 */}
-      <div className="w-full flex flex-col items-center gap-[15px]">
-        <Button className="w-full" asChild>
-          <Link to={REGISTER_SEARCH}>완료</Link>
-        </Button>
-      </div>
+      <Button className="w-full mb-3" asChild size={'xl'}>
+        <Link to={REGISTER_DETAILS}>완료</Link>
+      </Button>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { REGISTER_SEARCH } from '@/constants/pathname';
 import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const WHO = ['혼자', '친구랑', '연인과', '가족과', '동료와', '반려동물과'];
 const WHERE = [
@@ -24,10 +24,11 @@ const WHERE = [
 ];
 
 const SelectPage = () => {
+  const navi = useNavigate();
   return (
-    <div className="h-full flex flex-col py-5">
+    <div className="h-full flex flex-col">
       <header>
-        <ArrowLeft size={24} />
+        <ArrowLeft size={24} onClick={() => navi(-1)} className="cursor-pointer" />
       </header>
 
       <main className="flex flex-col items-center justify-center grow ">
@@ -43,7 +44,7 @@ const SelectPage = () => {
             <h5 className="text-text-xs font-bold py-2.5">누구와</h5>
             <div className="flex gap-2 flex-wrap">
               {WHO.map((who, idx) => (
-                <Button key={idx} variant={'muted'} size={'m'}>
+                <Button key={idx} variant={'muted'} size={'m'} className="font-bold">
                   {who}
                 </Button>
               ))}
@@ -55,7 +56,7 @@ const SelectPage = () => {
             <h5 className="text-text-xs font-bold py-2.5">어떤 느낌으로</h5>
             <div className="flex gap-2 flex-wrap">
               {WHERE.map((who, idx) => (
-                <Button key={idx} variant={'muted'} size={'m'}>
+                <Button key={idx} variant={'muted'} size={'m'} className="font-bold">
                   {who}
                 </Button>
               ))}
@@ -66,7 +67,7 @@ const SelectPage = () => {
 
       {/* 버튼 */}
       <div className="w-full flex flex-col items-center gap-[15px]">
-        <Button className="w-full" asChild>
+        <Button className="w-full" asChild size={'xl'}>
           <Link to={REGISTER_SEARCH}>다음</Link>
         </Button>
 
