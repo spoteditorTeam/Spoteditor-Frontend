@@ -8,11 +8,24 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-function SaveProfileButton() {
+interface SaveProfileButtonProps {
+  onTrigger?: () => void;
+}
+
+function SaveProfileButton({ onTrigger }: SaveProfileButtonProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="rounded-[6px] w-[120px] h-[42px]">저장</Button>
+        <Button
+          onClick={() => {
+            if (onTrigger) {
+              onTrigger();
+            }
+          }}
+          className="rounded-[6px] w-[120px] h-[42px]"
+        >
+          저장
+        </Button>
       </DialogTrigger>
       <DialogContent className="web:w-[390px] mobile:w-[300px] p-6">
         <DialogTitle className="w-full mb-2 section-heading">저장이 완료 되었습니다.</DialogTitle>
