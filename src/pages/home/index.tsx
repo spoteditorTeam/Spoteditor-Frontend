@@ -11,16 +11,16 @@ import { cn } from '@/lib/utils';
 
 const HomePage = () => {
   return (
-    <div>
+    <>
       {/* 메인 히어로 */}
       <MainHero />
 
       <div className="flex flex-col px-4 web:px-[50px]">
         {/* 제목 */}
-        <div className="flex justify-between items-end mt-10 mb-6">
-          <div>
-            <h3 className="text-primary-300 text-xl font-semibold">Sort by</h3>
-            <h3 className="text-primary-950 text-xl font-semibold">Popularity</h3>
+        <div className="flex justify-between items-end mt-10 mb-6 font-untitled">
+          <div className="text-xl web:text-2xl font-semibold">
+            <h3 className="text-primary-300">Sort by</h3>
+            <h3 className="text-primary-950">Popularity</h3>
           </div>
           <div className="hidden web:block">--------</div>
         </div>
@@ -69,9 +69,11 @@ const HomePage = () => {
         </div>
 
         {/* 로그 */}
-        <div>
-          <h3 className="text-primary-300 text-xl font-semibold">Latest</h3>
-          <h3 className="text-primary-950 text-xl font-semibold">Log</h3>
+        <div className="mb-6 font-untitled">
+          <div className="text-xl web:text-2xl font-semibold">
+            <h3 className="text-primary-300">Latest</h3>
+            <h3 className="text-primary-950">Log</h3>
+          </div>
         </div>
 
         <div className="flex flex-col gap-y-8 web:grid web:grid-cols-4 web:grid-rows-4 web:gap-x-[15px] web:gap-y-10">
@@ -94,10 +96,9 @@ const HomePage = () => {
             );
           })}
         </div>
-
         <MainPagination />
       </div>
-    </div>
+    </>
   );
 };
 
