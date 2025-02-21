@@ -9,7 +9,7 @@ const SearchPage = () => {
     <div className="h-full flex flex-col">
       <RegisterSearchBar />
 
-      <main className="flex flex-col items-center grow">
+      <main className="flex flex-col items-center grow ">
         {/* 최근 검색 */}
         <div className="w-full">
           <h3 className="text-text-2xl font-bold pt-5 pb-2.5">최근 검색한 장소</h3>
