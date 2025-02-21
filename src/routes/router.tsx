@@ -1,6 +1,7 @@
 import MainLayout from '@/layouts/MainLayout';
 import DetailPage from '@/pages/detail';
 import HomePage from '@/pages/home';
+import KakaoAuthTest from '@/pages/Login/KakaoAuthTest';
 import Notice from '@/pages/notice';
 import NoticeDetail from '@/pages/notice/notice-detail';
 import Profile from '@/pages/profile';
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { path: '/', element: <HomePage /> },
+      { path: '/kakaoAuthTest', element: <KakaoAuthTest /> },
       { path: '/search', element: <Search /> },
       { path: '/detail/:placeId', element: <DetailPage /> },
       {
