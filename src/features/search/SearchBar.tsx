@@ -36,7 +36,7 @@ function SearchBar() {
     <>
       {isOpen ? (
         <>
-          <nav className="web:px-[50px] -z-10 py-[30px] sticky mobile:px-4 w-full flex justify-center items-center bg-black">
+          <nav className="web:px-[50px] -z-10 py-[30px] fixed mobile:px-4 w-full flex justify-center items-center bg-black top-11 web:top-[61px]">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSearchSubmit)}
@@ -67,7 +67,7 @@ function SearchBar() {
           </nav>
           <div
             onClick={onCloseOverlayClick}
-            className="fixed top-0 left-0 w-screen h-screen -z-20 bg-black/80"
+            className="absolute top-0 left-0 w-screen h-screen -z-20 bg-black/80"
           />
         </>
       ) : null}
