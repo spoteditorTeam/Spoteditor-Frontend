@@ -1,7 +1,7 @@
 import { currentUser, IUser } from '@/services/apis/userApi';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 type UserState = 'userOnly' | 'nonUserOnly';
 
@@ -12,7 +12,6 @@ export default function useUser(userState?: UserState) {
   });
 
   const nav = useNavigate();
-  const { pathname } = useLocation();
 
   useEffect(() => {
     if (error) {
@@ -25,7 +24,7 @@ export default function useUser(userState?: UserState) {
     if (userState === 'userOnly' && !data) {
       nav('/', { replace: true });
     }
-  }, [data, error, nav, pathname, userState]);
+  }, [data, error, nav, userState]);
 
   return { user: data, isLoading: !data && !error };
 }
