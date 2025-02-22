@@ -56,4 +56,4 @@ class AuthClient {
   }
 }
 
-export const authClient = new AuthClient(API_BASE_URL).getInstance();
+export const currentAuth = new AuthClient(API_BASE_URL).getInstance();
