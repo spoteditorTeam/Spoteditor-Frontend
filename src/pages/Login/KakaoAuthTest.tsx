@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/services/apis/userApi';
+import { API_BASE_URL } from '@/services/apis/authApi';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 

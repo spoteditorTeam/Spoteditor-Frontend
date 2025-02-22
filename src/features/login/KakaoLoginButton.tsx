@@ -1,8 +1,11 @@
 import { Button } from '@/components/ui/button';
 import kakaoLoginButton from '@/assets/login/kakao-login-button.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function KakaoLoginButton() {
+  const nav = useNavigate();
   const handleLogin = () => {
+    nav('/');
     window.location.href = `${import.meta.env.VITE_KAKAO_LOGIN_URL}`;
   };
   return (
