@@ -7,7 +7,7 @@ const PlaceListItem = () => {
         <h5>장소명</h5>
         <p className="text-primary-300">관광명소 · 포항 · 안동</p>
       </div>
-      <Button variant={'ghost'} size={'m'} fullRounded>
+      <Button variant={'ghost'} size={'s'} fullRounded>
         선택
       </Button>
     </div>
