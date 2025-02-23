@@ -13,6 +13,7 @@ const buttonVariants = cva(
         outline: 'border border-primary-100 bg-white hover:bg-neutral-100 hover:text-neutral-900',
         ghost: 'bg-primary-50 hover:bg-primary-200 hover:text-primary-400',
         muted: 'bg-primary-50 !text-primary-300 hover:bg-primary-200 hover:text-primary-400',
+        transparent: 'bg-transparent',
       },
       fullRounded: {
         true: 'rounded-[60px]',
