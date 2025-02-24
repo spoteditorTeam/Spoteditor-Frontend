@@ -46,7 +46,7 @@ const MapPage = () => {
 
       const options = {
         center: new window.kakao.maps.LatLng(lat, lon), // 직접 lat, lon 사용
-        level: 2,
+        level: 3,
       };
 
       mapRef.current = new window.kakao.maps.Map(mapContainerRef.current, options);
@@ -81,8 +81,10 @@ const MapPage = () => {
       displayPlaces(result);
     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       alert('검색 결과가 없습니다.');
+      setPlaces([]);
     } else if (status === window.kakao.maps.services.Status.ERROR) {
       alert('검색 중 오류가 발생했습니다.');
+      setPlaces([]);
     }
   };
 
