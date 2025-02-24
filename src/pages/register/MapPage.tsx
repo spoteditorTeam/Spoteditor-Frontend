@@ -1,56 +1,91 @@
 import { Button } from '@/components/ui/button';
 import { REGISTER_DETAILS } from '@/constants/pathname';
 import RegisterSearchBar from '@/features/registerpage/RegisterSearchBar';
-import { cn } from '@/lib/utils';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const kakao = (window as any).kakao;
-const options = {
-  center: new kakao.maps.LatLng(33.450701, 126.570667),
-};
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
 
 const MapPage = () => {
   const mapContainerRef = useRef(null);
   const inputRef = useRef(null);
-  const [map, setMap] = useState(null);
-  const [ps, setPlaceInstance] = useState(null);
+  const [isSDKLoaded, setIsSDKLoaded] = useState(false);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [map, setMap] = useState(null); // map 객체
+  const [ps, setPlaceInstance] = useState(null); //place 객체
   const [markers, setMarkers] = useState([]);
   const [places, setPlaces] = useState([]);
+  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lon: number } | null>(null);
 
+  // sdk 로드
+  useEffect(() => loadKakaoMapSDK(() => setIsSDKLoaded(true)), []);
+
+  // 지도 로드
   useEffect(() => {
-    kakao.maps.load(() => {
-      if (!mapContainerRef.current) return;
-      const mapInstance = new kakao.maps.Map(mapContainerRef.current, options);
-      setMap(mapInstance);
-      const placeInstance = new kakao.maps.services.Places();
-      setPlaceInstance(placeInstance);
-    });
-  }, []);
+    if (isSDKLoaded) window.kakao.maps.load(() => setIsMapLoaded(true));
+  }, [isSDKLoaded]);
 
+  // 지도 객체 생성하기
+  useEffect(() => {
+    if (!isMapLoaded || !mapContainerRef.current) return;
+
+    (async () => {
+      try {
+        const { lat, lon } = await getCurrentLocation(); // 현재 위치 가져오기
+
+        const options = {
+          center: new window.kakao.maps.LatLng(lat, lon), // 직접 lat, lon 사용
+          level: 2,
+        };
+
+        const Imap = new window.kakao.maps.Map(mapContainerRef.current, options);
+        setMap(Imap);
+
+        const Iplaces = new window.kakao.maps.services.Places();
+        setPlaceInstance(Iplaces);
+
+        setCurrentLocation({ lat, lon }); // 위치 상태 업데이트 (나중에 필요하면 사용)
+      } catch (error) {
+        console.error('현재 위치를 가져올 수 없습니다.', error);
+      }
+    })();
+  }, [isMapLoaded]);
+
+  // 검색어 입력
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputRef.current || !ps || !map) return;
+
     removeMarker();
-    ps.keywordSearch(inputRef.current.value, searchByKeyword);
+
+    // 현재 위치에서 2km
+    // Q 특정 지역을 기준으로 검색 안됨
+    ps.keywordSearch(inputRef.current.value, searchByKeyword, {
+      location: new kakao.maps.LatLng(currentLocation?.lat, currentLocation?.lon),
+      radius: 2000,
+    });
   };
 
-  const searchByKeyword = (result, status, pagination) => {
-    if (status === kakao.maps.services.Status.OK) {
+  // pagination 가능
+  const searchByKeyword = (result, status) => {
+    if (status === window.kakao.maps.services.Status.OK) {
       setPlaces(result);
       displayPlaces(result);
-      displayPagination(pagination);
-    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+    } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       alert('검색 결과가 없습니다.');
-    } else if (status === kakao.maps.services.Status.ERROR) {
+    } else if (status === window.kakao.maps.services.Status.ERROR) {
       alert('검색 중 오류가 발생했습니다.');
     }
   };
 
   const displayPlaces = (result) => {
-    const bounds = new kakao.maps.LatLngBounds();
+    const bounds = new window.kakao.maps.LatLngBounds(); // 경계 객체
+
     const newMarkers = result.map((place) => {
-      const placePosition = new kakao.maps.LatLng(place.y, place.x);
+      const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
       bounds.extend(placePosition);
       return addMarker(placePosition, place);
     });
@@ -60,24 +95,13 @@ const MapPage = () => {
   };
 
   const addMarker = (position, place) => {
-    const marker = new kakao.maps.Marker({ position });
+    const marker = new window.kakao.maps.Marker({ position });
     marker.setMap(map);
 
-    // 인포윈도우 생성
-    const infowindow = new kakao.maps.InfoWindow({
-      content: `<div>
-                  <h4 class=${cn('text-text-sm font-semibold')}>${place.place_name}</h4>
-                  <p class=${cn('text-text-xs')}>${place.address_name}</p>
-                </div>`,
-    });
-
-    // 마커 클릭 시 인포윈도우 열기
-    kakao.maps.event.addListener(marker, 'click', () => {
-      infowindow.open(map, marker);
+    // 클릭 시 중앙 정렬
+    window.kakao.maps.event.addListener(marker, 'click', () => {
       map.setCenter(position); // 마커 클릭 시 지도 중앙으로 이동
     });
-
-    return { marker, infowindow }; // 마커와 인포윈도우 반환
   };
 
   const removeMarker = () => {
@@ -85,15 +109,11 @@ const MapPage = () => {
     setMarkers([]);
   };
 
-  const displayPagination = (pagination) => {
-    console.log('페이지 수:', pagination.last);
-  };
-
   // 장소 클릭 시, 마커와 인포윈도우 열기
   const handlePlaceClick = (place) => {
     if (!map || !ps) return;
 
-    const placePosition = new kakao.maps.LatLng(place.y, place.x);
+    const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
 
     // 지도 중심을 클릭한 장소로 이동
     map.setCenter(placePosition);
@@ -115,16 +135,31 @@ const MapPage = () => {
 
       {/* 장소 리스트 */}
       {places.length > 0 && (
-        <div className="mt-4 px-4 overflow-y-auto scrollbar-hide h-1/3">
-          <ul className="space-y-2 cursor-pointer">
+        <div className="overflow-y-auto scrollbar-hide h-1/2">
+          <ul className="cursor-pointer">
             {places.map((place, index) => (
               <li
                 key={index}
-                className="text-text-sm border-b pb-2"
+                className="py-2.5 px-4  flex justify-between items-center hover:bg-primary-50"
                 onClick={() => handlePlaceClick(place)} // 장소 클릭 시 처리
               >
-                <h4 className={cn(' font-semibold')}>{place.place_name}</h4>
-                <p>{place.address_name}</p>
+                <div>
+                  <div className="flex items-center gap-[3px] font-medium mb-[3px]">
+                    <h4 className="text-text-sm">{place.place_name}</h4>
+                    <span className="text-text-xs text-primary-400">{place.category_name}</span>
+                  </div>
+                  <div className="flex font-medium text-text-xs items-center gap-1.5">
+                    <h5 className=" text-primary-300">도로명</h5>
+                    <p className="text-primary-400">{place.road_address_name}</p>
+                  </div>
+                  <div className="flex font-medium text-text-xs items-center gap-1.5">
+                    <h5 className=" text-primary-300">지번</h5>
+                    <p className="text-primary-400">{place.address_name}</p>
+                  </div>
+                </div>
+                <Button variant={'outline'} size={'s'} fullRounded>
+                  선택
+                </Button>
               </li>
             ))}
           </ul>
@@ -139,5 +174,35 @@ const MapPage = () => {
     </div>
   );
 };
+
+// sdk
+function loadKakaoMapSDK(loadedCallback) {
+  const script = document.createElement('script');
+  script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
+    import.meta.env.VITE_KAKAO_MAP_KEY
+  }&autoload=false&libraries=services,clusterer`;
+  script.async = true;
+  script.onload = loadedCallback;
+  document.head.appendChild(script);
+}
+
+// geolocation
+async function getCurrentLocation() {
+  if (navigator.geolocation) {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          resolve({
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+          });
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+}
 
 export default MapPage;
