@@ -6,11 +6,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import kakaoLoginButton from '@/assets/login/kakao-login-button.png';
-import { Button } from '../../components/ui/button';
 import { useLoginMoalStore } from '@/store/loginStore';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import XIcon from '@/components/Icons/XIcon';
+import KakaoLoginButton from '@/features/login/KakaoLoginButton';
 
 function LoginModal() {
   const { isOpen, closeLoginModal } = useLoginMoalStore();
@@ -39,9 +38,7 @@ function LoginModal() {
               <br /> 업데이트 소식을 확인해보세요.
             </DialogDescription>
           </DialogHeader>
-          <Button variant={null} className="w-auto web:my-5 mobile:my-10">
-            <img className="object-contain" src={kakaoLoginButton} alt="카카오 로그인 버튼" />
-          </Button>
+          <KakaoLoginButton />
           <p className="text-text-xs text-center text-[#6D727D] w-[320px]">
             로그인은 <span className="underline underline-offset-2">개인정보보호정책</span> 및
             <span className="underline underline-offset-2">서비스약관</span>에 동의하는 것을
