@@ -10,61 +10,66 @@ declare global {
 }
 
 const MapPage = () => {
+  const isSDKLoadedRef = useRef(false);
+  const isMapLoadedRef = useRef(false);
   const mapContainerRef = useRef(null);
   const inputRef = useRef(null);
-  const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [map, setMap] = useState(null); // map 객체
-  const [ps, setPlaceInstance] = useState(null); //place 객체
+  const mapRef = useRef(null);
+  const placeRef = useRef(null);
+  const geoCoderRef = useRef(null);
+  const currentLocationRef = useRef<{ lat: number; lon: number } | null>(null);
+
   const [markers, setMarkers] = useState([]);
   const [places, setPlaces] = useState([]);
-  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lon: number } | null>(null);
 
   // sdk 로드
-  useEffect(() => loadKakaoMapSDK(() => setIsSDKLoaded(true)), []);
-
-  // 지도 로드
   useEffect(() => {
-    if (isSDKLoaded) window.kakao.maps.load(() => setIsMapLoaded(true));
-  }, [isSDKLoaded]);
+    if (!isSDKLoadedRef.current) {
+      loadKakaoMapSDK(() => {
+        isSDKLoadedRef.current = true;
 
-  // 지도 객체 생성하기
-  useEffect(() => {
-    if (!isMapLoaded || !mapContainerRef.current) return;
+        // 지도 로드 되면 초기화
+        window.kakao.maps.load(() => {
+          isMapLoadedRef.current = true;
+          initMap();
+        });
+      });
+    }
+  }, []);
 
-    (async () => {
-      try {
-        const { lat, lon } = await getCurrentLocation(); // 현재 위치 가져오기
+  const initMap = async () => {
+    if (!isSDKLoadedRef.current || !isMapLoadedRef.current) return;
 
-        const options = {
-          center: new window.kakao.maps.LatLng(lat, lon), // 직접 lat, lon 사용
-          level: 2,
-        };
+    try {
+      const { lat, lon } = await getCurrentLocation(); // 현재 위치 가져오기
+      currentLocationRef.current = { lat, lon };
 
-        const Imap = new window.kakao.maps.Map(mapContainerRef.current, options);
-        setMap(Imap);
+      const options = {
+        center: new window.kakao.maps.LatLng(lat, lon), // 직접 lat, lon 사용
+        level: 2,
+      };
 
-        const Iplaces = new window.kakao.maps.services.Places();
-        setPlaceInstance(Iplaces);
-
-        setCurrentLocation({ lat, lon }); // 위치 상태 업데이트 (나중에 필요하면 사용)
-      } catch (error) {
-        console.error('현재 위치를 가져올 수 없습니다.', error);
-      }
-    })();
-  }, [isMapLoaded]);
+      mapRef.current = new window.kakao.maps.Map(mapContainerRef.current, options);
+      placeRef.current = new window.kakao.maps.services.Places();
+      geoCoderRef.current = new window.kakao.maps.services.Geocoder();
+    } catch (error) {
+      console.log('위치 정보 가져오기 실패');
+    }
+  };
 
   // 검색어 입력
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!inputRef.current || !ps || !map) return;
+    if (!inputRef.current || !placeRef.current || !mapRef.current) return;
 
-    removeMarker();
+    removeMarker(); // 기존 검색어 마크 지우기
 
-    // 현재 위치에서 2km
-    // Q 특정 지역을 기준으로 검색 안됨
-    ps.keywordSearch(inputRef.current.value, searchByKeyword, {
-      location: new kakao.maps.LatLng(currentLocation?.lat, currentLocation?.lon),
+    const query = inputRef.current.value;
+    placeRef.current.keywordSearch(query, searchByKeyword, {
+      location: new window.kakao.maps.LatLng(
+        currentLocationRef.current?.lat,
+        currentLocationRef.current?.lon
+      ),
       radius: 2000,
     });
   };
@@ -87,43 +92,35 @@ const MapPage = () => {
     const newMarkers = result.map((place) => {
       const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
       bounds.extend(placePosition);
-      return addMarker(placePosition, place);
+      return addMarker(placePosition);
     });
 
-    map?.setBounds(bounds);
+    mapRef.current?.setBounds(bounds);
     setMarkers(newMarkers);
   };
 
-  const addMarker = (position, place) => {
+  const addMarker = (position) => {
     const marker = new window.kakao.maps.Marker({ position });
-    marker.setMap(map);
+    marker.setMap(mapRef.current);
 
     // 클릭 시 중앙 정렬
     window.kakao.maps.event.addListener(marker, 'click', () => {
-      map.setCenter(position); // 마커 클릭 시 지도 중앙으로 이동
+      mapRef.current?.setCenter(position);
     });
+
+    return marker;
   };
 
   const removeMarker = () => {
-    markers.forEach((markerObj) => markerObj.marker.setMap(null));
+    markers.forEach((marker) => marker.setMap(null));
     setMarkers([]);
   };
 
-  // 장소 클릭 시, 마커와 인포윈도우 열기
+  // 장소 클릭 시, 지도 중심을 클릭한 장소로 이동
   const handlePlaceClick = (place) => {
-    if (!map || !ps) return;
-
+    if (!mapRef.current || !placeRef.current) return;
     const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
-
-    // 지도 중심을 클릭한 장소로 이동
-    map.setCenter(placePosition);
-
-    // 기존 마커와 인포윈도우를 제거한 후 새로 추가
-    removeMarker();
-    const { marker, infowindow } = addMarker(placePosition, place);
-
-    // 인포윈도우 열기
-    infowindow.open(map, marker);
+    mapRef.current.setCenter(placePosition);
   };
 
   return (
@@ -188,21 +185,19 @@ function loadKakaoMapSDK(loadedCallback) {
 
 // geolocation
 async function getCurrentLocation() {
-  if (navigator.geolocation) {
-    return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          resolve({
-            lat: pos.coords.latitude,
-            lon: pos.coords.longitude,
-          });
-        },
-        (error) => {
-          reject(error);
-        }
-      );
-    });
-  }
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        resolve({
+          lat: pos.coords.latitude,
+          lon: pos.coords.longitude,
+        });
+      },
+      (error) => {
+        reject(error);
+      }
+    );
+  });
 }
 
 export default MapPage;
