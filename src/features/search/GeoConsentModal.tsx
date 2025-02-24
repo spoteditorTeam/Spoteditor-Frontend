@@ -9,18 +9,57 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { useEffect, useState } from 'react';
 
 export default function GeoConsentModal() {
+  const [open, setOpen] = useState(false);
+
+  /* 추후 유저 데이터에 위치 정보를 저장할 경우 활용 */
+  //const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  /* 위치 권한 상태 확인 함수 */
+  const checkPermission = async () => {
+    if (!('permissions' in navigator)) return;
+
+    const result = await navigator.permissions.query({ name: 'geolocation' });
+
+    // "prompt(사용자가 아직 위치 권한을 허용/거부하지 않음)" 상태이면 자동으로 모달 오픈
+    if (result.state === 'prompt') {
+      setOpen(true);
+    }
+
+    // 브라우저 설정에서 권한이 변경될 때 감지(granted: 사용자가 이미 위치 권한을 허용함)
+    result.onchange = () => {
+      if (result.state === 'granted') {
+        setOpen(false); // 권한 허용 시 모달 닫기
+      }
+    };
+  };
+
+  /* 위치 요청 함수 (모달에서 동의 시 실행) */
+  const requestLocation = () => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          setOpen(false); // 위치 가져오면 모달 닫기
+        },
+        (error) => {
+          console.error('위치 정보를 가져올 수 없습니다. 다시 시도해 주세요.', error);
+        }
+      );
+    }
+  };
+
+  // 컴포넌트 마운트 시 권한 상태 확인
+  useEffect(() => {
+    checkPermission();
+  }, []);
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        {/* 임시 오픈 버튼 */}
-        <Button variant="outline">Edit Profile</Button>
-      </DialogTrigger>
-      <DialogPrimitive.Overlay className=" mobile:bg-white" />
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogPrimitive.Overlay className="mobile:bg-white" />
       <DialogContent
         hideCloseButton
         className="mobile:top-0 mobile:left-[50%] w-[375px] web:w-[424px] mobile:translate-x-[-50%] mobile:translate-y-0 web:p-[15px]"
@@ -47,10 +86,16 @@ export default function GeoConsentModal() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex flex-row items-center gap-2 py-5 web:grid web:grid-cols-2">
-            <Button variant="outline" className="flex-1 font-semibold">
+            <Button
+              variant="outline"
+              className="flex-1 font-semibold"
+              onClick={() => setOpen(false)}
+            >
               거절
             </Button>
-            <Button className="font-semibold">동의</Button>
+            <Button className="font-semibold" onClick={requestLocation}>
+              동의
+            </Button>
           </DialogFooter>
         </div>
         <div className="mobile:fixed mobile:top-0 mobile:-z-10 mobile:w-screen mobile:h-screen mobile:bg-white" />
