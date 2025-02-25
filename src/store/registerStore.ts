@@ -1,24 +1,32 @@
+import { KakaoPlace } from '@/pages/register/types/place.type';
 import { create } from 'zustand';
 
 type RegisterStoreState = {
-  searchPlaces: string[];
+  selectedPlaces: KakaoPlace[]; // 선택한 장소
+  recentSearchPlaces: KakaoPlace[]; // 최근 검색 장소
 };
 
 type RegisterStoreActions = {
-  addSearchPlace: (place) => void;
-  removeSearchPlace: (place) => void;
+  addSelectedPlace: (place: KakaoPlace) => void;
+  removeSelectedPlace: (place: KakaoPlace) => void;
 };
 
 type RegisterStore = RegisterStoreState & RegisterStoreActions;
 
 export const useRegisterStore = create<RegisterStore>()((set) => ({
-  searchPlaces: [],
-  addSearchPlace: (place) =>
+  selectedPlaces: [],
+  recentSearchPlaces: [],
+  addSelectedPlace: (place) =>
     set((state) => ({
-      searchPlaces: [...state.searchPlaces, place],
+      selectedPlaces: state.selectedPlaces.some((item) => item.id === place.id)
+        ? state.selectedPlaces
+        : [...state.selectedPlaces, place],
+      recentSearchPlaces: state.recentSearchPlaces.some((item) => item.id === place.id)
+        ? state.recentSearchPlaces
+        : [...state.recentSearchPlaces, place],
     })),
-  removeSearchPlace: (place) =>
+  removeSelectedPlace: (place) =>
     set((state) => ({
-      searchPlaces: state.searchPlaces.filter((item) => item !== place),
+      selectedPlaces: state.selectedPlaces.filter((item) => item !== place),
     })),
 }));

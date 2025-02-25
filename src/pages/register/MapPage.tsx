@@ -1,8 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { REGISTER_DETAILS } from '@/constants/pathname';
 import RegisterSearchBar from '@/features/registerpage/RegisterSearchBar';
+import { useRegisterStore } from '@/store/registerStore';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { KakaoPlace } from './types/place.type';
 declare global {
   interface Window {
     kakao: any;
@@ -10,17 +12,20 @@ declare global {
 }
 
 const MapPage = () => {
+  const addSelectedPlace = useRegisterStore((state) => state.addSelectedPlace);
+  const handleSelectPlace = (place: KakaoPlace) => addSelectedPlace(place);
+
   const isSDKLoadedRef = useRef(false);
   const isMapLoadedRef = useRef(false);
   const mapContainerRef = useRef(null);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const mapRef = useRef(null);
   const placeRef = useRef(null);
   const geoCoderRef = useRef(null);
   const currentLocationRef = useRef<{ lat: number; lon: number } | null>(null);
 
   const [markers, setMarkers] = useState([]);
-  const [places, setPlaces] = useState([]);
+  const [places, setPlaces] = useState<KakaoPlace[]>([]);
 
   // sdk 로드
   useEffect(() => {
@@ -75,7 +80,7 @@ const MapPage = () => {
   };
 
   // pagination 가능
-  const searchByKeyword = (result, status) => {
+  const searchByKeyword = (result: KakaoPlace[], status: string) => {
     if (status === window.kakao.maps.services.Status.OK) {
       setPlaces(result);
       displayPlaces(result);
@@ -88,7 +93,7 @@ const MapPage = () => {
     }
   };
 
-  const displayPlaces = (result) => {
+  const displayPlaces = (result: KakaoPlace[]) => {
     const bounds = new window.kakao.maps.LatLngBounds(); // 경계 객체
 
     const newMarkers = result.map((place) => {
@@ -123,6 +128,9 @@ const MapPage = () => {
     if (!mapRef.current || !placeRef.current) return;
     const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
     mapRef.current.setCenter(placePosition);
+
+    // 장소 추가 액션 호출
+    handleSelectPlace(place);
   };
 
   return (
@@ -186,7 +194,7 @@ function loadKakaoMapSDK(loadedCallback) {
 }
 
 // geolocation
-async function getCurrentLocation() {
+async function getCurrentLocation(): Promise<{ lat: number; lon: number }> {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
