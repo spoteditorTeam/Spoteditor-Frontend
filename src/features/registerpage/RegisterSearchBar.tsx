@@ -5,25 +5,27 @@ import { ArrowLeft, Search } from 'lucide-react';
 import React, { FormEvent, ForwardedRef, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+interface RegisterSearchBarProps {
+  to: string;
+  onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
+}
+
 const RegisterSearchBar = forwardRef(
-  (
-    { onSubmit }: { onSubmit?: (e: FormEvent<HTMLFormElement>) => void },
-    ref?: ForwardedRef<HTMLInputElement>
-  ) => {
+  ({ to, onSubmit }: RegisterSearchBarProps, ref?: ForwardedRef<HTMLInputElement>) => {
     const navi = useNavigate();
     const handleGoBack = (e: React.MouseEvent) => {
       e.stopPropagation();
-      navi(-1);
+      navi(to);
     };
 
     return (
       <form
-        className="border-b flex items-center mt-3"
+        className="border-b flex items-center mt-3 w-full"
         onSubmit={onSubmit}
         onClick={() => navi(MAPS)}
       >
         <Button
-          type="submit"
+          type="button"
           className="px-4 [&_svg]:size-auto"
           variant={'transparent'}
           onClick={handleGoBack}

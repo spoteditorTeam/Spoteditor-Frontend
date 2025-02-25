@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { REGISTER_DETAILS } from '@/constants/pathname';
+import { REGISTER_SEARCH } from '@/constants/pathname';
 import RegisterSearchBar from '@/features/registerpage/RegisterSearchBar';
+import { cn } from '@/lib/utils';
 import { useRegisterStore } from '@/store/registerStore';
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { KakaoPlace } from './types/place.type';
 declare global {
   interface Window {
@@ -12,8 +13,12 @@ declare global {
 }
 
 const MapPage = () => {
+  const navi = useNavigate();
   const addSelectedPlace = useRegisterStore((state) => state.addSelectedPlace);
-  const handleSelectPlace = (place: KakaoPlace) => addSelectedPlace(place);
+  const handleSelectPlace = () => {
+    addSelectedPlace(selectedPlace);
+    navi(REGISTER_SEARCH);
+  };
 
   const isSDKLoadedRef = useRef(false);
   const isMapLoadedRef = useRef(false);
@@ -24,8 +29,11 @@ const MapPage = () => {
   const geoCoderRef = useRef(null);
   const currentLocationRef = useRef<{ lat: number; lon: number } | null>(null);
 
+  const [address, setAddress] = useState('');
   const [markers, setMarkers] = useState([]);
   const [places, setPlaces] = useState<KakaoPlace[]>([]);
+  const [selectedPlace, setSelectedPlace] = useState<KakaoPlace>({});
+  const [hasNoPlace, setHasNoPlace] = useState(false);
 
   // sdk 로드
   useEffect(() => {
@@ -57,6 +65,15 @@ const MapPage = () => {
       mapRef.current = new window.kakao.maps.Map(mapContainerRef.current, options);
       placeRef.current = new window.kakao.maps.services.Places();
       geoCoderRef.current = new window.kakao.maps.services.Geocoder();
+
+      geoCoderRef.current.coord2Address(lon, lat, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const address = result[0].address.address_name;
+          setAddress(address);
+        } else {
+          console.log('주소 변환 실패');
+        }
+      });
     } catch (error) {
       console.log('위치 정보 가져오기 실패');
     }
@@ -65,6 +82,7 @@ const MapPage = () => {
   // 검색어 입력
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!inputRef.current || !placeRef.current || !mapRef.current) return;
 
     removeMarker(); // 기존 검색어 마크 지우기
@@ -86,6 +104,7 @@ const MapPage = () => {
       displayPlaces(result);
     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       alert('검색 결과가 없습니다.');
+      setHasNoPlace(true);
       setPlaces([]);
     } else if (status === window.kakao.maps.services.Status.ERROR) {
       alert('검색 중 오류가 발생했습니다.');
@@ -128,20 +147,26 @@ const MapPage = () => {
     if (!mapRef.current || !placeRef.current) return;
     const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
     mapRef.current.setCenter(placePosition);
-
-    // 장소 추가 액션 호출
-    handleSelectPlace(place);
+    setSelectedPlace(place);
   };
 
   return (
     <div className="h-full flex flex-col">
-      <RegisterSearchBar ref={inputRef} onSubmit={handleSubmit} />
-
+      <RegisterSearchBar ref={inputRef} onSubmit={handleSubmit} to={REGISTER_SEARCH} />
       {/* 지도 담을 영역 */}
-      <div ref={mapContainerRef} className="w-full h-full relative"></div>
+      <div ref={mapContainerRef} className="w-full h-full relative">
+        <span
+          className={cn(
+            'absolute bottom-[15px] left-1/2 transform -translate-x-1/2 bg-white px-4 py-2 rounded-full border border-primary-100 z-20 font-medium hidden',
+            address && 'block'
+          )}
+        >
+          {address}
+        </span>
+      </div>
 
       {/* 장소 리스트 */}
-      {places.length > 0 && (
+      {!!places.length && (
         <div className="overflow-y-auto scrollbar-hide h-1/2">
           <ul className="cursor-pointer">
             {places.map((place, index) => (
@@ -173,9 +198,9 @@ const MapPage = () => {
         </div>
       )}
 
-      <div className="px-4 mb-6 pt-2">
-        <Button className="w-full" asChild size={'xl'}>
-          <Link to={REGISTER_DETAILS}>선택</Link>
+      <div className="pt-2 pb-6 px-4">
+        <Button className="w-full" size={'xl'} onClick={handleSelectPlace}>
+          선택
         </Button>
       </div>
     </div>

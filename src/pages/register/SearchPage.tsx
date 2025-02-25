@@ -1,10 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { REGISTER_DETAILS } from '@/constants/pathname';
+import { REGISTER_SELECT } from '@/constants/pathname';
 import PlaceListItem from '@/features/registerpage/PlaceListItem';
 import RegisterSearchBar from '@/features/registerpage/RegisterSearchBar';
 import { useRegisterStore } from '@/store/registerStore';
 import { CircleX } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { KakaoPlace } from './types/place.type';
 
 const SearchPage = () => {
@@ -15,7 +14,7 @@ const SearchPage = () => {
   const handleRemoveClick = (place: KakaoPlace) => removeSelectedPlace(place);
   return (
     <div className="h-full flex flex-col">
-      <RegisterSearchBar />
+      <RegisterSearchBar to={REGISTER_SELECT} />
 
       {selectedPlaces.length > 0 && (
         <div className="px-4 py-[14px] bg-primary-50 text-text-sm font-medium flex gap-3">
@@ -46,9 +45,11 @@ const SearchPage = () => {
       </main>
 
       {/* 버튼 */}
-      <Button className="w-full mb-3" asChild size={'xl'}>
-        <Link to={REGISTER_DETAILS}>완료</Link>
-      </Button>
+      <div className="pt-2 pb-6 px-4">
+        <Button className="w-full" size={'xl'} disabled={!selectedPlaces.length}>
+          다음
+        </Button>
+      </div>
     </div>
   );
 };
