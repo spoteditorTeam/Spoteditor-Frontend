@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { REGISTER_SEARCH } from '@/constants/pathname';
+import { useRegisterStore } from '@/store/registerStore';
 import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const WHO = ['혼자', '친구랑', '연인과', '가족과', '동료와', '반려동물과'];
@@ -26,25 +26,19 @@ const WHERE = [
 
 const SelectPage = () => {
   const navi = useNavigate();
-  const [selectedWithWho, setSelectedWithWho] = useState<string[]>([]);
-  const [selectedFeeling, setSelectedFeeling] = useState<string[]>([]);
+  const companions = useRegisterStore((state) => state.experience.selectedCompanions);
+  const feelings = useRegisterStore((state) => state.experience.selectedFeelings);
 
-  const handleOptionButtonClick = (type: 'who' | 'feeling', value: string) => {
-    if (type === 'who') {
-      setSelectedWithWho((prev) =>
-        prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-      );
-    } else if (type === 'feeling') {
-      setSelectedFeeling((prev) =>
-        prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
-      );
-    }
-  };
+  const setCompanions = useRegisterStore((state) => state.setCompanions);
+  const setFeelings = useRegisterStore((state) => state.setFeelings);
 
   return (
     <div className="h-full flex flex-col px-4">
       <header className="mt-3">
-        <ArrowLeft size={24} onClick={() => navi(-1)} className="cursor-pointer" />
+        {/* 나중에 경로 수정 */}
+        <Link to={'/profile/1'}>
+          <ArrowLeft size={24} className="cursor-pointer" />
+        </Link>
       </header>
 
       <main className="flex flex-col items-center justify-center grow ">
@@ -62,10 +56,10 @@ const SelectPage = () => {
               {WHO.map((who, idx) => (
                 <Button
                   key={idx}
-                  variant={selectedWithWho.includes(who) ? 'default' : 'muted'}
+                  variant={companions.includes(who) ? 'default' : 'muted'}
                   size={'m'}
                   className="font-bold"
-                  onClick={() => handleOptionButtonClick('who', who)}
+                  onClick={() => setCompanions(who)}
                 >
                   {who}
                 </Button>
@@ -80,10 +74,10 @@ const SelectPage = () => {
               {WHERE.map((who, idx) => (
                 <Button
                   key={idx}
-                  variant={selectedFeeling.includes(who) ? 'default' : 'muted'}
+                  variant={feelings.includes(who) ? 'default' : 'muted'}
                   size={'m'}
                   className="font-bold"
-                  onClick={() => handleOptionButtonClick('feeling', who)}
+                  onClick={() => setFeelings(who)}
                 >
                   {who}
                 </Button>
@@ -95,11 +89,18 @@ const SelectPage = () => {
 
       {/* 버튼 */}
       <div className="w-full flex flex-col items-center gap-[15px] mb-6">
-        <Button className="w-full" asChild size={'xl'}>
-          <Link to={REGISTER_SEARCH}>다음</Link>
+        <Button
+          className="w-full"
+          size={'xl'}
+          disabled={!companions.length || !feelings.length}
+          onClick={() => navi(REGISTER_SEARCH)}
+        >
+          다음
         </Button>
 
-        <p className="underline text-primary-300 text-text-sm font-medium">다음에 하기</p>
+        <p className="underline text-primary-300 text-text-sm font-medium">
+          <Link to={REGISTER_SEARCH}>다음에 하기</Link>
+        </p>
       </div>
     </div>
   );
