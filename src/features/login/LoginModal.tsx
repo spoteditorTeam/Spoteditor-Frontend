@@ -21,14 +21,14 @@ function LoginModal() {
         hideCloseButton
         className="mobile:top-0 mobile:left-[50%] mobile:w-[375px] mobile:translate-x-[-50%] mobile:translate-y-0 web:pb-[44.82px]"
       >
-        <DialogClose
-          asChild
-          className="flex items-center justify-end w-full web:py-2 mobile:py-[13px]"
-        >
-          <button>
-            <XIcon className="w-[34px] h-[34px]" />
-          </button>
-        </DialogClose>
+        <section className="flex items-center justify-end w-full web:py-2 mobile:py-[13px]">
+          <DialogClose asChild>
+            <button>
+              <XIcon className="w-[34px] h-[34px]" />
+            </button>
+          </DialogClose>
+        </section>
+
         <div className="flex w-[339px] flex-col items-center gap-[20px]">
           <DialogHeader>
             <DialogTitle>Spoteditor</DialogTitle>
