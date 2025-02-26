@@ -40,7 +40,6 @@ const DetailsPage = () => {
           placeholder="제목을 입력해주세요. (최대 30자) *"
           className="border-b px-0 placeholder:text-primary-300 placeholder:after:content-['*'] placeholder:after:text-red-500"
         />
-
         {/* 이미지 보여주기 */}
         {imagePreview && (
           <div className="relative">
@@ -49,7 +48,7 @@ const DetailsPage = () => {
               type="image"
               src={imagePreview}
               alt="커버 이미지"
-              className="w-full aspect-[2/1] p-0 "
+              className="w-full aspect-[2/1] p-0 object-cover"
             />
             <CircleX
               className="stroke-primary-100 absolute top-4 right-4 cursor-pointer hover:fill-slate-50/50"
@@ -57,7 +56,6 @@ const DetailsPage = () => {
             />
           </div>
         )}
-
         {/* 파일 입력 */}
         <Input
           type="file"
@@ -66,7 +64,6 @@ const DetailsPage = () => {
           ref={coverUploadInputRef}
           className="hidden"
         />
-
         <Button
           variant={'outline'}
           className={cn(
@@ -80,12 +77,10 @@ const DetailsPage = () => {
             커버이미지<span className="text-error-600 m-1">*</span>
           </span>
         </Button>
-
         <Textarea
           className="bg-primary-50 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
           placeholder="내용을 입력해주세요. (최대 500자)"
         />
-
         <div className="flex flex-col w-full">
           {selectedPlaces.map((place, idx) => (
             <PlaceDetailFormItem place={place} key={place.id} idx={idx + 1} />
