@@ -3,20 +3,26 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { REGISTER_SEARCH } from '@/constants/pathname';
 import PlaceDetailFormItem from '@/features/registerpage/PlaceDetailFormItem';
+import useImagePreview from '@/hooks/useImagePreview';
+import { cn } from '@/lib/utils';
 import { useRegisterStore } from '@/store/registerStore';
-import { ArrowLeft, Camera } from 'lucide-react';
+import { ArrowLeft, Camera, CircleX } from 'lucide-react';
+import { useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 // 스크롤 수정 필요
 const DetailsPage = () => {
   const navi = useNavigate();
   const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
+  const { imagePreview, handleFileChange, handleClearImage } = useImagePreview();
+  const coverUploadInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="h-full flex flex-col">
       <header className="flex items-center py-3 justify-between">
         <div className="flex gap-2.5">
           <ArrowLeft size={24} onClick={() => navi(-1)} className="cursor-pointer" />
+          {/* 첫번째 위치한 장소 주소 */}
           <h3 className="text-text-2xl font-bold">서울 · 종로구</h3>
         </div>
         <Button
@@ -35,9 +41,39 @@ const DetailsPage = () => {
           className="border-b px-0 placeholder:text-primary-300 placeholder:after:content-['*'] placeholder:after:text-red-500"
         />
 
+        {/* 이미지 보여주기 */}
+        {imagePreview && (
+          <div className="relative">
+            <Input
+              id="coverImg"
+              type="image"
+              src={imagePreview}
+              alt="커버 이미지"
+              className="w-full aspect-[2/1] p-0 "
+            />
+            <CircleX
+              className="stroke-primary-100 absolute top-4 right-4 cursor-pointer hover:fill-slate-50/50"
+              onClick={handleClearImage}
+            />
+          </div>
+        )}
+
+        {/* 파일 입력 */}
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          ref={coverUploadInputRef}
+          className="hidden"
+        />
+
         <Button
           variant={'outline'}
-          className="border w-full border-dashed gap-[5px] text-primary-600 px-2.5 py-3"
+          className={cn(
+            'border w-full border-dashed gap-[5px] text-primary-600 px-2.5 py-3',
+            imagePreview && 'hidden'
+          )}
+          onClick={() => coverUploadInputRef.current?.click()}
         >
           <Camera />
           <span className="text-text-sm font-bold">
