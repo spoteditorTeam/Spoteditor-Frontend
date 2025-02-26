@@ -1,5 +1,17 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { REGISTER_SEARCH } from '@/constants/pathname';
 import PlaceDetailFormItem from '@/features/registerpage/PlaceDetailFormItem';
@@ -7,8 +19,8 @@ import useImagePreview from '@/hooks/useImagePreview';
 import { cn } from '@/lib/utils';
 import { useRegisterStore } from '@/store/registerStore';
 import { ArrowLeft, Camera, CircleX } from 'lucide-react';
-import { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // 스크롤 수정 필요
 const DetailsPage = () => {
@@ -17,6 +29,10 @@ const DetailsPage = () => {
   const { imagePreview, handleFileChange, handleClearImage } = useImagePreview();
   const coverUploadInputRef = useRef<HTMLInputElement>(null);
 
+  const logTitleInputRef = useRef<HTMLInputElement>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  console.log(isDialogOpen);
   return (
     <div className="h-full flex flex-col">
       <header className="flex items-center py-3 justify-between">
@@ -33,12 +49,12 @@ const DetailsPage = () => {
           장소 추가
         </Button>
       </header>
-
       <main className="flex flex-col items-center grow gap-3 min-h-0 overflow-y-auto scrollbar-hide">
         {/* 로그 제목, 설명 */}
         <Input
           placeholder="제목을 입력해주세요. (최대 30자) *"
           className="border-b px-0 placeholder:text-primary-300 placeholder:after:content-['*'] placeholder:after:text-red-500"
+          ref={logTitleInputRef}
         />
         {/* 이미지 보여주기 */}
         {imagePreview && (
@@ -87,7 +103,6 @@ const DetailsPage = () => {
           ))}
         </div>
       </main>
-
       {/* 버튼 */}
       {/* {isChecked ? (
         <div className="bg-black grid grid-cols-3 pt-2 pb-3">
@@ -106,9 +121,31 @@ const DetailsPage = () => {
         </div>
       ) : ( */}
       <div className="pt-2 pb-3 px-4">
-        <Button className="w-full" asChild size={'xl'}>
-          <Link to={'#'}>완료</Link>
-        </Button>
+        <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <AlertDialogTrigger asChild>
+            <Button className="w-full" size={'xl'}>
+              선택
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                <span className="text-info-500">{logTitleInputRef.current?.value}</span> 로그를
+                등록하시겠어요?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                <Label htmlFor="secret" className="flex items-center gap-3">
+                  <Input type="checkbox" id="secret" className="w-fit" />
+                  <span className="text-black text-text-sm">비공개</span>
+                </Label>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>취소</AlertDialogCancel>
+              <AlertDialogAction>확인</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       {/* )} */}
     </div>

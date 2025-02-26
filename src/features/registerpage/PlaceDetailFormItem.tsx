@@ -58,7 +58,9 @@ const PlaceDetailFormItem = ({ place, idx }: PlaceDetailFormItemProps) => {
         onClick={() => fileInputRef.current?.click()}
       >
         <Camera />
-        <span className="text-text-sm font-bold">사진첨부 (최대 3장)</span>
+        <span className="text-text-sm font-bold">
+          사진첨부<span className="text-error-600"> * </span>(최대 3장)
+        </span>
       </Button>
 
       {imagePreviews && (
