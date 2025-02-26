@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { useRegisterStore } from '@/store/registerStore';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { KakaoPlace } from './types/place.type';
+import { KakaoPlace } from './types/Place';
 declare global {
   interface Window {
     kakao: any;
@@ -16,6 +16,7 @@ const MapPage = () => {
   const navi = useNavigate();
   const addSelectedPlace = useRegisterStore((state) => state.addSelectedPlace);
   const handleSelectPlace = () => {
+    if (!selectedPlace) return;
     addSelectedPlace(selectedPlace);
     navi(REGISTER_SEARCH);
   };
@@ -32,8 +33,7 @@ const MapPage = () => {
   const [address, setAddress] = useState('');
   const [markers, setMarkers] = useState([]);
   const [places, setPlaces] = useState<KakaoPlace[]>([]);
-  const [selectedPlace, setSelectedPlace] = useState<KakaoPlace>({});
-  const [hasNoPlace, setHasNoPlace] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<KakaoPlace | null>(null);
 
   // sdk 로드
   useEffect(() => {
@@ -66,7 +66,7 @@ const MapPage = () => {
       placeRef.current = new window.kakao.maps.services.Places();
       geoCoderRef.current = new window.kakao.maps.services.Geocoder();
 
-      geoCoderRef.current.coord2Address(lon, lat, (result, status) => {
+      geoCoderRef.current.coord2Address(lon, lat, (result, status: string) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const address = result[0].address.address_name;
           setAddress(address);
@@ -104,7 +104,6 @@ const MapPage = () => {
       displayPlaces(result);
     } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
       alert('검색 결과가 없습니다.');
-      setHasNoPlace(true);
       setPlaces([]);
     } else if (status === window.kakao.maps.services.Status.ERROR) {
       alert('검색 중 오류가 발생했습니다.');
@@ -208,7 +207,7 @@ const MapPage = () => {
 };
 
 // sdk
-function loadKakaoMapSDK(loadedCallback) {
+function loadKakaoMapSDK(loadedCallback: () => void) {
   const script = document.createElement('script');
   script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
     import.meta.env.VITE_KAKAO_MAP_KEY

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { KakaoPlace } from '@/pages/register/types/place.type';
+import { KakaoPlace } from '@/pages/register/types/Place';
 import { Camera, ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { useState } from 'react';
 

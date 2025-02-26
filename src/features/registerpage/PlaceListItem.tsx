@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { KakaoPlace } from '@/pages/register/types/place.type';
+import { KakaoPlace } from '@/pages/register/types/Place';
 import { useRegisterStore } from '@/store/registerStore';
 
 const PlaceListItem = ({ place }: { place: KakaoPlace }) => {

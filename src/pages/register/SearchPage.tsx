@@ -5,7 +5,7 @@ import RegisterSearchBar from '@/features/registerpage/RegisterSearchBar';
 import { useRegisterStore } from '@/store/registerStore';
 import { CircleX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { KakaoPlace } from './types/place.type';
+import { KakaoPlace } from './types/Place';
 
 const SearchPage = () => {
   const navi = useNavigate();
