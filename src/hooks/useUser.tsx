@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 type UserState = 'userOnly' | 'nonUserOnly';
 
 export default function useUser(userState?: UserState) {
-  const { data, error } = useQuery<IUser>({
+  const { data, error } = useQuery({
     queryKey: userKeys.all,
     queryFn: () => currentUser.getUser(),
   });
