@@ -1,4 +1,5 @@
 import { currentUser, IUser } from '@/services/apis/userApi';
+import { userKeys } from '@/services/queryKeys';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,7 @@ type UserState = 'userOnly' | 'nonUserOnly';
 
 export default function useUser(userState?: UserState) {
   const { data, error } = useQuery<IUser>({
-    queryKey: ['user'],
+    queryKey: userKeys.all,
     queryFn: () => currentUser.getUser(),
   });
 
