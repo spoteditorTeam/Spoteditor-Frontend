@@ -32,13 +32,12 @@ const DetailsPage = () => {
   const logTitleInputRef = useRef<HTMLInputElement>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  console.log(isDialogOpen);
   return (
     <div className="h-full flex flex-col">
+      {/* 헤더 */}
       <header className="flex items-center py-3 justify-between">
         <div className="flex gap-2.5">
           <ArrowLeft size={24} onClick={() => navi(-1)} className="cursor-pointer" />
-          {/* 첫번째 위치한 장소 주소 */}
           <h3 className="text-text-2xl font-bold">서울 · 종로구</h3>
         </div>
         <Button
@@ -49,12 +48,15 @@ const DetailsPage = () => {
           장소 추가
         </Button>
       </header>
+
+      {/* 장소들 */}
       <main className="flex flex-col items-center grow gap-3 min-h-0 overflow-y-auto scrollbar-hide">
         {/* 로그 제목, 설명 */}
         <Input
           placeholder="제목을 입력해주세요. (최대 30자) *"
           className="border-b px-0 placeholder:text-primary-300 placeholder:after:content-['*'] placeholder:after:text-red-500"
           ref={logTitleInputRef}
+          max={30}
         />
         {/* 이미지 보여주기 */}
         {imagePreview && (
@@ -94,8 +96,9 @@ const DetailsPage = () => {
           </span>
         </Button>
         <Textarea
-          className="bg-primary-50 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
           placeholder="내용을 입력해주세요. (최대 500자)"
+          maxLength={500}
         />
         <div className="flex flex-col w-full">
           {selectedPlaces.map((place, idx) => (

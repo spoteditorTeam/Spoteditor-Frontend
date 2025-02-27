@@ -89,6 +89,7 @@ const PlaceDetailFormItem = ({ place, idx }: PlaceDetailFormItemProps) => {
       <Textarea
         className="bg-primary-50 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="내용을 입력해주세요. (최대 500자)"
+        maxLength={500}
       />
     </div>
   );
