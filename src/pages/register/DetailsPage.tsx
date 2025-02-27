@@ -30,7 +30,19 @@ const DetailsPage = () => {
   const coverUploadInputRef = useRef<HTMLInputElement>(null);
 
   const logTitleInputRef = useRef<HTMLInputElement>(null);
+  const handleClearTitle = () => {
+    if (logTitleInputRef.current) {
+      logTitleInputRef.current.value = '';
+      logTitleInputRef.current.focus();
+    }
+  };
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('제출');
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -49,16 +61,23 @@ const DetailsPage = () => {
         </Button>
       </header>
 
-      {/* 장소들 */}
-      <main className="flex flex-col items-center grow gap-3 min-h-0 overflow-y-auto scrollbar-hide">
-        {/* 로그 제목, 설명 */}
-        <Input
-          placeholder="제목을 입력해주세요. (최대 30자) *"
-          className="border-b px-0 placeholder:text-primary-300 placeholder:after:content-['*'] placeholder:after:text-red-500"
-          ref={logTitleInputRef}
-          max={30}
-        />
-        {/* 이미지 보여주기 */}
+      <form
+        className="flex flex-col items-center grow gap-3 min-h-0 overflow-y-auto scrollbar-hide"
+        onSubmit={handleSubmit}
+      >
+        {/* 로그 타이틀 */}
+        <div className="flex items-center w-full border-b">
+          <Input
+            name="logTitle"
+            placeholder="제목을 입력해주세요. (최대 30자) *"
+            className=" placeholder:text-primary-300 placeholder:after:content-['*'] font-medium"
+            ref={logTitleInputRef}
+            maxLength={30}
+            defaultValue=""
+          />
+          <CircleX className=" fill-primary-100 stroke-white" onClick={handleClearTitle} />
+        </div>
+        {/* 커버 이미지 */}
         {imagePreview && (
           <div className="relative">
             <Input
@@ -82,6 +101,7 @@ const DetailsPage = () => {
           ref={coverUploadInputRef}
           className="hidden"
         />
+        {/* 커버 이미지 버튼 */}
         <Button
           variant={'outline'}
           className={cn(
@@ -95,6 +115,7 @@ const DetailsPage = () => {
             커버이미지<span className="text-error-600 m-1">*</span>
           </span>
         </Button>
+        {/* 로그 설명 */}
         <Textarea
           className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
           placeholder="내용을 입력해주세요. (최대 500자)"
@@ -105,24 +126,9 @@ const DetailsPage = () => {
             <PlaceDetailFormItem place={place} key={place.id} idx={idx + 1} />
           ))}
         </div>
-      </main>
+      </form>
+
       {/* 버튼 */}
-      {/* {isChecked ? (
-        <div className="bg-black grid grid-cols-3 pt-2 pb-3">
-          <Button>
-            <ArrowUp />
-            위로
-          </Button>
-          <Button>
-            <ArrowDown />
-            아래로
-          </Button>
-          <Button>
-            <Trash />
-            삭제하기
-          </Button>
-        </div>
-      ) : ( */}
       <div className="pt-2 pb-3 px-4">
         <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <AlertDialogTrigger asChild>
@@ -150,7 +156,6 @@ const DetailsPage = () => {
           </AlertDialogContent>
         </AlertDialog>
       </div>
-      {/* )} */}
     </div>
   );
 };
