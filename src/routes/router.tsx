@@ -1,7 +1,7 @@
 import MainLayout from '@/layouts/MainLayout';
 import RegisterLayout from '@/layouts/RegisterLayout';
 import DetailPage from '@/pages/detail';
-import HomePage from '@/pages/home';
+import HomePage from '@/pages/home/HomePage';
 import Notice from '@/pages/notice';
 import NoticeDetail from '@/pages/notice/notice-detail';
 import Profile from '@/pages/profile';
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/search', element: <Search /> },
-      { path: '/detail/:placeId', element: <DetailPage /> },
+      { path: '/log/:placeId', element: <DetailPage /> },
       {
         path: '/profile/:userId',
         element: <Profile />,
