@@ -97,8 +97,11 @@ const DetailsPage = () => {
 
   const handlePostLog = async () => {
     const formatedLog = formatLog(selectedPlaces);
+    console.log(formatedLog);
     const result = await api.register.createLog(formatedLog);
     console.log(result);
+
+    if (result) navi(`/log/${result.placeLogId}`, { replace: true });
   };
 
   return (
