@@ -9,8 +9,9 @@ import ProfileSetting from '@/pages/profile-setting';
 import MyLogs from '@/pages/profile/my-logs';
 import SavedLogs from '@/pages/profile/saved-logs';
 import SavedSpaces from '@/pages/profile/saved-spaces';
-import { MapPage, NewPlacePage, SearchPage, SelectPage } from '@/pages/register';
+import { MapPage, NewPlacePage, SearchPage, SelectPage, WritePage } from '@/pages/register';
 import DetailsPage from '@/pages/register/DetailsPage';
+import RegisterTest from '@/pages/register/RegisterTest';
 import Search from '@/pages/search';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
         path: 'notice/:noticeId',
         element: <NoticeDetail />,
       },
+      { path: '/test', element: <RegisterTest /> },
     ],
   },
   {
@@ -61,6 +63,7 @@ const router = createBrowserRouter([
       { path: '/register/details', element: <DetailsPage /> },
       { path: '/register/maps', element: <MapPage /> },
       { path: '/register/newPlace', element: <NewPlacePage /> },
+      { path: '/write', element: <WritePage /> },
     ],
   },
 ]);
