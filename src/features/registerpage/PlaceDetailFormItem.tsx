@@ -12,10 +12,11 @@ interface PlaceDetailFormItemProps {
 }
 
 const PlaceDetailFormItem = ({ place, idx }: PlaceDetailFormItemProps) => {
-  const [isChecked, setIsChecked] = useState(false);
-  const handleChecked = () => setIsChecked((prev) => !prev);
   const { handleFileChange, handleRemoveImage, imagePreviews } = useImages();
+  const [isChecked, setIsChecked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleChecked = () => setIsChecked((prev) => !prev);
 
   return (
     <div className="py-[5px]">
@@ -51,7 +52,6 @@ const PlaceDetailFormItem = ({ place, idx }: PlaceDetailFormItemProps) => {
       </div>
 
       {/* 사진 첨부 */}
-
       <Button
         variant={'outline'}
         className="border w-full border-dashed gap-[5px] text-primary-600 px-2.5 py-3 mt-[15px] mb-2.5"
@@ -75,21 +75,22 @@ const PlaceDetailFormItem = ({ place, idx }: PlaceDetailFormItemProps) => {
           ))}
         </div>
       )}
-
-      {/* 파일 입력 */}
       <Input
         type="file"
         accept="image/*"
         onChange={handleFileChange}
         ref={fileInputRef}
         className="hidden"
+        multiple
       />
 
       {/* 내용 */}
       <Textarea
-        className="bg-primary-50 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="내용을 입력해주세요. (최대 500자)"
         maxLength={500}
+        // onClick={handleNavigateToWritePage}
+        // readOnly
       />
     </div>
   );
