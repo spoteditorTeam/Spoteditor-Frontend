@@ -7,10 +7,10 @@ import {
   PaginationNext,
 } from '../ui/pagination';
 interface MainPaginationProps {
-  totalPages: number;
+  totalPages?: number;
 }
 
-const MainPagination = ({ totalPages }: MainPaginationProps) => {
+const MainPagination = ({ totalPages = 5 }: MainPaginationProps) => {
   const isEllipsis = totalPages > 3;
   const hasNext = totalPages > 1;
   return (

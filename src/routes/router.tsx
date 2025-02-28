@@ -11,7 +11,6 @@ import SavedLogs from '@/pages/profile/saved-logs';
 import SavedSpaces from '@/pages/profile/saved-spaces';
 import { MapPage, NewPlacePage, SearchPage, SelectPage, WritePage } from '@/pages/register';
 import DetailsPage from '@/pages/register/DetailsPage';
-import RegisterTest from '@/pages/register/RegisterTest';
 import Search from '@/pages/search';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -52,7 +51,6 @@ const router = createBrowserRouter([
         path: 'notice/:noticeId',
         element: <NoticeDetail />,
       },
-      { path: '/test', element: <RegisterTest /> },
     ],
   },
   {

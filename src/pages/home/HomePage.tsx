@@ -6,7 +6,6 @@ import { REGISTER_SELECT } from '@/constants/pathname';
 import LogCard from '@/features/homepage/LogCard';
 import MainHero from '@/features/homepage/MainHero';
 import useLogList from '@/hooks/queries/log/useLogList';
-
 import { cn } from '@/lib/utils';
 import { LogContent } from '@/services/apis/types/logAPI.type';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +17,7 @@ const HomePage = () => {
   const { data, isLoading } = useLogList();
 
   if (isLoading) return;
-  const { content } = data;
+  const { content, totalPages } = data;
   return (
     <>
       {/* 메인 히어로 */}
@@ -93,7 +92,7 @@ const HomePage = () => {
             );
           })}
         </div>
-        <MainPagination totalPages={data.totalPages} />
+        <MainPagination totalPages={totalPages} />
       </div>
     </>
   );

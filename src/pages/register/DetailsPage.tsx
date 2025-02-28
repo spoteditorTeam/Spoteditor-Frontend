@@ -72,14 +72,14 @@ const DetailsPage = () => {
     uuids: presignedUrlList[place.place_name].map((item) => item.uuid),
   });
 
-  const formatLog = (places: kakao.maps.services.PlacesSearchResult): Log => {
+  const formatLog = (places: kakao.maps.services.PlacesSearchResult): Log | null => {
     if (
       !logTitleInputRef.current?.value ||
       !logDescripTextAreaRef.current?.value ||
       !presignedUrlObj?.originalFile
     ) {
       alert('로그 제목 / 설명 / 커버 이미지를 작성해주세요');
-      return;
+      return null;
     }
 
     return {
@@ -97,6 +97,7 @@ const DetailsPage = () => {
 
   const handlePostLog = async () => {
     const formatedLog = formatLog(selectedPlaces);
+    if (!formatedLog) return;
     console.log(formatedLog);
     const result = await api.register.createLog(formatedLog);
     console.log(result);

@@ -11,7 +11,7 @@ const DetailPage = () => {
   const { placeLogId } = useParams();
   const { data, isLoading } = useLog(Number(placeLogId));
 
-  if (isLoading) return;
+  if (isLoading || !data) return <p>Loading...</p>;
   const { name, description, places } = data;
   return (
     <div>
