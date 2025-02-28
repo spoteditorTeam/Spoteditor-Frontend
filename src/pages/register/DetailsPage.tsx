@@ -17,9 +17,10 @@ import { MAPS, REGISTER_SEARCH } from '@/constants/pathname';
 import PlaceDetailFormItem from '@/features/registerpage/PlaceDetailFormItem';
 import useImagePreview from '@/hooks/useImagePreview';
 import { cn } from '@/lib/utils';
+import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
 import { useRegisterStore } from '@/store/registerStore';
 import { ArrowLeft, Camera, CircleX } from 'lucide-react';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // 스크롤 수정 필요
@@ -31,15 +32,54 @@ const DetailsPage = () => {
 
   const coverUploadInputRef = useRef<HTMLInputElement>(null);
   const logTitleInputRef = useRef<HTMLInputElement>(null);
+  const logDescripTextAreaRef = useRef<HTMLTextAreaElement>(null);
+  const textRefs = useRef<{ [placeId: string]: string }>({});
+
+  // 로그 등록 시 필요한 {presignedUrl, uuid}
+  const [presignedUrlList, setPresignUrlList] = useState<PresignUrlResponse[]>([]);
+
   const handleClearTitle = () => {
     if (logTitleInputRef.current) {
       logTitleInputRef.current.value = '';
       logTitleInputRef.current.focus();
     }
   };
+  const setRef = (id: string, elem: HTMLTextAreaElement) => {
+    if (elem) textRefs.current[id] = elem.value;
+    else delete textRefs.current[id];
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log('제출');
+  };
+
+  useEffect(() => console.log(presignedUrlList), [presignedUrlList]);
+
+  // 제출 형식에 맞춰 포맷
+  const formatAddress = (place: kakao.maps.services.PlacesSearchResultItem) => ({
+    address: place.address_name,
+    roadAddress: place.road_address_name,
+    latitude: place.y,
+    longitude: place.x,
+    sido: place.address_name.split(' ')[0],
+    bname: place.address_name.split(' ')[1],
+    sigungu: place.address_name.split(' ')[2],
+  });
+
+  const formatPlace = (place: kakao.maps.services.PlacesSearchResultItem) => ({
+    name: place.place_name,
+    description: textRefs.current[place.id],
+    address: formatAddress(place),
+    category: 'TOUR',
+    // useImages
+    originalFiles: [],
+    uuids: [],
+  });
+
+  const handleTest = () => {
+    // 형식에 맞게 보내면 됨 -> api.register.createLog
+    console.log(presignedUrlList);
   };
 
   return (
@@ -59,7 +99,7 @@ const DetailsPage = () => {
         </Button>
       </header>
 
-      <form
+      <main
         className="flex flex-col items-center grow gap-3 min-h-0 overflow-y-auto scrollbar-hide"
         onSubmit={handleSubmit}
       >
@@ -120,16 +160,23 @@ const DetailsPage = () => {
             className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm  placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder="내용을 입력해주세요. (최대 500자)"
             maxLength={500}
+            ref={logDescripTextAreaRef}
             // onClick={handleNavigateToWritePage}
             // readOnly
           />
           <div className="flex flex-col w-full">
             {selectedPlaces.map((place, idx) => (
-              <PlaceDetailFormItem place={place} key={place.id} idx={idx + 1} />
+              <PlaceDetailFormItem
+                place={place}
+                key={place.id}
+                idx={idx + 1}
+                setRef={setRef}
+                onChangePresignUrlList={setPresignUrlList}
+              />
             ))}
           </div>
         </div>
-      </form>
+      </main>
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4">
@@ -154,7 +201,7 @@ const DetailsPage = () => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>취소</AlertDialogCancel>
-              <AlertDialogAction>확인</AlertDialogAction>
+              <AlertDialogAction onClick={handleTest}>확인</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

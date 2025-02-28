@@ -7,29 +7,38 @@ function useImages(initialImageUrls: string[] = []) {
   const [imagePreviews, setImagePreviews] = useState<string[]>(initialImageUrls);
   const [presignedUrls, setPresignedUrls] = useState<PresignUrlResponse[]>([]);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) return;
-    const files = Array.from(event.target.files);
-
-    // 중복 파일 제거
-    const filteredFiles = files.filter(
+  const filterNewFiles = (files: File[], imageFiles: File[]) => {
+    return files.filter(
       (file) =>
         !imageFiles.some(
           (item) => item.name === file.name && item.lastModified === file.lastModified
         )
     );
-    const newFiles = filteredFiles.slice(0, 3 - imageFiles.length);
-    if (newFiles.length === 0) return; // 없으면 종료
+  };
 
+  const getPresignedUrls = async (files: File[]) => {
     try {
-      const newPresignedUrls = await Promise.all(
-        newFiles.map((file) => api.register.getPresignUrl({ originalFile: file.name }))
+      const presignedUrls = await Promise.all(
+        files.map((file) => api.register.getPresignUrl({ originalFile: file.name }))
       );
-      setImageFiles((prev) => [...prev, ...newFiles]);
-      setPresignedUrls((prev) => [...prev, ...newPresignedUrls]);
+      return presignedUrls;
     } catch (error) {
       console.log('Presigned URL 가져오기 실패:', error);
+      return [];
     }
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
+
+    const files = Array.from(event.target.files);
+    const filteredFiles = filterNewFiles(files, imageFiles); // 중복 파일 제거
+    const newFiles = filteredFiles.slice(0, 3 - imageFiles.length); // 추가될 파일
+    if (newFiles.length === 0) return; // 없으면 종료
+
+    const newPresignedUrls = await getPresignedUrls(newFiles); // Presigned URL 가져오기
+    setImageFiles((prev) => [...prev, ...newFiles]);
+    setPresignedUrls((prev) => [...prev, ...newPresignedUrls]);
   };
 
   const handleRemoveImage = (index: number) => {

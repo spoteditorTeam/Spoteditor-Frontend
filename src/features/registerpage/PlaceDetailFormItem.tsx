@@ -2,21 +2,33 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import useImages from '@/hooks/useImages';
+import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
 import { Camera, ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import ImagePreviewItem from './ImagePreviewItem';
 
 interface PlaceDetailFormItemProps {
   place: kakao.maps.services.PlacesSearchResultItem;
   idx: number;
+  setRef: (id: string, elem: HTMLTextAreaElement) => void;
+  onChangePresignUrlList: Dispatch<SetStateAction<PresignUrlResponse[]>>;
 }
 
-const PlaceDetailFormItem = ({ place, idx }: PlaceDetailFormItemProps) => {
-  const { handleFileChange, handleRemoveImage, imagePreviews } = useImages();
+const PlaceDetailFormItem = ({
+  place,
+  idx,
+  setRef,
+  onChangePresignUrlList,
+}: PlaceDetailFormItemProps) => {
+  const { handleFileChange, handleRemoveImage, imagePreviews, presignedUrls } = useImages();
   const [isChecked, setIsChecked] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleChecked = () => setIsChecked((prev) => !prev);
+
+  useEffect(() => {
+    onChangePresignUrlList(presignedUrls);
+  }, [onChangePresignUrlList, presignedUrls]);
 
   return (
     <div className="py-[5px]">
@@ -89,10 +101,12 @@ const PlaceDetailFormItem = ({ place, idx }: PlaceDetailFormItemProps) => {
         className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="내용을 입력해주세요. (최대 500자)"
         maxLength={500}
+        ref={(el) => setRef(place.id, el!)}
         // onClick={handleNavigateToWritePage}
         // readOnly
       />
     </div>
   );
 };
+
 export default PlaceDetailFormItem;
