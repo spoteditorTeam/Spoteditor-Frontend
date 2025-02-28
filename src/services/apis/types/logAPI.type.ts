@@ -13,3 +13,12 @@ export interface LogContent {
   address: Address;
   views: number;
 }
+
+export interface PlaceInLog {
+  placeId: number;
+  name: string;
+  description: string;
+  address: Address;
+  category: string;
+  images: Image;
+}

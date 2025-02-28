@@ -93,7 +93,7 @@ const HomePage = () => {
             );
           })}
         </div>
-        <MainPagination />
+        <MainPagination totalPages={data.totalPages} />
       </div>
     </>
   );

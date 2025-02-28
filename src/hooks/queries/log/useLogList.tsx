@@ -3,10 +3,20 @@ import { LogsQueryParams } from '@/services/apis/types/logAPI.type';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { logKeys } from './logQueryKeys';
 
-const useLogList = (params: LogsQueryParams = { page: 1, size: 5, direction: 'ASC' }) => {
+const useLogList = (params?: LogsQueryParams) => {
+  const defaultParams: LogsQueryParams = {
+    page: 1,
+    size: 2,
+    direction: 'ASC',
+  };
+
+  const finalParams = {
+    ...defaultParams,
+    ...params,
+  };
   return useQuery({
-    queryKey: [logKeys.list(params)],
-    queryFn: () => api.log.getLogs(params),
+    queryKey: [logKeys.list(finalParams)],
+    queryFn: () => api.log.getLogs(finalParams),
     placeholderData: keepPreviousData,
   });
 };

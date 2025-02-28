@@ -9,11 +9,15 @@ class LogAPI {
 
   async getLogs(params: LogsQueryParams) {
     const path = '/api/placelogs';
-
     const res = await this.#axios.get(path, {
       params,
     });
+    return res.data;
+  }
 
+  async getLog(placeLogId: number) {
+    const path = `/api/placelogs/${placeLogId}`;
+    const res = await this.#axios.get(path);
     return res.data;
   }
 
