@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
 import { useRegisterStore } from '@/store/registerStore';
 import { ArrowLeft, Camera, CircleX } from 'lucide-react';
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // 스크롤 수정 필요
@@ -36,7 +36,9 @@ const DetailsPage = () => {
   const textRefs = useRef<{ [placeId: string]: string }>({});
 
   // 로그 등록 시 필요한 {presignedUrl, uuid}
-  const [presignedUrlList, setPresignUrlList] = useState<PresignUrlResponse[]>([]);
+  const [presignedUrlList, setPresignUrlList] = useState<{ [key: string]: PresignUrlResponse[] }>(
+    {}
+  );
 
   const handleClearTitle = () => {
     if (logTitleInputRef.current) {
@@ -49,13 +51,6 @@ const DetailsPage = () => {
     else delete textRefs.current[id];
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    console.log('제출');
-  };
-
-  useEffect(() => console.log(presignedUrlList), [presignedUrlList]);
-
   // 제출 형식에 맞춰 포맷
   const formatAddress = (place: kakao.maps.services.PlacesSearchResultItem) => ({
     address: place.address_name,
@@ -67,7 +62,7 @@ const DetailsPage = () => {
     sigungu: place.address_name.split(' ')[2],
   });
 
-  const formatPlace = (place: kakao.maps.services.PlacesSearchResultItem) => ({
+  const formatPlace = (place: kakao.maps.services.PlacesSearchResultItem, idx: number) => ({
     name: place.place_name,
     description: textRefs.current[place.id],
     address: formatAddress(place),
@@ -80,6 +75,10 @@ const DetailsPage = () => {
   const handleTest = () => {
     // 형식에 맞게 보내면 됨 -> api.register.createLog
     console.log(presignedUrlList);
+
+    // const results = selectedPlaces.map((place, idx) => ({
+    //   ...formatPlace(place, idx)
+    // }))
   };
 
   return (
@@ -99,10 +98,7 @@ const DetailsPage = () => {
         </Button>
       </header>
 
-      <main
-        className="flex flex-col items-center grow gap-3 min-h-0 overflow-y-auto scrollbar-hide"
-        onSubmit={handleSubmit}
-      >
+      <main className="flex flex-col items-center grow gap-3 min-h-0 overflow-y-auto scrollbar-hide">
         {/* 로그 타이틀 */}
         <div className="flex items-center w-full border-b">
           <Input

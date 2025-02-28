@@ -11,7 +11,7 @@ interface PlaceDetailFormItemProps {
   place: kakao.maps.services.PlacesSearchResultItem;
   idx: number;
   setRef: (id: string, elem: HTMLTextAreaElement) => void;
-  onChangePresignUrlList: Dispatch<SetStateAction<PresignUrlResponse[]>>;
+  onChangePresignUrlList: Dispatch<SetStateAction<{ [key: number]: PresignUrlResponse[] }>>;
 }
 
 const PlaceDetailFormItem = ({
@@ -27,8 +27,11 @@ const PlaceDetailFormItem = ({
   const handleChecked = () => setIsChecked((prev) => !prev);
 
   useEffect(() => {
-    onChangePresignUrlList(presignedUrls);
-  }, [onChangePresignUrlList, presignedUrls]);
+    onChangePresignUrlList((prev) => ({
+      ...prev,
+      [place.place_name]: presignedUrls,
+    }));
+  }, [onChangePresignUrlList, presignedUrls, place.place_name]);
 
   return (
     <div className="py-[5px]">
