@@ -43,7 +43,7 @@ export interface Log {
 }
 
 // createLog response
-interface Image {
+export interface Image {
   imageId: number;
   originalFile: string;
   storedFile: string;
