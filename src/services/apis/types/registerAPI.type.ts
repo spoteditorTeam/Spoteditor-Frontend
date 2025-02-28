@@ -8,8 +8,12 @@ export interface PresignUrlResponse {
   uuid: string;
 }
 
+export interface PresignedUrlWithName extends PresignUrlResponse {
+  originalFile: string;
+}
+
 // createLog
-interface Address {
+export interface Address {
   address: string; // "서울특별시 강남구 역삼동 825-1"
   roadAddress: string; // "서울특별시 강남구 테헤란로 152"
   latitude: number; // 37.50523741
@@ -19,7 +23,7 @@ interface Address {
   sigungu: string; // "강남구"
 }
 
-interface Place {
+export interface Place {
   name: string; // "장소1"
   description: string; // "테스트 장소"
   address: Address;

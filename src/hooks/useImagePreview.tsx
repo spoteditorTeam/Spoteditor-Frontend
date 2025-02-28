@@ -1,11 +1,11 @@
 import api from '@/services/apis/api';
-import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
+import { PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
 import { useCallback, useEffect, useState } from 'react';
 
 function useImagePreview(initialImageUrl: string = '') {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>(initialImageUrl);
-  const [presignedUrlObj, setPresignedUrlObj] = useState<PresignUrlResponse | null>(null);
+  const [presignedUrlObj, setPresignedUrlObj] = useState<PresignedUrlWithName | null>(null);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

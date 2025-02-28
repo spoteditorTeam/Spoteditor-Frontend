@@ -1,11 +1,11 @@
 import api from '@/services/apis/api';
-import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
+import { PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
 import { useCallback, useEffect, useState } from 'react';
 
 function useImages(initialImageUrls: string[] = []) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>(initialImageUrls);
-  const [presignedUrls, setPresignedUrls] = useState<PresignUrlResponse[]>([]);
+  const [presignedUrls, setPresignedUrls] = useState<PresignedUrlWithName[]>([]);
 
   const filterNewFiles = (files: File[], imageFiles: File[]) => {
     return files.filter(

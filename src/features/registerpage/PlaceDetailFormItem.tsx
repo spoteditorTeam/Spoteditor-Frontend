@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import useImages from '@/hooks/useImages';
-import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
+import { PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
 import { Camera, ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import ImagePreviewItem from './ImagePreviewItem';
@@ -11,7 +11,7 @@ interface PlaceDetailFormItemProps {
   place: kakao.maps.services.PlacesSearchResultItem;
   idx: number;
   setRef: (id: string, elem: HTMLTextAreaElement) => void;
-  onChangePresignUrlList: Dispatch<SetStateAction<{ [key: number]: PresignUrlResponse[] }>>;
+  onChangePresignUrlList: Dispatch<SetStateAction<{ [key: number]: PresignedUrlWithName[] }>>;
 }
 
 const PlaceDetailFormItem = ({

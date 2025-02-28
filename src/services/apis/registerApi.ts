@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { Log, LogResponse, PresignUrlRequest, PresignUrlResponse } from './types/registerAPI.type';
+import { Log, PresignedUrlWithName, PresignUrlRequest } from './types/registerAPI.type';
 
 class RegisterAPI {
   #axios;
@@ -7,23 +7,20 @@ class RegisterAPI {
     this.#axios = axios;
   }
 
-  async getPresignUrl(file: PresignUrlRequest): Promise<PresignUrlResponse> {
+  async getPresignUrl(file: PresignUrlRequest): Promise<PresignedUrlWithName> {
     const path = '/api/purl';
     const res = await this.#axios.post(path, file);
-    return res.data;
+    return { ...res.data, originalFile: file.originalFile };
   }
 
   async uploadImageWithPresignUrl(presignUrl: string, file: FormData) {
-    const res = await this.#axios.put(presignUrl, {
-      body: file,
-    });
+    const res = await this.#axios.put(presignUrl, file);
     return res.status;
   }
 
-  async createLog(logData: Log): Promise<LogResponse> {
+  async createLog(logData: Log) {
     const path = '/api/placelogs';
     const res = await this.#axios.post(path, logData);
-    console.log(logData);
     return res.data;
   }
 }
