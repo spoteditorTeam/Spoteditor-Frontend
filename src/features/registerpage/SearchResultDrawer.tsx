@@ -21,7 +21,10 @@ export default function SearchResultDrawer({
 }: SearchResultDrawerProps) {
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
   const addSelectedPlace = useRegisterStore((state) => state.addSelectedPlace);
-
+  const handlePlaceSelect = (place: kakao.maps.services.PlacesSearchResultItem) => {
+    addSelectedPlace(place);
+    setIsOpen(false);
+  };
   return (
     <Drawer.Root
       snapPoints={snapPoints}
@@ -64,7 +67,7 @@ export default function SearchResultDrawer({
                     variant={'outline'}
                     size={'s'}
                     fullRounded
-                    onClick={() => addSelectedPlace(place)}
+                    onClick={() => handlePlaceSelect(place)}
                     className="hover:bg-black hover:text-white"
                   >
                     선택
