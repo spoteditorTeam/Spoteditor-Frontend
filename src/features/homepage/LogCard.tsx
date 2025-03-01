@@ -1,9 +1,9 @@
+import mockImg from '@/assets/mock/1.png';
 import { SubtractIcon } from '@/components/Icons';
 import { cn } from '@/lib/utils';
 import { LogContent, PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { Bookmark } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
 type LogCardProps = {
   isLarge?: boolean;
   vertical?: boolean;
@@ -26,7 +26,7 @@ const LogCard = ({ isLarge, vertical, isModal, log, place }: LogCardProps) => {
       {/* 이미지 */}
       <div className={cn('relative grow')}>
         <img
-          src={log?.image.storedFile}
+          src={mockImg}
           alt="장소 이미지"
           className={cn(
             'object-cover w-full h-full aspect-[3/2] bg-blue-100',
