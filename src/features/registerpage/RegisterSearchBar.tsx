@@ -6,7 +6,7 @@ import React, { FormEvent, ForwardedRef, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface RegisterSearchBarProps {
-  to: string;
+  to?: string;
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
 }
 
@@ -15,7 +15,8 @@ const RegisterSearchBar = forwardRef(
     const navi = useNavigate();
     const handleGoBack = (e: React.MouseEvent) => {
       e.stopPropagation();
-      navi(to);
+      if (to) navi(to);
+      else navi(-1);
     };
 
     return (
