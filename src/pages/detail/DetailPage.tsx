@@ -62,8 +62,8 @@ const DetailPage = () => {
         </div>
 
         {/* 컨텐츠 */}
-        {places.map((place: PlaceInLog) => (
-          <PlaceItem place={place} key={place.placeId} />
+        {places.map((place: PlaceInLog, idx: number) => (
+          <PlaceItem place={place} key={place.placeId} idx={idx + 1} />
         ))}
       </div>
 
