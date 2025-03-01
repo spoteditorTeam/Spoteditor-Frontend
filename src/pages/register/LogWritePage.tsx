@@ -195,21 +195,25 @@ const LogWritePage = () => {
       </main>
 
       {/* 버튼 */}
-      <div className="pt-2 pb-3 px-4">
+      <div className="pt-2 pb-3 px-4 ">
         <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <AlertDialogTrigger asChild>
             <Button className="w-full" size={'xl'}>
               선택
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="max-w-[400px] min-w-[300px]">
             <AlertDialogHeader>
               <AlertDialogTitle>
                 <span className="text-info-500">{logTitle}</span> 로그를 등록하시겠어요?
               </AlertDialogTitle>
               <AlertDialogDescription>
-                <Label htmlFor="secret" className="flex items-center gap-3">
-                  <Input type="checkbox" id="secret" className="w-fit" />
+                <Label htmlFor="secret" className="flex items-center gap-3 h-fit">
+                  <Input
+                    type="checkbox"
+                    id="secret"
+                    className="w-5 h-5 border rounded-sm !border-red-400 bg-white cursor-pointer  checked:text-white checked:accent-black"
+                  />
                   <span className="text-black text-text-sm">비공개</span>
                 </Label>
               </AlertDialogDescription>
