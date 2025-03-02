@@ -41,7 +41,7 @@ function CitySearchForm() {
         </div>
         <Button
           onClick={onSearchClick}
-          className="font-medium text-white rounded-none bg-primary-950 text-text-sm"
+          className="font-medium text-white rounded-none bg-primary-950 text-text-sm hover:bg-primary-900"
           asChild
         >
           <p className="h-full">검색</p>
