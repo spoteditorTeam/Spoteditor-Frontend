@@ -29,7 +29,7 @@ function NoticeDetailHeader({ title, time }: NoticeDetailHeaderProps) {
           <motion.div
             layoutId="noticeDetailHeader"
             transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="w-full pt-[15px] px-4 flex flex-col justify-center items-start gap-1"
+            className="flex flex-col items-start justify-center w-full gap-1 px-4 pt-2"
           >
             <h2 className="font-bold text-text-2xl">{title}</h2>
             <time className="text-text-xs text-primary-400">{time}</time>
