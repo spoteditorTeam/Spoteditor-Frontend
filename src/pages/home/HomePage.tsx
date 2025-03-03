@@ -1,5 +1,3 @@
-import mockImg1 from '@/assets/mock/1.png';
-import mockImg3 from '@/assets/mock/3.png';
 import ArrowIcon from '@/components/Icons/ArrowIcon';
 import MainPagination from '@/components/Pagination/MainPagination';
 import { Button } from '@/components/ui/button';
@@ -7,13 +5,19 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import { REGISTER_SELECT } from '@/constants/pathname';
 import LogCard from '@/features/homepage/LogCard';
 import MainHero from '@/features/homepage/MainHero';
-
+import useLogList from '@/hooks/queries/log/useLogList';
 import { cn } from '@/lib/utils';
+import { LogContent } from '@/services/apis/types/logAPI.type';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const navi = useNavigate();
   const handleGotoRegisterPage = () => navi(REGISTER_SELECT);
+
+  const { data, isLoading } = useLogList();
+
+  if (isLoading) return;
+  const { totalPages, content } = data ?? {};
   return (
     <>
       {/* 메인 히어로 */}
@@ -21,8 +25,8 @@ const HomePage = () => {
 
       <div className="flex flex-col px-4 web:px-[50px]">
         {/* 제목 */}
-        <div className="flex justify-between items-end mt-10 mb-6 font-untitled">
-          <div className="text-xl web:text-2xl font-semibold">
+        <div className="flex items-end justify-between mt-10 mb-6 font-untitled">
+          <div className="text-xl font-semibold web:text-2xl">
             <h3 className="text-primary-300">Sort by</h3>
             <h3 className="text-primary-950">Popularity</h3>
           </div>
@@ -32,24 +36,18 @@ const HomePage = () => {
         {/* 컨테이너 */}
         <Carousel>
           <CarouselContent className="flex">
-            {[...Array(5)].map((_, idx) => (
-              <CarouselItem className="flex-none basis-1/1.5 web:basis-1/4" key={idx}>
-                <LogCard
-                  title={'혼자 보내는 하루, 골목골목 숨어있는 용산 원효로 카페'}
-                  image={mockImg1}
-                  location1="서울"
-                  location2="위치 세부정보"
-                  vertical
-                />
+            {content?.map((log: LogContent) => (
+              <CarouselItem className="flex-none basis-1/1.5 web:basis-1/4" key={log.placeLogId}>
+                <LogCard vertical log={log} />
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
 
         {/* 에디터 설명 */}
-        <div className="flex flex-col web:grid web:grid-cols-2 border-primary-100 my-20 web:gap-7 justify-center">
+        <div className="flex flex-col justify-center my-20 web:grid web:grid-cols-2 border-primary-100 web:gap-7">
           <div className="py-[18px] border-t border-b flex flex-col justify-center web:py-10">
-            <h3 className="text-md font-bold web:text-xl">
+            <h3 className="font-bold text-md web:text-xl">
               모든 유저가 <br className="web:hidden" />
               특별한 "에디터"가 될 수 있어요!
             </h3>
@@ -61,7 +59,7 @@ const HomePage = () => {
               >
                 나의 추천 코스 등록하기
               </Button>
-              <div className="rounded-full w-10 h-10 bg-black flex justify-center items-center">
+              <div className="flex items-center justify-center w-10 h-10 bg-black rounded-full">
                 <ArrowIcon />
               </div>
             </div>
@@ -77,33 +75,24 @@ const HomePage = () => {
 
         {/* 로그 */}
         <div className="mb-6 font-untitled">
-          <div className="text-xl web:text-2xl font-semibold">
+          <div className="text-xl font-semibold web:text-2xl">
             <h3 className="text-primary-300">Latest</h3>
             <h3 className="text-primary-950">Log</h3>
           </div>
         </div>
 
         <div className="flex flex-col gap-y-8 web:grid web:grid-cols-4 web:grid-rows-4 web:gap-x-[15px] web:gap-y-10">
-          {[...Array(13)].map((_, idx) => {
+          {content?.map((log: LogContent, idx: number) => {
             const isLarge = idx === 2;
-
-            const logCardProps = {
-              key: idx,
-              title: '혼자 보내는 하루, 골목골목 숨어있는 용산 원효로 카페',
-              image: isLarge ? mockImg1 : mockImg3,
-              location1: '서울',
-              location2: '위치 세부정보',
-              isLarge,
-            };
 
             return (
               <div key={idx} className={cn(isLarge && 'col-span-2 row-span-2')}>
-                <LogCard {...logCardProps} />
+                <LogCard log={log} />
               </div>
             );
           })}
         </div>
-        <MainPagination />
+        <MainPagination totalPages={totalPages} />
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 import MainLayout from '@/layouts/MainLayout';
 import RegisterLayout from '@/layouts/RegisterLayout';
-import DetailPage from '@/pages/detail';
-import HomePage from '@/pages/home';
+import DetailPage from '@/pages/detail/DetailPage';
+import HomePage from '@/pages/home/HomePage';
 import Notice from '@/pages/notice';
 import NoticeDetail from '@/pages/notice/notice-detail';
 import Profile from '@/pages/profile';
@@ -9,8 +9,8 @@ import ProfileSetting from '@/pages/profile-setting';
 import MyLogs from '@/pages/profile/my-logs';
 import SavedLogs from '@/pages/profile/saved-logs';
 import SavedSpaces from '@/pages/profile/saved-spaces';
-import { MapPage, NewPlacePage, SearchPage, SelectPage } from '@/pages/register';
-import DetailsPage from '@/pages/register/DetailsPage';
+import { MapPage, NewPlacePage, SearchPage, SelectPage, WritePage } from '@/pages/register';
+import LogWritePage from '@/pages/register/LogWritePage';
 import Search from '@/pages/search';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <HomePage /> },
       { path: '/search', element: <Search /> },
-      { path: '/detail/:placeId', element: <DetailPage /> },
+      { path: '/log/:placeLogId', element: <DetailPage /> },
       {
         path: '/profile/:userName',
         element: <Profile />,
@@ -58,9 +58,10 @@ const router = createBrowserRouter([
     children: [
       { path: '/register/select', element: <SelectPage /> },
       { path: '/register/search', element: <SearchPage /> },
-      { path: '/register/details', element: <DetailsPage /> },
+      { path: '/register/details', element: <LogWritePage /> },
       { path: '/register/maps', element: <MapPage /> },
       { path: '/register/newPlace', element: <NewPlacePage /> },
+      { path: '/write', element: <WritePage /> },
     ],
   },
 ]);

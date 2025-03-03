@@ -1,5 +1,6 @@
-import global from '@/assets/homepage/global.png';
-import LoginStatusButtons from '@/components/Header/MainHeader/components/LoginStatusButtons';
+import search from '@/assets/homepage/search.png';
+import LoginStatusButtons from '@/components/Header/MainHeader/LoginStatusButtons';
+import { EarthIcon } from '@/components/Icons';
 import LogoIcon from '@/components/Icons/LogoIcon';
 import LoginModal from '@/features/login/LoginModal';
 import SearchBar from '@/features/search/SearchBar';
@@ -15,7 +16,7 @@ const MainHeader = () => {
         <section className="flex web:gap-[46px] mobile:gap-[20px] items-center justify-between text-white">
           <SearchBarButton />
           <button>
-            <img src={global} alt="global_logo" className="object-contain w-[20px] h-[20px]" />
+            <EarthIcon />
           </button>
           <LoginStatusButtons />
         </section>
