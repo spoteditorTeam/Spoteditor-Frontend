@@ -21,7 +21,7 @@ const RegisterSearchBar = forwardRef(
 
     return (
       <form
-        className="border-b flex items-center w-full px-4 pt-3"
+        className="border-b flex items-center w-full px-4 py-[7px]"
         onSubmit={onSubmit}
         onClick={() => navi(MAPS)}
       >
@@ -31,17 +31,17 @@ const RegisterSearchBar = forwardRef(
           variant={'transparent'}
           onClick={handleGoBack}
         >
-          <ArrowLeft />
+          <ArrowLeft size={24} />
         </Button>
 
         <Input
           ref={ref}
           placeholder="장소를 검색해보세요."
-          className="h-full placeholder:text-primary-300 text-text-lg font-medium"
+          className="h-full placeholder:text-primary-300 text-text-lg font-medium "
         />
 
         <Button type="submit" className="p-0 [&_svg]:size-auto" variant={'transparent'}>
-          <Search />
+          <Search size={20} />
         </Button>
       </form>
     );
