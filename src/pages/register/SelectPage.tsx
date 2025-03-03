@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { REGISTER_SEARCH } from '@/constants/pathname';
+import { HOME, REGISTER_SEARCH } from '@/constants/pathname';
 import { useRegisterStore } from '@/store/registerStore';
 import { ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -32,7 +32,7 @@ const SelectPage = () => {
   const setCompanions = useRegisterStore((state) => state.setCompanions);
   const setFeelings = useRegisterStore((state) => state.setFeelings);
 
-  const handleGoBack = () => navi(-1);
+  const handleGoBack = () => navi(HOME);
 
   return (
     <div className="h-full flex flex-col px-4">
