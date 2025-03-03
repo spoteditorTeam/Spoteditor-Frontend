@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { useMatch, useNavigate } from 'react-router-dom';
-import { animate, AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 
 interface TabNavButtonProps {
   params: string;
