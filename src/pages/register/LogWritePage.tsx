@@ -1,3 +1,4 @@
+import { CameraIcon } from '@/components/Icons';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,7 +21,7 @@ import { cn } from '@/lib/utils';
 import api from '@/services/apis/api';
 import { Address, Log, Place, PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
 import { useRegisterStore } from '@/store/registerStore';
-import { Camera, CircleX } from 'lucide-react';
+import { CircleX } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,7 +49,7 @@ const LogWritePage = () => {
     else delete textRefs.current[id];
   };
 
-  const [sido, , bname] = selectedPlaces[0].address_name.split(' '); // 뒤로가기 옆 로그 대표 지역 이름
+  // const [sido, , bname] = selectedPlaces[0].address_name.split(' '); // 뒤로가기 옆 로그 대표 지역 이름
 
   // 제출 형식에 맞춰 포맷
   const formatAddress = (place: kakao.maps.services.PlacesSearchResultItem): Address => ({
@@ -102,7 +103,8 @@ const LogWritePage = () => {
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <LogWriteBar sido={sido} bname={bname} />
+      {/* <LogWriteBar sido={sido} bname={bname} /> */}
+      <LogWriteBar />
 
       <main className="flex flex-col items-center grow gap-3 min-h-0 overflow-y-auto scrollbar-hide">
         {/* 로그 */}
@@ -157,7 +159,7 @@ const LogWritePage = () => {
             )}
             onClick={() => coverUploadInputRef.current?.click()}
           >
-            <Camera />
+            <CameraIcon className="stroke-primary-600" />
             <span className="text-text-sm font-bold">
               커버이미지<span className="text-error-600 m-1">*</span>
             </span>

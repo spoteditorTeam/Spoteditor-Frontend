@@ -4,11 +4,11 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface LogWriteBarProps {
-  sido: string;
-  bname: string;
+  sido?: string;
+  bname?: string;
 }
 
-const LogWriteBar = ({ sido, bname }: LogWriteBarProps) => {
+const LogWriteBar = ({ sido = '', bname = '' }: LogWriteBarProps) => {
   const navi = useNavigate();
   const handleBack = () => navi(MAPS);
   return (
