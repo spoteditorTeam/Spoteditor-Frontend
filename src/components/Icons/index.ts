@@ -1,4 +1,5 @@
 export { default as BookMarkIcon } from './BookMarkIcon';
+export { default as CameraIcon } from './CameraIcon';
 export { default as ClockIcon } from './ClockIcon';
 export { default as SpotIcon } from './SpotIcon';
 export { default as StarIcon } from './StarIcon';
