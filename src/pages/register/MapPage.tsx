@@ -148,10 +148,14 @@ const MapPage = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div
+      className={cn(
+        'h-full grid',
+        selectedPlaces.length > 0 ? 'grid-rows-[auto_auto_1fr_auto]' : 'grid-rows-[auto_1fr_auto]'
+      )}
+    >
       <RegisterSearchBar ref={inputRef} onSubmit={handleSubmit} to={REGISTER_SEARCH} />
       {selectedPlaces.length > 0 && <SelectedPlacePreview onRemove={removeSelectedPlace} />}
-
       {/* 지도 담을 영역 */}
       <div ref={mapContainerRef} className="w-full h-full relative">
         {isLoading ? (
@@ -172,7 +176,6 @@ const MapPage = () => {
           </>
         )}
       </div>
-
       {/* 장소 리스트 */}
       {!!places.length && (
         <SearchResultDrawer
@@ -182,7 +185,6 @@ const MapPage = () => {
           setIsOpen={setIsOpen}
         />
       )}
-
       <div className="pt-2 pb-6 px-4">
         <Button
           className="w-full"
