@@ -1,6 +1,6 @@
-import global from '@/assets/homepage/global.png';
 import search from '@/assets/homepage/search.png';
 import LoginStatusButtons from '@/components/Header/MainHeader/LoginStatusButtons';
+import { EarthIcon } from '@/components/Icons';
 import LogoIcon from '@/components/Icons/LogoIcon';
 import LoginModal from '@/features/login/LoginModal';
 import SearchBar from '@/features/search/SearchBar';
@@ -20,7 +20,7 @@ const MainHeader = () => {
             <img src={search} alt="search_logo" className="object-contain w-[20px] h-[20px]" />
           </button>
           <button>
-            <img src={global} alt="global_logo" className="object-contain w-[20px] h-[20px]" />
+            <EarthIcon />
           </button>
           <LoginStatusButtons />
         </section>
