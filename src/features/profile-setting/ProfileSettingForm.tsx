@@ -30,7 +30,7 @@ export default function ProfileSettingForm() {
               <Input
                 {...field}
                 placeholder="유저의 현재 닉네임"
-                className="text-text-sm placeholder:text-text-sm py-[5px]"
+                className="text-text-sm placeholder:text-text-sm py-[5px] px-0"
               />
             </FormControl>
           </FormItem>
@@ -56,7 +56,7 @@ export default function ProfileSettingForm() {
               <Input
                 {...field}
                 placeholder="프로필 설명을 입력하세요."
-                className="text-text-sm placeholder:text-text-sm py-[5px]"
+                className="text-text-sm placeholder:text-text-sm py-[5px] px-0"
               />
             </FormControl>
           </FormItem>
@@ -74,7 +74,7 @@ export default function ProfileSettingForm() {
               <Input
                 {...field}
                 placeholder="@"
-                className="text-text-sm placeholder:text-text-sm py-[5px]"
+                className="text-text-sm placeholder:text-text-sm py-[5px] px-0"
               />
             </FormControl>
           </FormItem>
