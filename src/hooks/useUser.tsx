@@ -1,8 +1,8 @@
-import { currentUser, IUser } from '@/services/apis/userApi';
-import { userKeys } from '@/services/queryKeys';
+import { currentUser } from '@/services/apis/userApi';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { userKeys } from '@/hooks/queries/user/userQueryKeys';
 
 type UserState = 'userOnly' | 'nonUserOnly';
 
