@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dialog';
 import useGeolocationPermission from '@/hooks/useGeolocationPermission';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function GeoConsentModal() {
   const { open, setOpen } = useGeolocationPermission();
@@ -29,6 +30,16 @@ export default function GeoConsentModal() {
       );
     }
   };
+
+  /* 모달 닫을 때, 현재 경로가 /register로 시작하면 홈으로 이동 */
+  const nav = useNavigate();
+  const { pathname } = useLocation();
+  const handleClose = () => {
+    setOpen(false);
+    if (pathname.startsWith('/register')) {
+      nav(-1);
+    }
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogPrimitive.Overlay className="mobile:bg-white" />
@@ -38,7 +49,7 @@ export default function GeoConsentModal() {
       >
         <section className="flex items-center justify-end w-full p-4 web:p-0">
           <DialogClose asChild className="bg-transparent focus:outline-none focus:ring-0">
-            <button>
+            <button onClick={handleClose}>
               <XIcon className="w-[34px] h-[34px]" />
             </button>
           </DialogClose>
@@ -58,11 +69,7 @@ export default function GeoConsentModal() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex flex-row items-center gap-2 py-5">
-            <Button
-              variant="outline"
-              className="flex-1 font-semibold"
-              onClick={() => setOpen(false)}
-            >
+            <Button variant="outline" className="flex-1 font-semibold" onClick={handleClose}>
               거절
             </Button>
             <Button className="font-semibold web:flex-1" onClick={requestLocation}>
