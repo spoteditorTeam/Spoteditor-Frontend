@@ -8,8 +8,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useDeleteUser } from '@/hooks/queries/user/useDeleteUser';
+import { useNavigate } from 'react-router-dom';
 
 function DeleteAccountConfirmButton() {
+  const nav = useNavigate();
   const { isPending, isSuccess, mutate } = useDeleteUser();
 
   const onDeleteClick = () => {
@@ -48,7 +50,9 @@ function DeleteAccountConfirmButton() {
         ) : (
           <DialogClose asChild className="flex justify-end w-full">
             <div>
-              <Button className="w-[100px]">확인</Button>
+              <Button onClick={() => nav('/')} className="w-[100px]">
+                확인
+              </Button>
             </div>
           </DialogClose>
         )}
