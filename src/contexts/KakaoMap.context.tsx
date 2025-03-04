@@ -1,17 +1,20 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useRef, useState } from 'react';
-
 interface KakaoMapContextType {
-  mapContainerRef: React.RefObject<HTMLDivElement>;
-  placeRef: React.RefObject<kakao.maps.services.Places>;
-  currentLocationRef: React.RefObject<{ lat: number; lon: number }>;
+  mapContainerRef: React.RefObject<HTMLDivElement | null>;
+  placeRef: React.RefObject<kakao.maps.services.Places | null>;
+  currentLocationRef: React.RefObject<{ lat: number; lon: number } | null>;
   isLoading: boolean;
   initMap: () => Promise<void>;
-  map: kakao.maps.Map;
+  map: kakao.maps.Map | null;
 }
 
 const KakaoMapContext = createContext<KakaoMapContextType | null>(null);
 
-export const useKakaoMap = () => useContext(KakaoMapContext);
+export const useKakaoMap = () => {
+  const state = useContext(KakaoMapContext);
+  if (!state) throw new Error('KakaoMapContext Provider Not Found');
+  return state;
+};
 
 export function KakaoMapProvider({ children }: PropsWithChildren) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -51,12 +54,13 @@ export function KakaoMapProvider({ children }: PropsWithChildren) {
   const initMap = async () => {
     if (!isMapLoaded || !mapContainerRef.current) return;
 
+    setIsLoading(true);
     await setCurrentLocation();
 
     const options = {
       center: new window.kakao.maps.LatLng(
-        currentLocationRef.current?.lat,
-        currentLocationRef.current?.lon
+        currentLocationRef.current?.lat || 37.5665,
+        currentLocationRef.current?.lon || 126.978
       ),
       level: 3,
     };
@@ -75,6 +79,7 @@ export function KakaoMapProvider({ children }: PropsWithChildren) {
     initMap,
     map,
   };
+
   return <KakaoMapContext.Provider value={value}>{children}</KakaoMapContext.Provider>;
 }
 

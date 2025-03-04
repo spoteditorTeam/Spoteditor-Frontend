@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const MapPage = () => {
   const navi = useNavigate();
   const { mapContainerRef, placeRef, currentLocationRef, isLoading, initMap, map } = useKakaoMap();
+
   const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
   const removeSelectedPlace = useRegisterStore((state) => state.removeSelectedPlace);
 
