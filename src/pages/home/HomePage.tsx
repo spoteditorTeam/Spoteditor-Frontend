@@ -1,5 +1,6 @@
 import ArrowIcon from '@/components/Icons/ArrowIcon';
 import MainPagination from '@/components/Pagination/MainPagination';
+import LogCardSkeleton from '@/components/Skeleton/LogCardSkeleton';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { REGISTER_SELECT } from '@/constants/pathname';
@@ -14,10 +15,7 @@ const HomePage = () => {
   const navi = useNavigate();
   const handleGotoRegisterPage = () => navi(REGISTER_SELECT);
 
-  const { data, isLoading } = useLogList();
-
-  console.log(data);
-
+  const { data, isLoading, isError } = useLogList();
   const { totalPages, content } = data ?? {};
 
   return (
@@ -38,11 +36,22 @@ const HomePage = () => {
         {/* 컨테이너 */}
         <Carousel>
           <CarouselContent className="flex">
-            {content?.map((log: LogContent) => (
-              <CarouselItem className="flex-none basis-1/1.5 web:basis-1/4" key={log.placeLogId}>
-                <LogCard vertical log={log} />
-              </CarouselItem>
-            ))}
+            {isLoading || isError
+              ? // 로딩 중
+                [...Array(4)].map((_, idx) => (
+                  <CarouselItem className="flex-none basis-1/1.5 web:basis-1/4" key={idx}>
+                    <LogCardSkeleton />
+                  </CarouselItem>
+                ))
+              : // 데이터 로딩 완료
+                content?.map((log: LogContent) => (
+                  <CarouselItem
+                    className="flex-none basis-1/1.5 web:basis-1/4"
+                    key={log.placeLogId}
+                  >
+                    <LogCard vertical log={log} />
+                  </CarouselItem>
+                ))}
           </CarouselContent>
         </Carousel>
 
