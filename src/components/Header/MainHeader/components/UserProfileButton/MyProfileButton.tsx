@@ -7,7 +7,7 @@ export default function MyProfileButton() {
   const { user } = useUser();
 
   const onProfileClick = () => {
-    const params = user?.name;
+    const params = user?.userId;
     nav(`/profile/${params}/my-logs`);
   };
   return (

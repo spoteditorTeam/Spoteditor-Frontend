@@ -4,6 +4,7 @@ import AccountSettings from '@/features/profile-setting/AccountSettings';
 import ProfileSettingAvatar from '@/features/profile-setting/ProfileSettingAvatar';
 import ProfileSettingForm from '@/features/profile-setting/ProfileSettingForm/ProfileSettingForm';
 import SaveProfileButton from '@/features/profile-setting/SaveProfileButton';
+import { useUpdateUser } from '@/hooks/queries/user/useUpdateUser';
 import useUser from '@/hooks/useUser';
 import PageLayout from '@/layouts/PageLayout';
 import { profileSettingSchema } from '@/services/schemas/profileSchema';
@@ -14,7 +15,6 @@ import { z } from 'zod';
 
 function ProfileSetting() {
   const { user } = useUser('userOnly');
-  console.log('user', user);
 
   const form = useForm({
     resolver: zodResolver(profileSettingSchema),
@@ -26,9 +26,10 @@ function ProfileSetting() {
     },
   });
 
+  const { mutate } = useUpdateUser();
+
   const onSubmit = (data: z.infer<typeof profileSettingSchema>) => {
-    console.log('data', data); // 데이터 조회 안 됨
-    console.log('폼 제출 완료');
+    mutate(data);
   };
 
   const handleSaveClick = useCallback(() => {
@@ -49,7 +50,7 @@ function ProfileSetting() {
               <Button variant="outline" className="rounded-[6px] w-[120px] h-[42px]">
                 취소
               </Button>
-              <SaveProfileButton onTrigger={handleSaveClick} />
+              <SaveProfileButton userId={user?.userId!} onTrigger={handleSaveClick} />
             </section>
           </form>
         </Form>

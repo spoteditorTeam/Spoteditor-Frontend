@@ -7,13 +7,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface SaveProfileButtonProps {
+  userId: number;
   onTrigger?: () => void;
 }
 
-function SaveProfileButton({ onTrigger }: SaveProfileButtonProps) {
+function SaveProfileButton({ userId, onTrigger }: SaveProfileButtonProps) {
+  const nav = useNavigate();
+  const onUpdateClick = () => {
+    nav(`/profile/${userId}`);
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -35,9 +40,9 @@ function SaveProfileButton({ onTrigger }: SaveProfileButtonProps) {
         </DialogDescription>
         <DialogClose asChild className="flex justify-end w-full">
           <div className="space-x-[15px]">
-            <Link to="/">
-              <Button className="w-[91px]">확인</Button>
-            </Link>
+            <Button onClick={onUpdateClick} className="w-[91px]">
+              확인
+            </Button>
           </div>
         </DialogClose>
       </DialogContent>
