@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import PlaceItem from '@/features/detailpage/PlaceItem';
-import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { Bookmark, TableIcon } from 'lucide-react';
@@ -84,7 +83,8 @@ const DetailPage = () => {
 
             <div className="grid grid-cols-3 gap-x-[5px] gap-y-5 w-full max-h-[680px] overflow-y-auto scrollbar-hide py-[18px]">
               {places.map((place: PlaceInLog) => (
-                <LogCard key={place.placeId} place={place} vertical isModal />
+                // <LogCard key={place.placeId} place={place} vertical isModal />
+                <div>이미지</div>
               ))}
             </div>
           </DialogContent>
