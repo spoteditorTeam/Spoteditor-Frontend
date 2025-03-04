@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import useUser from '@/hooks/useUser';
+import useUser from '@/hooks/queries/user/useUser';
 import { useNavigate } from 'react-router-dom';
 
 export default function MyProfileButton() {

@@ -10,6 +10,7 @@ export default function useUser(userState?: UserState) {
   const { data, error } = useQuery({
     queryKey: userKeys.all,
     queryFn: () => authUserApi.getUser(),
+    staleTime: Infinity,
   });
 
   const nav = useNavigate();
