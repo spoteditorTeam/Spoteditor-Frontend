@@ -11,6 +11,7 @@ export const profileSettingSchema = z.object({
         return /\.(jpeg|jpg|png|gif)$/i.test(val);
       },
       { message: '이미지는 JPEG, PNG, GIF만 업로드 가능합니다.' }
-    ) */ description: z.string().max(50, { message: '프로필 설명은 50글자를 넘을 수 없습니다.' }),
+    ) */
+  description: z.string().max(50, { message: '프로필 설명은 50글자를 넘을 수 없습니다.' }),
   instagramId: z.string(),
 });

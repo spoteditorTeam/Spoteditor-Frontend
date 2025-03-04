@@ -1,5 +1,4 @@
-import search from '@/assets/homepage/search.png';
-import LoginStatusButtons from '@/components/Header/MainHeader/LoginStatusButtons';
+import LoginStatusButtons from '@/components/Header/MainHeader/components/LoginStatusButtons';
 import { EarthIcon } from '@/components/Icons';
 import LogoIcon from '@/components/Icons/LogoIcon';
 import LoginModal from '@/features/login/LoginModal';

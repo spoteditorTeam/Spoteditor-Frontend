@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import AccountSettings from '@/features/profile-setting/AccountSettings';
 import ProfileSettingAvatar from '@/features/profile-setting/ProfileSettingAvatar';
-import ProfileSettingForm from '@/features/profile-setting/ProfileSettingForm';
+import ProfileSettingForm from '@/features/profile-setting/ProfileSettingForm/ProfileSettingForm';
 import SaveProfileButton from '@/features/profile-setting/SaveProfileButton';
 import useUser from '@/hooks/useUser';
 import PageLayout from '@/layouts/PageLayout';
@@ -14,13 +14,14 @@ import { z } from 'zod';
 
 function ProfileSetting() {
   const { user } = useUser('userOnly');
+  console.log('user', user);
 
   const form = useForm({
     resolver: zodResolver(profileSettingSchema),
     defaultValues: {
       name: user?.name ?? '',
       imageUrl: user?.imageUrl ?? 'https://github.com/shadcn.png',
-      description: user?.instagramId ?? '',
+      description: user?.description ?? '',
       instagramId: user?.instagramId ?? '',
     },
   });

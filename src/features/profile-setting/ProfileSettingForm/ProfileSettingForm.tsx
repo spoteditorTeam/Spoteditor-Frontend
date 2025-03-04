@@ -1,7 +1,7 @@
 import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 import { useFormContext } from 'react-hook-form';
+import TextCounter from './TextCounter';
 
 export default function ProfileSettingForm() {
   //useFormContext을 이용해 부모 컴포넌트의 useForm 데이터를 사용
@@ -17,14 +17,7 @@ export default function ProfileSettingForm() {
           <FormItem className="border-b-[1px] border-b-primary-100">
             <div className="flex items-center justify-between py-[5px]">
               <FormLabel className="font-bold text-text-sm">닉네임</FormLabel>
-              <span
-                className={cn(
-                  'text-text-2xs',
-                  nameLeng.length > 30 ? 'text-red-500' : 'text-primarySlate'
-                )}
-              >
-                {nameLeng.length}/30
-              </span>
+              <TextCounter length={nameLeng.length} maxLength={30} />
             </div>
             <FormControl>
               <Input
@@ -43,14 +36,7 @@ export default function ProfileSettingForm() {
           <FormItem className="border-b-[1px] border-b-primary-100">
             <div className="flex items-center justify-between py-[5px]">
               <FormLabel className="font-bold text-text-sm">프로필 설명</FormLabel>
-              <span
-                className={cn(
-                  'text-text-2xs',
-                  descLeng.length > 50 ? 'text-red-500' : 'text-primarySlate'
-                )}
-              >
-                {descLeng.length}/50
-              </span>
+              <TextCounter length={descLeng.length} maxLength={50} />
             </div>
             <FormControl>
               <Input
