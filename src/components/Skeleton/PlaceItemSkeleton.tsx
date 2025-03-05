@@ -35,10 +35,10 @@ const PlaceItemSkeleton = () => {
           </div>
         </div>
 
-        <p className="text-primary-400 text-text-sm web:text-text-lg web:my-5 space-y-2">
+        <div className="text-primary-400 text-text-sm web:text-text-lg web:my-5 space-y-2">
           <Skeleton className="h-5 w-[600px]" />
           <Skeleton className="h-5 w-[400px]" />
-        </p>
+        </div>
       </div>
     </div>
   );

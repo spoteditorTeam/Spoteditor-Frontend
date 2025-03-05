@@ -70,14 +70,18 @@ const DetailPage = () => {
           </div>
 
           {/* 설명 */}
-          <p className="text-primary-400 text-text-sm web:grow web:text-text-lg web:py-1.5">
-            {isDataReady ? <Skeleton className="h-5 w-[400px]" /> : description}
-          </p>
+          {isDataReady ? (
+            <Skeleton className="h-5 w-[400px]" />
+          ) : (
+            <p className="text-primary-400 text-text-sm web:grow web:text-text-lg web:py-1.5">
+              {description}
+            </p>
+          )}
         </div>
 
         {/* 컨텐츠 */}
         {isDataReady
-          ? [...Array(3)].map(() => <PlaceItemSkeleton />)
+          ? [...Array(3)].map((_, idx) => <PlaceItemSkeleton key={idx} />)
           : places.map((place: PlaceInLog, idx: number) => (
               <PlaceItem place={place} key={place.placeId} idx={idx + 1} />
             ))}
@@ -100,7 +104,7 @@ const DetailPage = () => {
           </Button>
         ) : (
           <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button
                 variant={'outline'}
                 className="w-[60px] h-[60px] border-gray-200 rounded-full"
