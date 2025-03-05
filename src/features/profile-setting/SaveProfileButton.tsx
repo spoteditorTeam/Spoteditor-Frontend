@@ -28,7 +28,7 @@ function SaveProfileButton({ userId, onTrigger }: SaveProfileButtonProps) {
               onTrigger();
             }
           }}
-          className="rounded-[6px] w-[120px] h-[42px]"
+          className="rounded-[6px] h-[42px] px-5"
         >
           저장
         </Button>
@@ -40,7 +40,7 @@ function SaveProfileButton({ userId, onTrigger }: SaveProfileButtonProps) {
         </DialogDescription>
         <DialogClose asChild className="flex justify-end w-full">
           <div className="space-x-[15px]">
-            <Button onClick={onUpdateClick} className="w-[91px]">
+            <Button onClick={onUpdateClick} size="sm" className="w-[100px]">
               확인
             </Button>
           </div>

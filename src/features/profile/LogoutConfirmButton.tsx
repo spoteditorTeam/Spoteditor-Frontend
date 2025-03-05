@@ -8,7 +8,7 @@ export default function LogoutConfirmButton() {
     mutate();
   };
   return (
-    <Button onClick={onLogoutClick} className="w-[100px]">
+    <Button onClick={onLogoutClick} size="sm" className="w-[100px]">
       확인
     </Button>
   );
