@@ -1,6 +1,7 @@
 import MainLayout from '@/layouts/MainLayout';
 import RegisterLayout from '@/layouts/RegisterLayout';
 import DetailPage from '@/pages/detail/DetailPage';
+import PlacesCollectionPage from '@/pages/detail/PlacesCollectionPage';
 import HomePage from '@/pages/home/HomePage';
 import Notice from '@/pages/notice';
 import NoticeDetail from '@/pages/notice/notice-detail';
@@ -64,6 +65,7 @@ const router = createBrowserRouter([
       { path: '/write', element: <WritePage /> },
     ],
   },
+  { path: '/log/:placeLogId/placesCollection', element: <PlacesCollectionPage /> },
 ]);
 
 export default router;
