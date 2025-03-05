@@ -59,10 +59,6 @@ const HomePage = () => {
         {/* 에디터 설명 */}
         <div className="flex flex-col justify-center my-20 web:grid web:grid-cols-2 border-primary-100 web:gap-7">
           <div className="py-[18px] border-t border-b flex flex-col justify-center web:py-10">
-            {/* <h3 className="font-bold text-md web:text-xl">
-              모든 유저가 <br className="web:hidden" />
-              특별한 "에디터"가 될 수 있어요!
-            </h3> */}
             <TypingText text='모든 유저가 특별한 "에디터"가 될 수 있어요!' />
 
             <div className="flex my-[15px]">
