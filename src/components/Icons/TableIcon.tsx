@@ -12,7 +12,7 @@ const SvgTableIcon = (props: SVGProps<SVGSVGElement>) => (
       id="Table 01"
       d="M28.5 14.8574V28.3574H15M28.5 14.8574V1.35742H15M28.5 14.8574H1.5M1.5 14.8574V1.35742H15M1.5 14.8574V28.3574H15M15 1.35742V28.3574"
       stroke="black"
-      stroke-width="2.5"
+      strokeWidth="2.5"
     />
   </svg>
 );
