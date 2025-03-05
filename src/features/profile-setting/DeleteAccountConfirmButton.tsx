@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useDeleteUser } from '@/hooks/queries/user/useDeleteUser';
+import { useDeleteUser } from '@/hooks/mutations/user/useDeleteUser';
 import { useNavigate } from 'react-router-dom';
 
 function DeleteAccountConfirmButton() {
