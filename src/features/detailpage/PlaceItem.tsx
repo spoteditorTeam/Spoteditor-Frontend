@@ -34,7 +34,7 @@ const PlaceItem = ({ place, idx }: PlaceItemProps) => {
             <h4>{name}</h4>
           </div>
           <Bookmark
-            className={cn('cursor-pointer w-[2em] h-[2em]', isChecked && 'fill-black')}
+            className={cn('cursor-pointer web:!size-9', isChecked && 'fill-black')}
             onClick={handleClick}
           />
         </div>

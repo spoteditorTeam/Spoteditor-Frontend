@@ -1,6 +1,6 @@
 import coverImg from '@/assets/detailPage/coverImg.png';
 // import coverImg from '@/assets/mock/1.png';
-import { SpotIcon, SubtractIcon } from '@/components/Icons';
+import { SpotIcon, SubtractIcon, TableIcon } from '@/components/Icons';
 import LogCoverSkeleton from '@/components/Skeleton/LogCoverSkeleton';
 import PlaceItemSkeleton from '@/components/Skeleton/PlaceItemSkeleton';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
@@ -18,7 +18,7 @@ import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
 import useResponsive from '@/hooks/useResponsive';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
-import { Bookmark, TableIcon } from 'lucide-react';
+import { Bookmark } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
   const { placeLogId } = useParams();
@@ -87,29 +87,32 @@ const DetailPage = () => {
             ))}
       </div>
 
-      <div className="fixed bottom-12 right-5 flex flex-col gap-[15px]">
+      <div className="fixed bottom-12 right-2.5 web:right-5 flex flex-col gap-2 web:gap-[15px]">
         {/* 북마크 버튼 */}
-        <Button variant={'outline'} className="w-[60px] h-[60px] border-gray-200 rounded-full">
-          <Bookmark />
+        <Button
+          variant={'outline'}
+          className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"
+        >
+          <Bookmark className="!size-6 web:!size-8" />
         </Button>
         {/* 장소 모아 보기 버튼 */}
 
         {isMobile ? (
           <Button
             variant={'outline'}
-            className="w-[60px] h-[60px] border-gray-200 rounded-full"
+            className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"
             onClick={() => navi(`/log/${placeLogId}/placesCollection`)}
           >
-            <TableIcon />
+            <TableIcon className="!size-5 web:!size-7" />
           </Button>
         ) : (
           <Dialog>
             <DialogTrigger asChild>
               <Button
                 variant={'outline'}
-                className="w-[60px] h-[60px] border-gray-200 rounded-full"
+                className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"
               >
-                <TableIcon />
+                <TableIcon className="!size-7" />
               </Button>
             </DialogTrigger>
             <DialogContent>
