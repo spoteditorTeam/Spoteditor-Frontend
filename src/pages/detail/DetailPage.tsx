@@ -14,13 +14,17 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import PlaceItem from '@/features/detailpage/PlaceItem';
+import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
+import useResponsive from '@/hooks/useResponsive';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { Bookmark, TableIcon } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
   const { placeLogId } = useParams();
+  const navi = useNavigate();
   const { data, isLoading } = useLog(Number(placeLogId));
+  const { isMobile } = useResponsive();
   const name = data?.name ?? '';
   const description = data?.description ?? '';
   const places = data?.places ?? [];
@@ -80,31 +84,43 @@ const DetailPage = () => {
       </div>
 
       <div className="fixed bottom-12 right-5 flex flex-col gap-[15px]">
-        <button className="w-[60px] h-[60px] border border-gray-200 flex items-center justify-center rounded-full bg-white">
-          <Bookmark className="w-[2em] h-[2em]" />
-        </button>
-        <Dialog>
-          <DialogTrigger>
-            <button className="w-[60px] h-[60px] border border-gray-200 flex items-center justify-center rounded-full bg-white">
-              <TableIcon className="w-[2em] h-[2em]" />
-            </button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader className="items-start">
-              <DialogTitle className="text-text-2xl">소개된 장소</DialogTitle>
-            </DialogHeader>
+        {/* 북마크 버튼 */}
+        <Button variant={'outline'} className="w-[60px] h-[60px] border-gray-200 rounded-full">
+          <Bookmark />
+        </Button>
+        {/* 장소 모아 보기 버튼 */}
 
-            <div className="grid grid-cols-3 gap-x-[5px] gap-y-5 w-full max-h-[680px] overflow-y-auto scrollbar-hide py-[18px]">
-              {[...Array(3)].map(() => (
-                // <LogCard key={place.placeId} place={place} vertical isModal />
-                <div>이미지</div>
-              ))}
-              {/* {places.map((place: PlaceInLog) => (
-                <LogCard key={place.placeId} place={place} vertical isModal />
-              ))} */}
-            </div>
-          </DialogContent>
-        </Dialog>
+        {isMobile ? (
+          <Button
+            variant={'outline'}
+            className="w-[60px] h-[60px] border-gray-200 rounded-full"
+            onClick={() => navi(`/log/${placeLogId}/placesCollection`)}
+          >
+            <TableIcon />
+          </Button>
+        ) : (
+          <Dialog>
+            <DialogTrigger>
+              <Button
+                variant={'outline'}
+                className="w-[60px] h-[60px] border-gray-200 rounded-full"
+              >
+                <TableIcon />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader className="items-start">
+                <DialogTitle className="text-text-2xl">소개된 장소</DialogTitle>
+              </DialogHeader>
+
+              <div className="grid grid-cols-3 gap-x-[5px] gap-y-5 w-full h-[680px] overflow-y-auto scrollbar-hide py-[18px]">
+                {places.map((place: PlaceInLog) => (
+                  <LogCard key={place.placeId} place={place} vertical isModal />
+                ))}
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </div>
   );

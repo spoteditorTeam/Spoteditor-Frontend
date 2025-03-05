@@ -8,9 +8,10 @@ type LogCardProps = {
   vertical?: boolean;
   log?: LogContent;
   place?: PlaceInLog;
+  isModal?: boolean;
 };
 
-const LogCard = ({ isLarge, vertical, log, place }: LogCardProps) => {
+const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
   const navi = useNavigate();
   const handleCardClick = () => navi(`/log/${log?.placeLogId}`);
   return (
@@ -27,18 +28,15 @@ const LogCard = ({ isLarge, vertical, log, place }: LogCardProps) => {
         />
         <div className="absolute inset-0 card-id-gradient"></div>
         <div className="absolute inset-0 hover:bg-black/25 transition-colors"></div>
-        <span className="flex items-center gap-1 p-2.5 text-white text-text-2xs font-semibold absolute bottom-0">
-          teamluddy
-        </span>
+        {!isModal && (
+          <span className="flex items-center gap-1 p-2.5 text-white text-text-2xs font-semibold absolute bottom-0">
+            teamluddy
+          </span>
+        )}
 
-        <div className="bg-white absolute top-4 right-4 p-[11px]">
+        <div className={cn('bg-white absolute top-4 right-4 p-[11px]', isModal && 'top-1 right-1')}>
           <Bookmark />
         </div>
-        {/* {isModal && (
-          <div className="w-10 h-10 bg-white absolute top-1 right-1 p-1.5 flex items-center justify-center">
-            <Bookmark className="w-[1.5em] h-[1.5em]" />
-          </div>
-        )} */}
       </div>
 
       {/* 설명 */}
