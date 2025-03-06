@@ -22,7 +22,7 @@ const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
       {/* 이미지 */}
       <div className={cn('relative grow')}>
         <img
-          src={getImgFromCloudFront(log?.image.storedFile) || ''}
+          src={getImgFromCloudFront(log?.image.storedFile ?? place?.images[0].storedFile ?? '')}
           alt="장소 이미지"
           className={cn('object-cover w-full h-full aspect-[3/2]', vertical && 'aspect-[3/4]')}
         />
