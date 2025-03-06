@@ -1,4 +1,3 @@
-// import coverImg from '@/assets/mock/1.png';
 import { SpotIcon, SubtractIcon, TableIcon } from '@/components/Icons';
 import LogCoverSkeleton from '@/components/Skeleton/LogCoverSkeleton';
 import PlaceItemSkeleton from '@/components/Skeleton/PlaceItemSkeleton';
@@ -18,21 +17,21 @@ import useLog from '@/hooks/queries/log/useLog';
 import useResponsive from '@/hooks/useResponsive';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
-import { Bookmark } from 'lucide-react';
+import { Bookmark, Share2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
   const { placeLogId } = useParams();
   const navi = useNavigate();
-  const { data, isLoading } = useLog(Number(placeLogId));
+  const { data, isPending } = useLog(Number(placeLogId));
   const { isMobile } = useResponsive();
   const name = data?.name ?? '';
   const description = data?.description ?? '';
   const places = data?.places ?? [];
 
-  const isDataReady = isLoading || !data;
+  const isDataReady = isPending || !data;
 
   return (
-    <div>
+    <>
       {/* 커버 이미지 */}
       <div className="relative w-full aspect-[3/4] web:aspect-[4/1]">
         {isDataReady ? (
@@ -44,6 +43,9 @@ const DetailPage = () => {
               alt="coverImage"
               className="w-full h-full object-cover"
             />
+            <div className="bg-white/70 border border-primary-100 rounded-full absolute p-2.5 top-[14px] right-2.5 cursor-pointer web:top-4 web:right-4">
+              <Share2 />
+            </div>
             <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient"></div>
             <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8">
               <h3 className="text-lg web:text-2xl font-bold text-white">{name}</h3>
@@ -133,7 +135,7 @@ const DetailPage = () => {
           </Dialog>
         )}
       </div>
-    </div>
+    </>
   );
 };
 
