@@ -16,6 +16,7 @@ import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
+import api from '@/services/apis/api';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { Bookmark, Share2 } from 'lucide-react';
@@ -33,10 +34,11 @@ const DetailPage = () => {
   const places = data?.places ?? [];
   const isDataReady = isPending || !data;
 
-  const onClickBookMark = async () => {
+  const onClickLogBookMark = async () => {
     setIsChecked((prev) => !prev);
-    // await api.log.addLogBookMark(Number(placeLogId));
-    console.log('북마크 연결하기');
+    await api.log.addLogBookMark(Number(placeLogId));
+    // await api.log.deleteLogBookMark(Number(placeLogId));
+    console.log('북마크 추가');
   };
 
   return (
@@ -107,7 +109,7 @@ const DetailPage = () => {
         <Button
           variant={'outline'}
           className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"
-          onClick={onClickBookMark}
+          onClick={onClickLogBookMark}
         >
           <Bookmark className={cn('!size-6 web:!size-8', isChecked && 'fill-black')} />
         </Button>

@@ -32,7 +32,8 @@ class LogAPI {
     try {
       const path = `/api/placelogs/${placeLogId}/bookmark`;
       const res = await this.#axios.post(path);
-      if (res.status !== 201) throw new Error('로그 북마크 실패');
+      console.log('로그 북마크 추가', res);
+      if (res.status !== 200) throw new Error('로그 북마크 실패');
     } catch (error) {
       console.log(error);
     }
@@ -42,28 +43,8 @@ class LogAPI {
     try {
       const path = `/api/placelogs/${placeLogId}/bookmark`;
       const res = await this.#axios.delete(path);
+      console.log('로그 북마크 삭제', res);
       if (res.status !== 204) throw new Error('로그 북마크 삭제 실패');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // 장소 북마크
-  async addPlaceBookMark(placeId: number) {
-    try {
-      const path = `/api/placelogs/bookmark`;
-      const res = await this.#axios.post(path, { placeId });
-      if (res.status !== 200) throw new Error('장소 북마크 실패');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async deletePlaceBookMark(placeId: number) {
-    try {
-      const path = `/api/placelogs/bookmark`;
-      const res = await this.#axios.delete(path, { data: { placeId } });
-      if (res.status !== 204) throw new Error('장소 북마크 삭제 실패');
     } catch (error) {
       console.log(error);
     }
