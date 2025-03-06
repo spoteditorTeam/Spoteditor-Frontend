@@ -1,4 +1,3 @@
-import coverImg from '@/assets/detailPage/coverImg.png';
 // import coverImg from '@/assets/mock/1.png';
 import { SpotIcon, SubtractIcon, TableIcon } from '@/components/Icons';
 import LogCoverSkeleton from '@/components/Skeleton/LogCoverSkeleton';
@@ -18,6 +17,7 @@ import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
 import useResponsive from '@/hooks/useResponsive';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { Bookmark } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
@@ -30,7 +30,7 @@ const DetailPage = () => {
   const places = data?.places ?? [];
 
   const isDataReady = isLoading || !data;
-  // const isDataReady = true;
+
   return (
     <div>
       {/* 커버 이미지 */}
@@ -39,7 +39,11 @@ const DetailPage = () => {
           <LogCoverSkeleton />
         ) : (
           <>
-            <img src={coverImg} alt="coverImage" className="w-full h-full object-cover" />
+            <img
+              src={getImgFromCloudFront(data.image.storedFile)}
+              alt="coverImage"
+              className="w-full h-full object-cover"
+            />
             <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient"></div>
             <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8">
               <h3 className="text-lg web:text-2xl font-bold text-white">{name}</h3>

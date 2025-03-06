@@ -11,6 +11,7 @@ import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { Image } from '@/services/apis/types/registerAPI.type';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { Bookmark, Clock, MapPin } from 'lucide-react';
 import { useState } from 'react';
 
@@ -64,7 +65,11 @@ const PlaceItem = ({ place, idx }: PlaceItemProps) => {
               <CarouselItem className="flex-none web:basis-1/3" key={img.imageId}>
                 <Dialog>
                   <DialogTrigger>
-                    <img src={mockImg} alt="mockImg" className="w-[245px] web:w-full" />
+                    <img
+                      src={getImgFromCloudFront(img.storedFile)}
+                      alt={img.originalFile}
+                      className="w-[245px] web:w-full"
+                    />
                   </DialogTrigger>
                   <DialogContent className="bg-transparent" hideCloseButton>
                     <Carousel className="w-full">
