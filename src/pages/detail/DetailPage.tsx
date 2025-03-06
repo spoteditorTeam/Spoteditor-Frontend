@@ -15,20 +15,29 @@ import PlaceItem from '@/features/detailpage/PlaceItem';
 import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
 import useResponsive from '@/hooks/useResponsive';
+import { cn } from '@/lib/utils';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { Bookmark, Share2 } from 'lucide-react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
-  const { placeLogId } = useParams();
   const navi = useNavigate();
+  const { placeLogId } = useParams();
   const { data, isPending } = useLog(Number(placeLogId));
   const { isMobile } = useResponsive();
+  const [isChecked, setIsChecked] = useState(false);
+
   const name = data?.name ?? '';
   const description = data?.description ?? '';
   const places = data?.places ?? [];
-
   const isDataReady = isPending || !data;
+
+  const onClickBookMark = async () => {
+    setIsChecked((prev) => !prev);
+    // await api.log.addLogBookMark(Number(placeLogId));
+    console.log('북마크 연결하기');
+  };
 
   return (
     <>
@@ -98,8 +107,9 @@ const DetailPage = () => {
         <Button
           variant={'outline'}
           className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"
+          onClick={onClickBookMark}
         >
-          <Bookmark className="!size-6 web:!size-8" />
+          <Bookmark className={cn('!size-6 web:!size-8', isChecked && 'fill-black')} />
         </Button>
         {/* 장소 모아 보기 버튼 */}
 
