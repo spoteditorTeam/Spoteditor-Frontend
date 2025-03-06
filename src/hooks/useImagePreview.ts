@@ -32,6 +32,7 @@ function useImagePreview(initialImageUrl: string = '') {
 
   const uploadImage = useCallback(async () => {
     if (!imageFile || !presignedUrlObj) return;
+
     try {
       await api.register.uploadImageWithPresignUrl(presignedUrlObj?.preSignedUrl, imageFile);
     } catch (error) {
