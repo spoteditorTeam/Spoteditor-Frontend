@@ -14,22 +14,22 @@ class UserLog {
   }
 
   async getUserLogs(params: LogsQueryParams): Promise<UserLogs> {
-    const response = await this.axios.get('/users/placelogs', { params });
+    const response = await this.axios.get('/api/user/placelogs', { params });
     return response.data;
   }
 
   async getUserBookmarkPlaces(params: LogsQueryParams): Promise<UserBookmarkPlaces> {
-    const response = await this.axios.get('/user/bookmark/places', { params });
+    const response = await this.axios.get('/api/user/bookmark/places', { params });
     return response.data;
   }
 
   async getUserBookmarkLogs(params: LogsQueryParams): Promise<UserBookmarkLogs> {
-    const response = await this.axios.get('/user/bookmark/placelogs', { params });
+    const response = await this.axios.get('/api/user/bookmark/placelogs', { params });
     return response.data;
   }
 
   async getOtherUserLogs({ userId, params }: IOtherUserParams): Promise<UserLogs> {
-    const response = await this.axios.get(`/users/${userId}/placelogs`, { params });
+    const response = await this.axios.get(`/api/users/${userId}/placelogs`, { params });
     return response.data;
   }
 
@@ -37,12 +37,12 @@ class UserLog {
     userId,
     params,
   }: IOtherUserParams): Promise<UserBookmarkPlaces> {
-    const response = await this.axios.get(`/user/${userId}/bookmark/places`, { params });
+    const response = await this.axios.get(`/api/users/${userId}/bookmark/places`, { params });
     return response.data;
   }
 
   async getOtherUserBookmarkLogs({ userId, params }: IOtherUserParams): Promise<UserBookmarkLogs> {
-    const response = await this.axios.get(`/user/${userId}/bookmark/placelogs`, { params });
+    const response = await this.axios.get(`/api/users/${userId}/bookmark/placelogs`, { params });
     return response.data;
   }
 }
