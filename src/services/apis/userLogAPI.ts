@@ -5,7 +5,7 @@ import {
   UserBookmarkLogs,
   UserBookmarkPlaces,
   UserLogs,
-} from './types/userLogAPI.type';
+} from './types/userLogAPI';
 
 class UserLog {
   private axios;

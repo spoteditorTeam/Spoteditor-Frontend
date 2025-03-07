@@ -1,5 +1,5 @@
 import { currentAuth } from '@/services/apis/authApi';
-import { IUpdateUser, IUser } from '@/services/apis/types/userAPI.type';
+import { IUpdateUser, IUser } from '@/services/apis/types/userAPI';
 
 class User {
   private authApi = currentAuth;
