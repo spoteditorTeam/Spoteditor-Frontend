@@ -1,36 +1,46 @@
-import MainPagination from '@/components/Pagination/MainPagination';
-import PostCardSkeleton from '@/components/Skeleton/PostCardSkeleton';
+import Loading from '@/components/Loading';
+import MotionCard from '@/components/MotionCard';
+import CustomPagination from '@/components/CustomPagination';
 import {
-  PostCard,
   PostCardImage,
   PostCardLocation,
   PostCardTitle,
   PostCardWrapper,
 } from '@/features/profile/PostCard';
+import useUser from '@/hooks/queries/user/useUser';
+import useOtherUserLogs from '@/hooks/queries/userLog/useOtherUserLogs';
 import useUserLogs from '@/hooks/queries/userLog/useUserLogs';
+import { Link, useParams } from 'react-router-dom';
 
 function MyLogs() {
-  const { data, isLoading } = useUserLogs();
-  console.log(data);
+  const { user } = useUser();
+  const { userId } = useParams();
 
+  const isMyLogs = user?.userId === userId;
+
+  const { data, isPending } = isMyLogs ? useUserLogs() : useOtherUserLogs(Number(user?.userId));
   return (
     <>
-      {isLoading ? (
-        <PostCardSkeleton />
+      {isPending ? (
+        <Loading className="min-h-[350px]" />
       ) : (
-        <PostCardWrapper className="mb-[50px]">
-          {data?.content.map((log) => (
-            <PostCard key={log.placeLogId} className="bg-blue-300">
-              <PostCardImage lable className="bg-slate-300" imageUrl="" />
-              <PostCardTitle title={log.name} />
-              <PostCardLocation location={log.address.sido} detail={log.address.sigungu} />
-            </PostCard>
-          ))}
-        </PostCardWrapper>
+        <>
+          <PostCardWrapper className="mb-[50px]">
+            {data?.content.map((log) => (
+              <Link to={`/log/${log.placeLogId}`}>
+                <MotionCard key={log.placeLogId}>
+                  <PostCardImage lable imageUrl={log.image.storedFile} />
+                  <PostCardTitle title={log.name} />
+                  <PostCardLocation location={log.address.sido} detail={log.address.sigungu} />
+                </MotionCard>
+              </Link>
+            ))}
+          </PostCardWrapper>
+          <section className="mt-[50px]">
+            <CustomPagination currentPage={data?.pageNumber!} totalPages={data?.totalPages!} />
+          </section>
+        </>
       )}
-      <section className="mt-[50px]">
-        <MainPagination />
-      </section>
     </>
   );
 }

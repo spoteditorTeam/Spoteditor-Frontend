@@ -1,25 +1,52 @@
-import MainPagination from '@/components/Pagination/MainPagination';
+import CustomPagination from '@/components/CustomPagination';
+import Loading from '@/components/Loading';
+import MotionCard from '@/components/MotionCard';
 import {
-  PostCard,
   PostCardImage,
   PostCardLocation,
   PostCardTitle,
   PostCardWrapper,
 } from '@/features/profile/PostCard';
+import useUser from '@/hooks/queries/user/useUser';
+import useOtherUserBookmarkPlaces from '@/hooks/queries/userLog/useOtherUserBookmarkPlaces';
+import useUserBookmarkPlaces from '@/hooks/queries/userLog/useUserBookmarkPlaces';
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function SavedSpaces() {
+  const { user } = useUser();
+  const { userId } = useParams();
+
+  const isMySaveLogs = user?.userId === userId;
+
+  const { data, isPending } = isMySaveLogs
+    ? useUserBookmarkPlaces()
+    : useOtherUserBookmarkPlaces(Number(user?.userId));
   return (
     <>
-      <PostCardWrapper className="mb-[50px]">
-        {Array.from({ length: 12 }).map((_, idx) => (
-          <PostCard key={idx}>
-            <PostCardImage lable className="bg-blue-300" />
-            <PostCardTitle title="혼자 보내는 하루, 골목골목 숨어있는 용산 원효로 카페" />
-            <PostCardLocation location="서울" detail="위치 세부 정보" />
-          </PostCard>
-        ))}
-      </PostCardWrapper>
-      <MainPagination />
+      {isPending ? (
+        <Loading className="min-h-[350px]" />
+      ) : (
+        <>
+          <PostCardWrapper className="mb-[50px]">
+            {data?.content.map((place) => (
+              <Link to={`/log/${place.placeId}/placesCollection`}>
+                <MotionCard key={place.placeId}>
+                  <PostCardImage lable className="bg-red-300" imageUrl="" />
+                  <PostCardTitle title={place.name} />
+                  <PostCardLocation location={place.address.sido} detail={place.address.sigungu} />
+                </MotionCard>
+              </Link>
+            ))}
+          </PostCardWrapper>
+          <section className="mt-[50px]">
+            <CustomPagination
+              currentPage={Number(data?.pageNumber)}
+              totalPages={Number(data?.totalPages)}
+            />
+          </section>
+        </>
+      )}
     </>
   );
 }
