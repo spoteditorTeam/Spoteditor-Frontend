@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import PlaceItem from '@/features/detailpage/PlaceItem';
 import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
+import usePlaceBookMark from '@/hooks/queries/log/usePlaceBookmark';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import api from '@/services/apis/api';
@@ -25,14 +26,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
   const navi = useNavigate();
   const { placeLogId } = useParams();
-  const { data, isPending } = useLog(Number(placeLogId));
+  const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
+  const { data: bookMarkData, isPending: isBookMarkPending } = usePlaceBookMark(Number(placeLogId));
   const { isMobile } = useResponsive();
   const [isChecked, setIsChecked] = useState(false);
 
-  const name = data?.name ?? '';
-  const description = data?.description ?? '';
-  const places = data?.places ?? [];
-  const isDataReady = isPending || !data;
+  const name = logData?.name ?? '';
+  const description = logData?.description ?? '';
+  const places = logData?.places ?? [];
+  const isDataReady = isLogPending || !logData || isBookMarkPending;
 
   const onClickLogBookMark = async () => {
     setIsChecked((prev) => !prev);
@@ -50,7 +52,7 @@ const DetailPage = () => {
         ) : (
           <>
             <img
-              src={getImgFromCloudFront(data.image.storedFile)}
+              src={getImgFromCloudFront(logData.image.storedFile)}
               alt="coverImage"
               className="w-full h-full object-cover"
             />
@@ -100,7 +102,12 @@ const DetailPage = () => {
         {isDataReady
           ? [...Array(3)].map((_, idx) => <PlaceItemSkeleton key={idx} />)
           : places.map((place: PlaceInLog, idx: number) => (
-              <PlaceItem place={place} key={place.placeId} idx={idx + 1} />
+              <PlaceItem
+                place={place}
+                key={place.placeId}
+                idx={idx + 1}
+                isBookMark={bookMarkData[idx].isBookmarked}
+              />
             ))}
       </div>
 

@@ -4,4 +4,5 @@ export const logKeys = {
   all: ['log'] as const,
   list: (params?: LogsQueryParams) => [...logKeys.all, 'list', params] as const,
   detail: (placeLogId: number) => [...logKeys.all, 'detail', placeLogId] as const,
+  bookMark: (placeLogId: number) => [...logKeys.detail(placeLogId), 'bookMark'] as const,
 };
