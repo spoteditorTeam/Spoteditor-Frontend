@@ -6,7 +6,7 @@ export interface IOtherUserParams {
   params: LogsQueryParams;
 }
 
-interface SortInfo {
+export interface SortInfo {
   empty: boolean;
   sorted: boolean;
   unsorted: boolean;
