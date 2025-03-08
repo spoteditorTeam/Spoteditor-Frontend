@@ -179,7 +179,7 @@ const LogWritePage = () => {
                 place={place}
                 key={place.id}
                 idx={idx + 1}
-                setRef={setRef}
+                registerTextRef={setRef}
                 onChangePresignUrlList={setPresignUrlList}
               />
             ))}
