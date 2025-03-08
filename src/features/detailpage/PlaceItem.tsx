@@ -1,11 +1,5 @@
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import ImageDialog from '@/components/Dialog/ImageDialog';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import api from '@/services/apis/api';
@@ -69,30 +63,11 @@ const PlaceItem = ({ place, idx }: PlaceItemProps) => {
           <CarouselContent>
             {images.map((img: Image) => (
               <CarouselItem className="flex-none web:basis-1/3" key={img.imageId}>
-                <Dialog>
-                  <DialogTrigger>
-                    <img
-                      src={getImgFromCloudFront(img.storedFile)}
-                      alt={img.originalFile}
-                      className="w-[245px] web:w-full aspect-[1/1.3] object-cover"
-                    />
-                  </DialogTrigger>
-                  <DialogContent className="bg-transparent" hideCloseButton>
-                    <Carousel className="w-full">
-                      <CarouselContent>
-                        {images.map((img) => (
-                          <CarouselItem key={img.imageId}>
-                            <img src={getImgFromCloudFront(img.storedFile)} alt="장소 이미지" />
-                          </CarouselItem>
-                        ))}
-                      </CarouselContent>
-
-                      {/* 좌우 버튼 */}
-                      <CarouselPrevious />
-                      <CarouselNext />
-                    </Carousel>
-                  </DialogContent>
-                </Dialog>
+                <ImageDialog
+                  images={images}
+                  triggerImg={getImgFromCloudFront(img.storedFile)}
+                  triggerAlt={img.originalFile}
+                />
               </CarouselItem>
             ))}
           </CarouselContent>
