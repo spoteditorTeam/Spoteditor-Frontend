@@ -1,4 +1,3 @@
-import mockImg from '@/assets/mock/3.png';
 import {
   Carousel,
   CarouselContent,
@@ -81,9 +80,9 @@ const PlaceItem = ({ place, idx }: PlaceItemProps) => {
                   <DialogContent className="bg-transparent" hideCloseButton>
                     <Carousel className="w-full">
                       <CarouselContent>
-                        {Array.from({ length: 5 }).map((_, index) => (
-                          <CarouselItem key={index}>
-                            <img src={mockImg} alt="mockImg" />
+                        {images.map((img) => (
+                          <CarouselItem key={img.imageId}>
+                            <img src={getImgFromCloudFront(img.storedFile)} alt="장소 이미지" />
                           </CarouselItem>
                         ))}
                       </CarouselContent>
