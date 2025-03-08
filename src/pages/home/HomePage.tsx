@@ -10,6 +10,7 @@ import TypingText from '@/features/homepage/TypingText';
 import useLogList from '@/hooks/queries/log/useLogList';
 import { cn } from '@/lib/utils';
 import { LogContent } from '@/services/apis/types/logAPI.type';
+import Autoplay from 'embla-carousel-autoplay';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
@@ -36,7 +37,7 @@ const HomePage = () => {
         </div>
 
         {/* 컨테이너 */}
-        <Carousel>
+        <Carousel plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]}>
           <CarouselContent className="flex">
             {isDataReady
               ? // 로딩 중
