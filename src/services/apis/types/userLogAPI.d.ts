@@ -19,6 +19,7 @@ interface Place {
   description: string;
   address: Address;
   category: string;
+  image: Image;
 }
 
 interface PlaceLog {
@@ -49,7 +50,7 @@ export interface UserBookmarkPlaces {
   sort: SortInfo;
 }
 
-/* 유저 북마크 로고리스트 응답 */
+/* 유저 북마크 로그리스트 응답 */
 export interface UserBookmarkLogs {
   content: PlaceLog[];
   totalCount: number;

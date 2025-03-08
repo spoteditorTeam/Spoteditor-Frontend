@@ -10,15 +10,27 @@ import {
 import useUser from '@/hooks/queries/user/useUser';
 import useOtherUserLogs from '@/hooks/queries/userLog/useOtherUserLogs';
 import useUserLogs from '@/hooks/queries/userLog/useUserLogs';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 function MyLogs() {
   const { user } = useUser();
   const { userId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageNumber = searchParams.get('pageNumber');
+  const totalPages = searchParams.get('totalPages');
 
   const isMyLogs = user?.userId === userId;
 
+  /* const { data: myLogsData, isPending: isMyLogsPending } = useUserLogs(
+    { page: Number(pageNumber) },
+    { enabled: isMyLogs }
+  ); */
+
   const { data, isPending } = isMyLogs ? useUserLogs() : useOtherUserLogs(Number(user?.userId));
+
+  const data = isMyLogs ? myLogsData : otherLogsData;
+  const isPending = isMyLogs ? isMyLogsPending : isOtherLogsPending;
   return (
     <>
       {isPending ? (
@@ -29,7 +41,7 @@ function MyLogs() {
             {data?.content.map((log) => (
               <Link to={`/log/${log.placeLogId}`}>
                 <MotionCard key={log.placeLogId}>
-                  <PostCardImage lable imageUrl={log.image.storedFile} />
+                  <PostCardImage lable imageUrl={log.image.originalFile} />
                   <PostCardTitle title={log.name} />
                   <PostCardLocation location={log.address.sido} detail={log.address.sigungu} />
                 </MotionCard>
@@ -46,15 +58,3 @@ function MyLogs() {
 }
 
 export default MyLogs;
-
-{
-  /* <PostCardWrapper className="mb-[50px]">
-  {Array.from({ length: 12 }).map((_, idx) => (
-    <PostCard key={idx} className="bg-blue-300">
-      <PostCardImage lable className="bg-slate-300" />
-      <PostCardTitle title="혼자 보내는 하루, 골목골목 숨어있는 용산 원효로 카페" />
-      <PostCardLocation location="서울" detail="위치 세부 정보" />
-    </PostCard>
-  ))}
-</PostCardWrapper>; */
-}
