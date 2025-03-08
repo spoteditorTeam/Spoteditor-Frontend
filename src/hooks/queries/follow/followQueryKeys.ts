@@ -3,6 +3,7 @@ import { FollowQueryParams } from '@/services/apis/types/followAPI';
 export const followKeys = {
   all: ['follow'] as const,
 
+  /* 로그인 한 사용자 */
   followers: () => [...followKeys.all, 'followers'] as const,
   followerList: (params: FollowQueryParams) => [...followKeys.followers(), { params }] as const,
 
@@ -11,6 +12,7 @@ export const followKeys = {
 
   user: (userId: number) => [...followKeys.all, 'user', userId] as const,
 
+  /* 타유저 */
   userFollowers: (userId: number) => [...followKeys.user(userId), 'followers'] as const,
   userFollowerList: (userId: number, params: FollowQueryParams) =>
     [...followKeys.userFollowers(userId), { params }] as const,

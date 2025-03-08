@@ -1,16 +1,16 @@
-import { FollowQueryParams } from '@/services/apis/types/followAPI';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { followKeys } from './followQueryKeys';
+import { FollowQueryParams } from '@/services/apis/types/followAPI';
 import api from '@/services/apis/api';
 
-export default function useFollowing(
-  userId: number,
-  { page = 1, size = 10, direction = 'ASC' }: Partial<FollowQueryParams> = {}
-) {
+export default function useFollowing({
+  page = 1,
+  size = 10,
+  direction = 'ASC',
+}: Partial<FollowQueryParams> = {}) {
   return useInfiniteQuery({
-    queryKey: followKeys.userFollowingList(userId, { page, size, direction }),
-    queryFn: ({ pageParam }) =>
-      api.follow.getFollowing({ userId, params: { ...pageParam, size, direction } }),
+    queryKey: followKeys.followingList({ page, size, direction }),
+    queryFn: ({ pageParam }) => api.follow.getFollowing({ ...pageParam, size, direction }),
     initialPageParam: { page: 1 },
     getNextPageParam: (lastPage) => {
       const nextPage = lastPage.pageNumber + 1;

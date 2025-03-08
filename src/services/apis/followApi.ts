@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { FollowParams, FollowResponse } from './types/followAPI';
+import { FollowParams, FollowQueryParams, FollowResponse } from './types/followAPI';
 import { ApiErrorResponse } from './types/commonApi';
 
 class FollowAPI {
@@ -8,19 +8,29 @@ class FollowAPI {
     this.axios = axios;
   }
 
-  async getFollower({ userId, params }: FollowParams): Promise<FollowResponse> {
+  async getFollower(params: FollowQueryParams): Promise<FollowResponse> {
+    const response = await this.axios.get(`/api/follower`, { params });
+    return response.data;
+  }
+
+  async getFollowing(params: FollowQueryParams): Promise<FollowResponse> {
+    const response = await this.axios.get(`/api/following`, { params });
+    return response.data;
+  }
+
+  async getOtherFollower({ userId, params }: FollowParams): Promise<FollowResponse> {
     const response = await this.axios.get(`/api/users/${userId}/follower`, { params });
     return response.data;
   }
 
-  async getFollowing({ userId, params }: FollowParams): Promise<FollowResponse> {
+  async getOtherFollowing({ userId, params }: FollowParams): Promise<FollowResponse> {
     const response = await this.axios.get(`/api/users/${userId}/following`, { params });
     return response.data;
   }
 
   async postFollow(userId: number): Promise<void> {
     try {
-      await this.axios.post('/api/users/follow', { userId });
+      await this.axios.post('/api/follow', { userId });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw error.response?.data as ApiErrorResponse;
@@ -31,7 +41,7 @@ class FollowAPI {
 
   async deleteFollow(userId: number): Promise<void> {
     try {
-      await this.axios.delete('/api/users/unfollow', { data: { userId } });
+      await this.axios.delete('/api/unfollow', { data: { userId } });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw error.response?.data as ApiErrorResponse;

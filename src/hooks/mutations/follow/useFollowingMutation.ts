@@ -9,7 +9,7 @@ interface UseFollowMutationProps {
   otherUserImage: string;
 }
 
-export function useFollowMutation({ otherUserName, otherUserImage }: UseFollowMutationProps) {
+export function useFollowingMutation({ otherUserName, otherUserImage }: UseFollowMutationProps) {
   const queryClient = useQueryClient();
 
   return useMutation<void, ApiErrorResponse, number>({
