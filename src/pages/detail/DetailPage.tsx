@@ -14,13 +14,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import PlaceItem from '@/features/detailpage/PlaceItem';
 import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
-import usePlaceBookMark from '@/hooks/queries/log/usePlaceBookmark';
+import usePlaceBookMark from '@/hooks/queries/log/usePlaceBookMark';
+import useUser from '@/hooks/queries/user/useUser';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import api from '@/services/apis/api';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
-import { Bookmark, Share2 } from 'lucide-react';
+import { ArrowLeft, Bookmark, PencilLine, Share2 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
@@ -28,13 +29,18 @@ const DetailPage = () => {
   const { placeLogId } = useParams();
   const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
   const { data: bookMarkData, isPending: isBookMarkPending } = usePlaceBookMark(Number(placeLogId));
+  const { user, isLoading } = useUser();
+
   const { isMobile } = useResponsive();
   const [isChecked, setIsChecked] = useState(false);
+
+  const isDataReady = isLogPending || isBookMarkPending || isLoading;
 
   const name = logData?.name ?? '';
   const description = logData?.description ?? '';
   const places = logData?.places ?? [];
-  const isDataReady = isLogPending || !logData || isBookMarkPending;
+
+  const isOwner = user?.userId === logData?.userId;
 
   const onClickLogBookMark = async () => {
     setIsChecked((prev) => !prev);
@@ -42,6 +48,10 @@ const DetailPage = () => {
     // await api.log.deleteLogBookMark(Number(placeLogId));
     console.log('북마크 추가');
   };
+
+  const onClickBack = () => navi(-1);
+  const onClickShare = () => alert('공유 기능 예정');
+  const onClickPencil = () => alert('수정 기능');
 
   return (
     <>
@@ -56,9 +66,34 @@ const DetailPage = () => {
               alt="coverImage"
               className="w-full h-full object-cover"
             />
-            <div className="bg-white/70 border border-primary-100 rounded-full absolute p-2.5 top-[14px] right-2.5 cursor-pointer web:top-4 web:right-4">
-              <Share2 />
+
+            <div>
+              <div className="absolute flex flex-col web:top-4 web:left-4 space-y-2">
+                <div
+                  className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-0 left-2.5 cursor-pointer z-10 hover:bg-white"
+                  onClick={onClickBack}
+                >
+                  <ArrowLeft />
+                </div>
+              </div>
+              <div className="absolute flex flex-col web:top-4 web:right-4 space-y-2">
+                <div
+                  className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
+                  onClick={onClickShare}
+                >
+                  <Share2 />
+                </div>
+                {isOwner && (
+                  <div
+                    className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
+                    onClick={onClickPencil}
+                  >
+                    <PencilLine />
+                  </div>
+                )}
+              </div>
             </div>
+
             <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient"></div>
             <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8">
               <h3 className="text-lg web:text-2xl font-bold text-white">{name}</h3>
@@ -106,7 +141,7 @@ const DetailPage = () => {
                 place={place}
                 key={place.placeId}
                 idx={idx + 1}
-                isBookMark={bookMarkData[idx].isBookmarked}
+                isBookMark={bookMarkData?.[idx]?.isBookmarked ?? false}
               />
             ))}
       </div>
