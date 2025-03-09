@@ -2,8 +2,9 @@ import axios from 'axios';
 import LogAPI from './logApi';
 import PlaceAPI from './placeApi';
 import RegisterAPI from './registerApi';
-import UserLog from './userLogApi';
 import FollowAPI from './followApi';
+import UserLog from './userLogApi';
+import { OtherUser } from './userApi';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -14,6 +15,7 @@ class API {
   userLog;
   place;
   follow;
+  otherUser;
   constructor() {
     this.#axios = axios.create({ baseURL: API_BASE_URL, withCredentials: true });
     this.register = new RegisterAPI(this.#axios);
@@ -21,6 +23,7 @@ class API {
     this.userLog = new UserLog(this.#axios);
     this.place = new PlaceAPI(this.#axios);
     this.follow = new FollowAPI(this.#axios);
+    this.otherUser = new OtherUser(this.#axios);
   }
 }
 
