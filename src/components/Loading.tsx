@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import Lottie from 'lottie-react';
 
 interface LoadingProps {
-  className: string;
+  className?: string;
 }
 
 const Loading = ({ className }: LoadingProps) => {
