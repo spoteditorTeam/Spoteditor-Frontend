@@ -24,7 +24,7 @@ const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
       onClick={handleCardClick}
     >
       {/* 이미지 */}
-      <div className={cn('relative grow')}>
+      <div className={cn('relative grow, group')}>
         <img
           src={getImgFromCloudFront(log?.image.storedFile ?? place?.images[0].storedFile ?? '')}
           alt="장소 이미지"
@@ -42,7 +42,12 @@ const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
           </span>
         )}
 
-        <div className={cn('bg-white absolute top-4 right-4 p-[11px]', isModal && 'top-1 right-1')}>
+        <div
+          className={cn(
+            'bg-white absolute top-4 right-4 p-[11px] opacity-0 group-hover:opacity-100',
+            isModal && 'top-1 right-1'
+          )}
+        >
           <Bookmark />
         </div>
       </div>
