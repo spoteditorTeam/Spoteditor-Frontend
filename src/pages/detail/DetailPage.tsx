@@ -13,33 +13,51 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import PlaceItem from '@/features/detailpage/PlaceItem';
 import LogCard from '@/features/homepage/LogCard';
+import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLog from '@/hooks/queries/log/useLog';
+import useLogBookMark from '@/hooks/queries/log/useLogBookMark';
+import usePlaceBookMark from '@/hooks/queries/log/usePlaceBookMark';
+import useUser from '@/hooks/queries/user/useUser';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
-import api from '@/services/apis/api';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
-import { Bookmark, Share2 } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowLeft, Bookmark, PencilLine, Share2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
+  /* hooks */
   const navi = useNavigate();
   const { placeLogId } = useParams();
-  const { data, isPending } = useLog(Number(placeLogId));
   const { isMobile } = useResponsive();
-  const [isChecked, setIsChecked] = useState(false);
 
-  const name = data?.name ?? '';
-  const description = data?.description ?? '';
-  const places = data?.places ?? [];
-  const isDataReady = isPending || !data;
+  /* query */
+  const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
+  const { data: LogBookmark, isPending: isLogBookmarkPending } = useLogBookMark(Number(placeLogId));
+  const { data: placeBookmark, isPending: isPlaceBookmarkPending } = usePlaceBookMark(
+    Number(placeLogId)
+  );
+  const { user, isLoading } = useUser();
 
-  const onClickLogBookMark = async () => {
-    setIsChecked((prev) => !prev);
-    await api.log.addLogBookMark(Number(placeLogId));
-    // await api.log.deleteLogBookMark(Number(placeLogId));
-    console.log('북마크 추가');
-  };
+  /* state */
+  const isDataReady = isLogPending || isPlaceBookmarkPending || isLoading || isLogBookmarkPending;
+
+  const name = logData?.name ?? '';
+  const description = logData?.description ?? '';
+  const places = logData?.places ?? [];
+  const placebookmark = LogBookmark?.isBookmarked ?? false;
+  const isOwner = user?.userId === logData?.userId;
+
+  /* mutatation */
+  const { mutate } = useLogBookmarkMutation({
+    isBookMark: placebookmark,
+    placeLogId: Number(placeLogId),
+  });
+
+  /* handlers */
+  const onClickLogBookmark = async () => mutate();
+  const onClickBack = () => navi(-1);
+  const onClickShare = () => alert('공유 기능 예정');
+  const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
 
   return (
     <>
@@ -50,13 +68,38 @@ const DetailPage = () => {
         ) : (
           <>
             <img
-              src={getImgFromCloudFront(data.image.storedFile)}
+              src={getImgFromCloudFront(logData.image.storedFile)}
               alt="coverImage"
               className="w-full h-full object-cover"
             />
-            <div className="bg-white/70 border border-primary-100 rounded-full absolute p-2.5 top-[14px] right-2.5 cursor-pointer web:top-4 web:right-4">
-              <Share2 />
+
+            <div>
+              <div className="absolute flex flex-col web:top-4 web:left-4 space-y-2">
+                <div
+                  className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-0 left-2.5 cursor-pointer z-10 hover:bg-white"
+                  onClick={onClickBack}
+                >
+                  <ArrowLeft />
+                </div>
+              </div>
+              <div className="absolute flex flex-col web:top-4 web:right-4 space-y-2">
+                <div
+                  className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
+                  onClick={onClickShare}
+                >
+                  <Share2 />
+                </div>
+                {isOwner && (
+                  <div
+                    className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
+                    onClick={onClickPencil}
+                  >
+                    <PencilLine />
+                  </div>
+                )}
+              </div>
             </div>
+
             <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient"></div>
             <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8">
               <h3 className="text-lg web:text-2xl font-bold text-white">{name}</h3>
@@ -100,7 +143,12 @@ const DetailPage = () => {
         {isDataReady
           ? [...Array(3)].map((_, idx) => <PlaceItemSkeleton key={idx} />)
           : places.map((place: PlaceInLog, idx: number) => (
-              <PlaceItem place={place} key={place.placeId} idx={idx + 1} />
+              <PlaceItem
+                place={place}
+                key={place.placeId}
+                idx={idx + 1}
+                isBookMark={placeBookmark?.[idx]?.isBookmarked ?? false}
+              />
             ))}
       </div>
 
@@ -109,9 +157,9 @@ const DetailPage = () => {
         <Button
           variant={'outline'}
           className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"
-          onClick={onClickLogBookMark}
+          onClick={onClickLogBookmark}
         >
-          <Bookmark className={cn('!size-6 web:!size-8', isChecked && 'fill-black')} />
+          <Bookmark className={cn('!size-6 web:!size-8', placebookmark && 'fill-black')} />
         </Button>
         {/* 장소 모아 보기 버튼 */}
 
