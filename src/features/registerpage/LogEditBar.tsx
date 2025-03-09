@@ -1,5 +1,6 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import { Button } from '@/components/ui/button';
+import useDeleteLog from '@/hooks/mutations/log/useDeleteLogMutation';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,12 +8,15 @@ interface LogEditBarProps {
   sido?: string;
   bname?: string;
   logTitle: string;
+  placeLogId: string;
 }
 
-const LogEditBar = ({ sido = '', bname = '', logTitle }: LogEditBarProps) => {
+const LogEditBar = ({ sido = '', bname = '', logTitle, placeLogId }: LogEditBarProps) => {
   const navi = useNavigate();
+  const { mutate: deleteLog } = useDeleteLog(Number(placeLogId));
   const handleBack = () => navi(-1);
-  const handleClickDelete = () => console.log('삭제');
+
+  const handleClickDelete = () => deleteLog();
   return (
     <div className="flex items-center w-full py-[7px] px-4 justify-between">
       <div className="flex items-center gap-2.5">
@@ -37,7 +41,6 @@ const LogEditBar = ({ sido = '', bname = '', logTitle }: LogEditBarProps) => {
           <Button
             variant={'transparent'}
             className="p-0 h-fit text-error-500 !text-text-md font-medium"
-            onClick={handleClickDelete}
           >
             삭제
           </Button>
