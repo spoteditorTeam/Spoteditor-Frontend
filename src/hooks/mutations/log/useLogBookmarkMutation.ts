@@ -29,7 +29,7 @@ const useLogBookmarkMutation = ({ isBookMark, placeLogId }: UseLogBookmarkMutati
       return { previousLogBookMark };
     },
 
-    onError: (error, variables, context) => {
+    onError: (_error, _variables, context) => {
       if (context?.previousLogBookMark) {
         queryClient.setQueryData([...logKeys.logBookMark(placeLogId)], context.previousLogBookMark);
       }
