@@ -21,6 +21,7 @@ const HomePage = () => {
   const { totalPages, content } = data ?? {};
 
   const isDataReady = isPending || !data || isError;
+
   return (
     <>
       {/* 메인 히어로 */}
@@ -33,11 +34,16 @@ const HomePage = () => {
             <h3 className="text-primary-300">Sort by</h3>
             <h3 className="text-primary-950">Popularity</h3>
           </div>
-          <div className="hidden web:block">--------</div>
         </div>
 
         {/* 컨테이너 */}
-        <Carousel plugins={[Autoplay({ delay: 3000, stopOnInteraction: false })]}>
+        <Carousel
+          plugins={[Autoplay({ delay: 4000, stopOnInteraction: false })]}
+          opts={{
+            align: 'start',
+            slidesToScroll: 4,
+          }}
+        >
           <CarouselContent className="flex">
             {isDataReady
               ? // 로딩 중
