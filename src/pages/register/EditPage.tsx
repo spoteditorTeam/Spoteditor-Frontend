@@ -1,41 +1,50 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
+import Loading from '@/components/Loading';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import CoverImageInput from '@/features/registerpage/CoverImageInput';
-import LogWriteBar from '@/features/registerpage/LogWriteBar';
+import LogEditBar from '@/features/registerpage/LogEditBar';
 import PlaceDetailFormItem from '@/features/registerpage/PlaceDetailFormItem';
+import useLog from '@/hooks/queries/log/useLog';
 import useImagePreview from '@/hooks/useImagePreview';
 import api from '@/services/apis/api';
 import { Log, Place, PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
-import { useRegisterStore } from '@/store/registerStore';
 import { formatAddress } from '@/utils/formatLogForm';
 import { CircleX } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const LogWritePage = () => {
+const EditPage = () => {
+  /* hooks */
   const navi = useNavigate();
-  const [logTitle, setLogTitle] = useState('');
-  const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
-  const resetSelectedPlaces = useRegisterStore((state) => state.resetSelectedPlaces);
+  const { placeLogId } = useParams();
   const { imagePreview, handleFileChange, handleClearImage, presignedUrlObj } = useImagePreview();
-  const logDescripTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
+  /* states */
+  const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
+  const [logTitle, setLogTitle] = useState(logData?.name);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   // 로그 등록 시 필요한 {presignedUrl, uuid}
   const [presignedUrlList, setPresignUrlList] = useState<{ [key: string]: PresignedUrlWithName[] }>(
     {}
   );
+  // const [sido, , bname] = selectedPlaces[0].address_name.split(' '); // 뒤로가기 옆 로그 대표 지역 이름
 
-  const handleClearTitle = () => setLogTitle('');
-
+  const logDescripTextAreaRef = useRef<HTMLTextAreaElement>(logData?.description);
   const textRefs = useRef<{ [placeId: string]: string }>({});
   const registerTextRef = (id: string, elem: HTMLTextAreaElement) => {
     if (elem) textRefs.current[id] = elem.value;
     else delete textRefs.current[id];
   };
 
-  const [sido, , bname] = selectedPlaces[0].address_name.split(' '); // 뒤로가기 옆 로그 대표 지역 이름
-  // 제출 형식에 맞춰 포맷
+  /* handler */
+  const onClickBack = () => navi(-1);
+  const handleClearTitle = () => setLogTitle('');
+
+  /* 제출 형식에 맞춰 포맷 */
+  const selectedPlaces = [];
+  const resetSelectedPlaces = [];
 
   const formatPlace = (place: kakao.maps.services.PlacesSearchResultItem): Place | null => {
     const placeImages = presignedUrlList[place.place_name];
@@ -87,10 +96,13 @@ const LogWritePage = () => {
     }
   };
 
+  if (isLogPending) return <Loading />;
+
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <LogWriteBar sido={sido} bname={bname} />
+
+      <LogEditBar sido={''} bname={''} logTitle={logTitle} />
 
       <main className="flex flex-col items-center grow min-h-0 overflow-y-auto scrollbar-hide">
         {/* 로그 제목 */}
@@ -144,7 +156,10 @@ const LogWritePage = () => {
       </main>
 
       {/* 버튼 */}
-      <div className="pt-2 pb-3 px-4 ">
+      <div className="pt-2 pb-3 px-4 flex gap-2.5">
+        <Button variant={'outline'} className="w-full" size={'xl'} onClick={onClickBack}>
+          취소
+        </Button>
         <ConfirmDialog
           title="로그를 등록하시겠어요?"
           showCheckbox={true}
@@ -156,4 +171,4 @@ const LogWritePage = () => {
   );
 };
 
-export default LogWritePage;
+export default EditPage;
