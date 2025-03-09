@@ -14,7 +14,9 @@ type LogCardProps = {
 
 const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
   const navi = useNavigate();
-  const handleCardClick = () => navi(`/log/${log?.placeLogId}`);
+  const handleCardClick = () => {
+    if (!isModal) navi(`/log/${log?.placeLogId}`);
+  };
   const { isMobile } = useResponsive();
   return (
     <div
