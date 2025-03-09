@@ -12,7 +12,7 @@ import api from '@/services/apis/api';
 import { Log, Place, PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
 import { formatAddress } from '@/utils/formatLogForm';
 import { CircleX } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const EditPage = () => {
@@ -23,28 +23,40 @@ const EditPage = () => {
 
   /* states */
   const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
+
   const [logTitle, setLogTitle] = useState(logData?.name);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [, setLogDescription] = useState<string>('');
+
   // 로그 등록 시 필요한 {presignedUrl, uuid}
   const [presignedUrlList, setPresignUrlList] = useState<{ [key: string]: PresignedUrlWithName[] }>(
     {}
   );
-  // const [sido, , bname] = selectedPlaces[0].address_name.split(' '); // 뒤로가기 옆 로그 대표 지역 이름
 
-  const logDescripTextAreaRef = useRef<HTMLTextAreaElement>(logData?.description);
+  const address = logData?.places[0]?.address?.address as string;
+  const [sido, , bname] = address.split(' ');
+
+  const logDescripTextAreaRef = useRef<HTMLTextAreaElement>(null);
   const textRefs = useRef<{ [placeId: string]: string }>({});
   const registerTextRef = (id: string, elem: HTMLTextAreaElement) => {
     if (elem) textRefs.current[id] = elem.value;
     else delete textRefs.current[id];
   };
 
+  useEffect(() => {
+    if (logData) {
+      setLogTitle(logData.name);
+      setLogDescription(logData.description);
+      if (logDescripTextAreaRef.current) {
+        logDescripTextAreaRef.current.value = logData.description;
+      }
+    }
+  }, [logData]);
+
+  if (isLogPending) return <Loading />;
+
   /* handler */
   const onClickBack = () => navi(-1);
   const handleClearTitle = () => setLogTitle('');
-
-  /* 제출 형식에 맞춰 포맷 */
-  const selectedPlaces = [];
-  const resetSelectedPlaces = [];
 
   const formatPlace = (place: kakao.maps.services.PlacesSearchResultItem): Place | null => {
     const placeImages = presignedUrlList[place.place_name];
@@ -102,7 +114,7 @@ const EditPage = () => {
     <div className="h-full flex flex-col">
       {/* 헤더 */}
 
-      <LogEditBar sido={''} bname={''} logTitle={logTitle} />
+      <LogEditBar sido={sido} bname={bname} logTitle={logTitle} />
 
       <main className="flex flex-col items-center grow min-h-0 overflow-y-auto scrollbar-hide">
         {/* 로그 제목 */}
@@ -142,7 +154,7 @@ const EditPage = () => {
 
           {/* 장소 */}
           <div className="flex flex-col w-full mt-3">
-            {selectedPlaces.map((place, idx) => (
+            {[].map((place, idx) => (
               <PlaceDetailFormItem
                 place={place}
                 key={place.id}

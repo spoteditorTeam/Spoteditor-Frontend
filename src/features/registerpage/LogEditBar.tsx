@@ -24,7 +24,9 @@ const LogEditBar = ({ sido = '', bname = '', logTitle }: LogEditBarProps) => {
         >
           <ArrowLeft size={24} />
         </Button>
-        <p className="text-text-2xl font-bold">gg</p>
+        <p className="text-text-2xl font-bold">
+          {sido} · {bname}
+        </p>
       </div>
 
       <ConfirmDialog
