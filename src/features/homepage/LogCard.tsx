@@ -1,3 +1,4 @@
+import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import { LogContent, PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
@@ -14,6 +15,7 @@ type LogCardProps = {
 const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
   const navi = useNavigate();
   const handleCardClick = () => navi(`/log/${log?.placeLogId}`);
+  const { isMobile } = useResponsive();
   return (
     <div
       className={cn('h-full gap-1.5', isLarge ? 'flex flex-col' : 'grid grid-rows-[auto_1fr]')}
@@ -24,7 +26,11 @@ const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
         <img
           src={getImgFromCloudFront(log?.image.storedFile ?? place?.images[0].storedFile ?? '')}
           alt="장소 이미지"
-          className={cn('object-cover w-full h-full aspect-[3/2]', vertical && 'aspect-[3/4]')}
+          className={cn(
+            'object-cover w-full aspect-[3/2]',
+            vertical && 'aspect-[3/4]',
+            vertical && isMobile && 'max-w-xs mx-auto'
+          )}
         />
         <div className="absolute inset-0 card-id-gradient"></div>
         <div className="absolute inset-0 hover:bg-black/25 transition-colors"></div>
