@@ -49,6 +49,17 @@ class LogAPI {
       console.log(error);
     }
   }
+
+  async getLogBookMark(placeLogId: number) {
+    try {
+      const path = `/api/placelogs/bookmark/check?placeLogId=${placeLogId} `;
+      const res = await this.#axios.get(path);
+      if (res.status !== 200) throw new Error('로그 북마크 조회 실패');
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export default LogAPI;
