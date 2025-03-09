@@ -10,18 +10,30 @@ import {
 import useUser from '@/hooks/queries/user/useUser';
 import useOtherUserBookmarkPlaces from '@/hooks/queries/userLog/useOtherUserBookmarkPlaces';
 import useUserBookmarkPlaces from '@/hooks/queries/userLog/useUserBookmarkPlaces';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 function SavedSpaces() {
   const { user } = useUser();
   const { userId } = useParams();
+  const [searchParams] = useSearchParams();
 
-  const isMySaveLogs = user?.userId === userId;
+  const pageNumber = searchParams.get('pageNumber');
 
-  const { data, isPending } = isMySaveLogs
-    ? useUserBookmarkPlaces()
-    : useOtherUserBookmarkPlaces(Number(user?.userId));
+  const isMySaveSpaces = user?.userId === Number(userId);
+
+  const { data: myPlaceData, isPending: myPlacePending } = useUserBookmarkPlaces(
+    { page: Number(pageNumber) },
+    { enabled: isMySaveSpaces }
+  );
+  const { data: otherPlaceData, isPending: otherPlacePending } = useOtherUserBookmarkPlaces(
+    Number(userId),
+    { page: Number(pageNumber) },
+    { enabled: !isMySaveSpaces }
+  );
+
+  const data = isMySaveSpaces ? myPlaceData : otherPlaceData;
+  const isPending = isMySaveSpaces ? myPlacePending : otherPlacePending;
   return (
     <>
       {isPending ? (
@@ -30,13 +42,18 @@ function SavedSpaces() {
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.content.map((place) => (
-              <Link to={`/log/${place.placeId}/placesCollection`}>
+              <div>
+                {/* 추후 주소가 나오면 링크 컴포넌트로 보내는 기능 추가 */}
                 <MotionCard key={place.placeId}>
-                  <PostCardImage lable className="bg-red-300" imageUrl="" />
+                  <PostCardImage lable imageUrl={getImgFromCloudFront(place.image.storedFile)} />
                   <PostCardTitle title={place.name} />
-                  <PostCardLocation location={place.address.sido} detail={place.address.sigungu} />
+                  <PostCardLocation
+                    sido={place.address.sido}
+                    bname={place.address.bname}
+                    sigungu={place.address.sigungu}
+                  />
                 </MotionCard>
-              </Link>
+              </div>
             ))}
           </PostCardWrapper>
           <section className="mt-[50px]">

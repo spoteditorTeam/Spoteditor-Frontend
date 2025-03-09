@@ -10,18 +10,31 @@ import {
 import useUser from '@/hooks/queries/user/useUser';
 import useOtherUserBookmarkLogs from '@/hooks/queries/userLog/useOtherUserBookmarkLogs';
 import useUserBookmarkLogs from '@/hooks/queries/userLog/useUserBookmarkLogs';
-import { Link } from 'react-router-dom';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 function SavedLogs() {
   const { user } = useUser();
   const { userId } = useParams();
+  const [searchParams] = useSearchParams();
 
-  const isMySaveLogs = user?.userId === userId;
+  const pageNumber = searchParams.get('pageNumber');
 
-  const { data, isPending } = isMySaveLogs
-    ? useUserBookmarkLogs()
-    : useOtherUserBookmarkLogs(Number(user?.userId));
+  const isMySaveLogs = user?.userId === Number(userId);
+
+  const { data: mySaveLogsData, isPending: isMySaveLogsPending } = useUserBookmarkLogs(
+    { page: Number(pageNumber) },
+    { enabled: isMySaveLogs }
+  );
+  const { data: otherSaveLogsData, isPending: isOtherSaveLogsPending } = useOtherUserBookmarkLogs(
+    Number(userId),
+    { page: Number(pageNumber) },
+    { enabled: !isMySaveLogs }
+  );
+
+  const data = isMySaveLogs ? mySaveLogsData : otherSaveLogsData;
+  const isPending = isMySaveLogs ? isMySaveLogsPending : isOtherSaveLogsPending;
   return (
     <>
       {isPending ? (
@@ -32,9 +45,13 @@ function SavedLogs() {
             {data?.content.map((log) => (
               <Link to={`/log/${log.placeLogId}`}>
                 <MotionCard key={log.placeLogId}>
-                  <PostCardImage lable imageUrl={log.image.storedFile} />
+                  <PostCardImage lable imageUrl={getImgFromCloudFront(log.image.storedFile)} />
                   <PostCardTitle title={log.name} />
-                  <PostCardLocation location={log.address.sido} detail={log.address.sigungu} />
+                  <PostCardLocation
+                    sido={log.address.sido}
+                    bname={log.address.bname}
+                    sigungu={log.address.sigungu}
+                  />
                 </MotionCard>
               </Link>
             ))}

@@ -11,23 +11,26 @@ import useUser from '@/hooks/queries/user/useUser';
 import useOtherUserLogs from '@/hooks/queries/userLog/useOtherUserLogs';
 import useUserLogs from '@/hooks/queries/userLog/useUserLogs';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 
 function MyLogs() {
   const { user } = useUser();
   const { userId } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const pageNumber = searchParams.get('pageNumber');
-  const totalPages = searchParams.get('totalPages');
 
-  const isMyLogs = user?.userId === userId;
+  const isMyLogs = user?.userId === Number(userId);
 
-  /* const { data: myLogsData, isPending: isMyLogsPending } = useUserLogs(
+  const { data: myLogsData, isPending: isMyLogsPending } = useUserLogs(
     { page: Number(pageNumber) },
     { enabled: isMyLogs }
-  ); */
-
-  const { data, isPending } = isMyLogs ? useUserLogs() : useOtherUserLogs(Number(user?.userId));
+  );
+  const { data: otherLogsData, isPending: isOtherLogsPending } = useOtherUserLogs(
+    Number(userId),
+    { page: Number(pageNumber) },
+    { enabled: !isMyLogs }
+  );
 
   const data = isMyLogs ? myLogsData : otherLogsData;
   const isPending = isMyLogs ? isMyLogsPending : isOtherLogsPending;
@@ -41,9 +44,13 @@ function MyLogs() {
             {data?.content.map((log) => (
               <Link to={`/log/${log.placeLogId}`}>
                 <MotionCard key={log.placeLogId}>
-                  <PostCardImage lable imageUrl={log.image.originalFile} />
+                  <PostCardImage lable imageUrl={getImgFromCloudFront(log.image.storedFile)} />
                   <PostCardTitle title={log.name} />
-                  <PostCardLocation location={log.address.sido} detail={log.address.sigungu} />
+                  <PostCardLocation
+                    sido={log.address.sido}
+                    bname={log.address.bname}
+                    sigungu={log.address.sigungu}
+                  />
                 </MotionCard>
               </Link>
             ))}
