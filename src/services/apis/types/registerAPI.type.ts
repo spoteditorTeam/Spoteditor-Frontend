@@ -42,6 +42,11 @@ export interface Log {
   places: Place[]; // 여러 장소를 포함할 수 있음
 }
 
+interface Tag {
+  name: string;
+  category: 'WITH_WHOM';
+}
+
 // createLog response
 export interface Image {
   imageId: number;
@@ -67,3 +72,43 @@ export interface LogResponse {
   places: ResponsePlace[];
   userId: number;
 }
+
+// 수정 request
+interface UpdateLogTitleRequest {
+  name: string;
+}
+interface UpdateLogDescriptionRequest {
+  description: string;
+}
+interface UpdateLogCoverRequest {
+  originalFile: string;
+  uuid: string;
+}
+interface UpdateStatusRequest {
+  status: 'public';
+}
+interface DeleteTagsRequest {
+  deleteTags: Tag[];
+}
+interface AddTagsRequest {
+  addTags: Tag[];
+}
+interface DeletePlaceIdsRequest {
+  deletePlaceIds: number[];
+}
+interface AddPlacesRequest {
+  addPlaces: Place[];
+}
+interface UpdatePlacesRequest {
+  updatePlaces: Place[];
+}
+export type UpdateRequest =
+  | UpdateLogTitleRequest
+  | UpdateLogDescriptionRequest
+  | UpdateLogCoverRequest
+  | UpdateStatusRequest
+  | DeleteTagsRequest
+  | AddTagsRequest
+  | DeletePlaceIdsRequest
+  | AddPlacesRequest
+  | UpdatePlacesRequest;
