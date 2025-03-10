@@ -12,9 +12,10 @@ interface OtherUserProfileSectionProps {
 export default function OtherUserProfileSection({ userId }: OtherUserProfileSectionProps) {
   const { user } = useUser();
   const isOther = user?.userId !== userId;
-  const { data: otherUser } = useOtherUser(userId, { enabled: isOther });
+  const { data: otherUser } = useOtherUser(userId, { enabled: isOther && !isNaN(userId) });
 
   const userData = isOther ? otherUser : user;
+
   return (
     <div className="flex items-center gap-2 py-[15px]">
       <Link to={`/profile/${userId}`} className="flex items-center gap-2">
