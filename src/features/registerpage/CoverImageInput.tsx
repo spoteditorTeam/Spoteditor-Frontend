@@ -19,24 +19,24 @@ const CoverImageInput = ({
   handleClearImage,
 }: CoverImageInputProps) => {
   const coverUploadInputRef = useRef<HTMLInputElement>(null);
+  console.log(imagePreview);
   return (
     <>
-      {imagePreview ||
-        (defaultImg && (
-          /* 커버 이미지  */
-          <div className="relative mb-3">
-            <Input
-              type="image"
-              src={imagePreview || defaultImg}
-              alt="커버 이미지"
-              className="w-full aspect-[2/1] p-0 object-cover"
-            />
-            <CircleX
-              className="stroke-primary-100 absolute top-4 right-4 cursor-pointer hover:fill-slate-50/50"
-              onClick={handleClearImage}
-            />
-          </div>
-        ))}
+      {(imagePreview || defaultImg) && (
+        /* 커버 이미지  */
+        <div className="relative mb-3">
+          <Input
+            type="image"
+            src={imagePreview || defaultImg}
+            alt="커버 이미지"
+            className="w-full aspect-[2/1] p-0 object-cover"
+          />
+          <CircleX
+            className="stroke-primary-100 absolute top-4 right-4 cursor-pointer hover:fill-slate-50/50"
+            onClick={handleClearImage}
+          />
+        </div>
+      )}
       {/* 커버 이미지 업로드 버튼 */}
       <div className="px-4 w-full">
         <Input
