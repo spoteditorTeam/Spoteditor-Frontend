@@ -40,8 +40,8 @@ const ImageDialog = ({ images, triggerImg, triggerAlt }: ImageDialogProps) => {
           </CarouselContent>
 
           {/* 좌우 버튼 */}
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="!bg-transparent border-none" />
+          <CarouselNext className="!bg-transparent border-none" />
         </Carousel>
       </DialogContent>
     </Dialog>

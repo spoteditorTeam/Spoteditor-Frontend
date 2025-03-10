@@ -47,6 +47,7 @@ export const ConfirmDialog = ({
       <AlertDialogContent className="max-w-[400px] min-w-[300px]">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-text-2xl">{title}</AlertDialogTitle>
+          <AlertDialogDescription className="hidden">alertDialog 설명란</AlertDialogDescription>
           {description && (
             <AlertDialogDescription className="text-text-xs">{description}</AlertDialogDescription>
           )}
