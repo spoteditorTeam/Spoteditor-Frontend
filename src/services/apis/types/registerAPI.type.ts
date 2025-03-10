@@ -65,4 +65,5 @@ export interface LogResponse {
   views: number;
   tags: [];
   places: ResponsePlace[];
+  userId: number;
 }
