@@ -1,34 +1,35 @@
 import { Textarea } from '@/components/ui/textarea';
 import useImages from '@/hooks/useImages';
-import { PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
+import { PresignedUrlWithName, ResponsePlace } from '@/services/apis/types/registerAPI.type';
 import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import PlaceImagesInput from './PlaceImagesInput';
+import PlaceImagesInput from '../registerpage/PlaceImagesInput';
 
-interface PlaceDetailFormItemProps {
-  place: kakao.maps.services.PlacesSearchResultItem;
+interface PlaceEditFormItemProps {
+  place: ResponsePlace;
   idx: number;
   registerTextRef: (id: string, elem: HTMLTextAreaElement) => void;
   onChangePresignUrlList: Dispatch<SetStateAction<{ [key: number]: PresignedUrlWithName[] }>>;
   setModifyTarget?: Dispatch<SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>>;
 }
 
-const PlaceDetailFormItem = ({
+const PlaceEditFormItem = ({
   place,
   idx,
   registerTextRef,
   onChangePresignUrlList,
-  setModifyTarget,
-}: PlaceDetailFormItemProps) => {
+}: // setModifyTarget,
+PlaceEditFormItemProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const handleChecked = () => {
-    if (!setModifyTarget) return;
-    setIsChecked((prev) => {
-      const newChcked = !prev;
-      if (newChcked) setModifyTarget(place);
-      else setModifyTarget(null);
-      return newChcked;
-    });
+    console.log('아직 안됨', setIsChecked);
+    // if (!setModifyTarget) return;
+    // setIsChecked((prev) => {
+    //   const newChcked = !prev;
+    //   if (newChcked) setModifyTarget(place);
+    //   else setModifyTarget(null);
+    //   return newChcked;
+    // });
   };
 
   const { handleFileChange, handleRemoveImage, imagePreviews, presignedUrls } = useImages();
@@ -36,9 +37,9 @@ const PlaceDetailFormItem = ({
   useEffect(() => {
     onChangePresignUrlList((prev) => ({
       ...prev,
-      [place.place_name]: presignedUrls,
+      [place.name]: presignedUrls,
     }));
-  }, [onChangePresignUrlList, presignedUrls, place.place_name]);
+  }, [onChangePresignUrlList, presignedUrls, place.name]);
 
   return (
     <div className="py-[5px]">
@@ -54,21 +55,21 @@ const PlaceDetailFormItem = ({
             )}
           </div>
           <p className="flex items-center">
-            {place.place_name} <ChevronRight className="w-[1.2em] h-[1.2em]" />
+            {place.name} <ChevronRight className="w-[1.2em] h-[1.2em]" />
           </p>
         </div>
 
         <div className="flex flex-col text-primary-400">
           <div className="flex gap-2 items-center text-text-sm">
             <Clock size={16} />
-            <p className="after:ml-1.5">{place.category_group_name}</p>
+            <p className="after:ml-1.5">{place.category}</p>
           </div>
           <div className="flex gap-2 items-center text-text-sm">
             <MapPin size={16} />
             <p className="after:ml-1.5 after:content-['|'] after:text-primary-100">
-              {place.road_address_name.split(' ')[0]}
+              {place.address.address.split(' ')[0]}
             </p>
-            <p>{place.road_address_name}</p>
+            <p>{place.address.address}</p>
           </div>
         </div>
       </section>
@@ -77,7 +78,8 @@ const PlaceDetailFormItem = ({
       <PlaceImagesInput
         handleFileChange={handleFileChange}
         handleRemoveImage={handleRemoveImage}
-        imagePreviews={imagePreviews}
+        imagePreviews={imagePreviews || place.images}
+        defaultplaceImgs={place.images}
       />
 
       {/* 내용 */}
@@ -85,10 +87,10 @@ const PlaceDetailFormItem = ({
         className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="내용을 입력해주세요. (최대 500자)"
         maxLength={500}
-        ref={(el) => registerTextRef(place.id, el!)}
+        ref={(el) => registerTextRef(place.name, el!)}
       />
     </div>
   );
 };
 
-export default PlaceDetailFormItem;
+export default PlaceEditFormItem;
