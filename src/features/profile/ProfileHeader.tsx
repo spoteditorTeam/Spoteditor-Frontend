@@ -12,7 +12,6 @@ import FollowerListButton from '../follow/FollowerListButton';
 function ProfileHeader() {
   const { userId } = useParams();
   const { user, isLoading: userLoading } = useUser();
-  console.log('user', user);
 
   const isMe = user?.userId === Number(userId);
   const { data: otherUserData, isLoading: otherUserLoading } = useOtherUser(Number(userId));
