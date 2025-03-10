@@ -67,11 +67,13 @@ const DetailPage = () => {
           <LogCoverSkeleton />
         ) : (
           <>
-            <img
-              src={getImgFromCloudFront(logData.image.storedFile)}
-              alt="coverImage"
-              className="w-full h-full object-cover"
-            />
+            {logData && (
+              <img
+                src={getImgFromCloudFront(logData.image.storedFile)}
+                alt="coverImage"
+                className="w-full h-full object-cover"
+              />
+            )}
 
             <div>
               <div className="absolute flex flex-col web:top-4 web:left-4 space-y-2">

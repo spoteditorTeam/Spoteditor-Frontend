@@ -11,7 +11,7 @@ interface LogEditBarProps {
   placeLogId: string;
 }
 
-const LogEditBar = ({ sido = '', bname = '', logTitle, placeLogId }: LogEditBarProps) => {
+const LogEditBar = ({ sido = '', bname = '', logTitle = '', placeLogId }: LogEditBarProps) => {
   const navi = useNavigate();
   const { mutate: deleteLog } = useDeleteLog(Number(placeLogId));
   const handleBack = () => navi(-1);

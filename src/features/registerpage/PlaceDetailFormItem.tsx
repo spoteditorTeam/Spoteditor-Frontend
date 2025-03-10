@@ -10,7 +10,7 @@ interface PlaceDetailFormItemProps {
   idx: number;
   registerTextRef: (id: string, elem: HTMLTextAreaElement) => void;
   onChangePresignUrlList: Dispatch<SetStateAction<{ [key: number]: PresignedUrlWithName[] }>>;
-  setModifyTarget: Dispatch<SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>>;
+  setModifyTarget?: Dispatch<SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>>;
 }
 
 const PlaceDetailFormItem = ({
@@ -22,6 +22,7 @@ const PlaceDetailFormItem = ({
 }: PlaceDetailFormItemProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const handleChecked = () => {
+    if (!setModifyTarget) return;
     setIsChecked((prev) => {
       const newChcked = !prev;
       if (newChcked) setModifyTarget(place);

@@ -8,9 +8,7 @@ import LogEditBar from '@/features/registerpage/LogEditBar';
 import PlaceDetailFormItem from '@/features/registerpage/PlaceDetailFormItem';
 import useLog from '@/hooks/queries/log/useLog';
 import useImagePreview from '@/hooks/useImagePreview';
-import api from '@/services/apis/api';
-import { Log, Place, PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
-import { formatAddress } from '@/utils/formatLogForm';
+import { PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -19,18 +17,21 @@ const EditPage = () => {
   /* hooks */
   const navi = useNavigate();
   const { placeLogId } = useParams();
+  if (!placeLogId) navi('/404');
   const { imagePreview, handleFileChange, handleClearImage, presignedUrlObj } = useImagePreview();
 
   /* states */
   const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
 
-  const [logTitle, setLogTitle] = useState(logData?.name);
+  const [logTitle, setLogTitle] = useState(logData?.name || '');
   const [, setLogDescription] = useState<string>('');
 
   // 로그 등록 시 필요한 {presignedUrl, uuid}
   const [presignedUrlList, setPresignUrlList] = useState<{ [key: string]: PresignedUrlWithName[] }>(
     {}
   );
+
+  console.log('임시', presignedUrlList, presignedUrlObj);
 
   const address = logData?.places[0]?.address?.address as string;
   const [sido, , bname] = address.split(' ');
@@ -58,54 +59,53 @@ const EditPage = () => {
   const onClickBack = () => navi(-1);
   const handleClearTitle = () => setLogTitle('');
 
-  const formatPlace = (place: kakao.maps.services.PlacesSearchResultItem): Place | null => {
-    const placeImages = presignedUrlList[place.place_name];
-    if (!placeImages || placeImages.length === 0) {
-      alert(`${place.place_name} 이미지가 비어있습니다.`);
-      return null;
-    }
+  // const formatPlace = (place: kakao.maps.services.PlacesSearchResultItem): Place | null => {
+  //   const placeImages = presignedUrlList[place.place_name];
+  //   if (!placeImages || placeImages.length === 0) {
+  //     alert(`${place.place_name} 이미지가 비어있습니다.`);
+  //     return null;
+  //   }
 
-    return {
-      name: place.place_name,
-      description: textRefs.current[place.id],
-      address: formatAddress(place),
-      category: 'TOUR',
-      originalFiles: presignedUrlList[place.place_name].map((item) => item.originalFile),
-      uuids: presignedUrlList[place.place_name].map((item) => item.uuid),
-    };
-  };
+  //   return {
+  //     name: place.place_name,
+  //     description: textRefs.current[place.id],
+  //     address: formatAddress(place),
+  //     category: 'TOUR',
+  //     originalFiles: presignedUrlList[place.place_name].map((item) => item.originalFile),
+  //     uuids: presignedUrlList[place.place_name].map((item) => item.uuid),
+  //   };
+  // };
 
-  const formatLog = (places: kakao.maps.services.PlacesSearchResult): Log | null => {
-    if (!logTitle || !logDescripTextAreaRef.current?.value || !presignedUrlObj?.originalFile) {
-      alert('로그 제목 / 설명 / 커버 이미지를 작성해주세요');
-      return null;
-    }
+  // const formatLog = (places: kakao.maps.services.PlacesSearchResult): Log | null => {
+  //   if (!logTitle || !logDescripTextAreaRef.current?.value || !presignedUrlObj?.originalFile) {
+  //     alert('로그 제목 / 설명 / 커버 이미지를 작성해주세요');
+  //     return null;
+  //   }
 
-    const formattedPlaces = places.map((place) => formatPlace(place));
+  //   const formattedPlaces = places.map((place) => formatPlace(place));
 
-    if (formattedPlaces.some((place) => place === null)) return null;
+  //   if (formattedPlaces.some((place) => place === null)) return null;
 
-    // 로그 정보
-    return {
-      name: logTitle,
-      description: logDescripTextAreaRef.current.value,
-      originalFile: presignedUrlObj?.originalFile,
-      uuid: presignedUrlObj?.uuid,
-      status: 'public',
-      tags: [],
-      places: formattedPlaces as Place[],
-    };
-  };
+  //   // 로그 정보
+  //   return {
+  //     name: logTitle,
+  //     description: logDescripTextAreaRef.current.value,
+  //     originalFile: presignedUrlObj?.originalFile,
+  //     uuid: presignedUrlObj?.uuid,
+  //     status: 'public',
+  //     tags: [],
+  //     places: formattedPlaces as Place[],
+  //   };
+  // };
 
   const handlePostLog = async () => {
-    const formatedLog = formatLog(selectedPlaces);
-    if (!formatedLog) return;
-
-    const result = await api.register.createLog(formatedLog);
-    if (result) {
-      resetSelectedPlaces();
-      navi(`/log/${result.placeLogId}`, { replace: true });
-    }
+    // const formatedLog = formatLog(selectedPlaces);
+    // if (!formatedLog) return;
+    // const result = await api.register.createLog(formatedLog);
+    // if (result) {
+    //   resetSelectedPlaces();
+    //   navi(`/log/${result.placeLogId}`, { replace: true });
+    // }
   };
 
   if (isLogPending) return <Loading />;
@@ -114,7 +114,7 @@ const EditPage = () => {
     <div className="h-full flex flex-col">
       {/* 헤더 */}
 
-      <LogEditBar sido={sido} bname={bname} logTitle={logTitle} placeLogId={placeLogId} />
+      <LogEditBar sido={sido} bname={bname} logTitle={logTitle} placeLogId={placeLogId || ''} />
 
       <main className="flex flex-col items-center grow min-h-0 overflow-y-auto scrollbar-hide">
         {/* 로그 제목 */}
@@ -157,7 +157,7 @@ const EditPage = () => {
             {[].map((place, idx) => (
               <PlaceDetailFormItem
                 place={place}
-                key={place.id}
+                key={place}
                 idx={idx + 1}
                 registerTextRef={registerTextRef}
                 onChangePresignUrlList={setPresignUrlList}
