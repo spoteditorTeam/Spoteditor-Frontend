@@ -1,5 +1,5 @@
 import { currentAuth } from '@/services/apis/authApi';
-import { IUpdateUser, IUser } from '@/services/apis/types/userAPI';
+import { IOhterUser, IUpdateUser, IUser } from '@/services/apis/types/userAPI';
 import { AxiosInstance } from 'axios';
 
 class User {
@@ -30,7 +30,7 @@ export class OtherUser {
     this.axios = axios;
   }
 
-  async getOtherUser(userId: number): Promise<IUser> {
+  async getOtherUser(userId: number): Promise<IOhterUser> {
     const response = await this.axios.get(`/api/users/${userId}`);
     return response.data;
   }

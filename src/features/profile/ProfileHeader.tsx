@@ -2,22 +2,19 @@ import VerifiedLabelIcon from '@/components/Icons/VerifiedLabelIcon';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import FollowButton from './FollowButton';
 import { Link, useParams } from 'react-router-dom';
 import useUser from '@/hooks/queries/user/useUser';
 import useOtherUser from '@/hooks/queries/user/useOtherUser';
 import ProfileHeaderSkeleton from '@/components/Skeleton/ProfileHeaderSkeleton';
-import useFollowing from '@/hooks/queries/follow/useFollowing';
+import FollowingListButton from '../follow/FollowingListButton';
+import FollowerListButton from '../follow/FollowerListButton';
 
 function ProfileHeader() {
   const { userId } = useParams();
   const { user, isLoading: userLoading } = useUser();
-  console.log('user', user);
 
   const isMe = user?.userId === Number(userId);
   const { data: otherUserData, isLoading: otherUserLoading } = useOtherUser(Number(userId));
-  const { data: meFollowing, isLoading: meFollowingLoading } = useFollowing(isMe);
-  console.log('meFollowing', meFollowing?.pages);
 
   const data = isMe ? user : otherUserData;
   const isLoading = isMe ? userLoading : otherUserLoading;
@@ -30,19 +27,27 @@ function ProfileHeader() {
         <section className="flex flex-col items-center justify-start w-full pb-5 web:pb-[30px]">
           <section>
             <Avatar className="w-[60px] h-[60px]">
-              <AvatarImage src={data?.imageUrl} alt="user Avatar" />
+              <AvatarImage src={data?.imageUrl} alt={`${data?.name}님의 프로필`} />
             </Avatar>
           </section>
           <section className="gap-[6px] flex justify-center items-center my-3">
-            <h2 className="font-bold text-md web:text-xl">{data?.name}</h2>
+            <h2 className="pl-3 font-bold text-md web:text-xl">{data?.name}</h2>
             <VerifiedLabelIcon className="w-[16.075px] h-[15.921px] web:w-[22px] web:h-[21px]" />
           </section>
           <section className="flex gap-[15px] py-1 text-text-lg web:text-text-2xl">
-            <FollowButton label="팔로워" count={data?.follower!} />
+            <FollowerListButton
+              isMe={isMe}
+              otherUserId={Number(userId)}
+              count={data?.follower || 0}
+            />
             <div className="flex items-center">
               <Separator orientation="vertical" className="h-3 bg-primarySlate" />
             </div>
-            <FollowButton label="팔로잉" count={data?.following!} />
+            <FollowingListButton
+              isMe={isMe}
+              otherUserId={Number(userId)}
+              count={data?.following || 0}
+            />
           </section>
           <section className="flex my-[7px] flex-col gap-[10px] web:gap-[15px] items-center text-primarySlate text-text-xs web:text-text-sm">
             <h3 className="font-medium text-center">

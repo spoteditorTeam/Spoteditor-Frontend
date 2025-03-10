@@ -10,9 +10,9 @@ function Profile() {
   const { userId } = useParams();
 
   useEffect(() => {
-    /* 현재 경로가 '/profile/:userId'일 경우 my-logs으로 이동 */
-    if (pathname.match(/^\/profile\/\d+$/)) {
-      nav(`/profile/${userId}/my-logs`);
+    /* 현재 경로가 정확히 `/profile/:userId`일 경우에만 리다이렉트 */
+    if (pathname === `/profile/${userId}`) {
+      nav(`/profile/${userId}/my-logs`, { replace: true });
     }
   }, [userId, pathname]);
   return (
