@@ -2,12 +2,12 @@ import VerifiedLabelIcon from '@/components/Icons/VerifiedLabelIcon';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import FollowButton from './FollowButton';
 import { Link, useParams } from 'react-router-dom';
 import useUser from '@/hooks/queries/user/useUser';
 import useOtherUser from '@/hooks/queries/user/useOtherUser';
 import ProfileHeaderSkeleton from '@/components/Skeleton/ProfileHeaderSkeleton';
 import FollowingListButton from '../follow/FollowingListButton';
+import FollowerListButton from '../follow/FollowerListButton';
 
 function ProfileHeader() {
   const { userId } = useParams();
@@ -36,11 +36,19 @@ function ProfileHeader() {
             <VerifiedLabelIcon className="w-[16.075px] h-[15.921px] web:w-[22px] web:h-[21px]" />
           </section>
           <section className="flex gap-[15px] py-1 text-text-lg web:text-text-2xl">
-            <FollowButton label="팔로워" count={data?.follower!} />
+            <FollowerListButton
+              isMe={isMe}
+              otherUserId={Number(userId)}
+              count={data?.follower || 0}
+            />
             <div className="flex items-center">
               <Separator orientation="vertical" className="h-3 bg-primarySlate" />
             </div>
-            <FollowingListButton isMe={isMe} otherUserId={Number(userId)} />
+            <FollowingListButton
+              isMe={isMe}
+              otherUserId={Number(userId)}
+              count={data?.following || 0}
+            />
           </section>
           <section className="flex my-[7px] flex-col gap-[10px] web:gap-[15px] items-center text-primarySlate text-text-xs web:text-text-sm">
             <h3 className="font-medium text-center">

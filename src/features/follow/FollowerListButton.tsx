@@ -9,48 +9,41 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import useFollowing from '@/hooks/queries/follow/useFollowing';
-import useOtherFollowing from '@/hooks/queries/follow/useOtherFollowing';
+import useFollower from '@/hooks/queries/follow/useFollower';
+import useOtherFollower from '@/hooks/queries/follow/useOtherFollower';
 import useBottomScrollTrigger from '@/hooks/useBottomScrollTrigger';
-import FollowingButton from './FollowingButton';
 
-interface FollowingListButtonProps {
+interface FollowerListButtonProps {
   isMe: boolean;
   otherUserId: number;
   count: number;
 }
 
-export default function FollowingListButton({
-  isMe,
-  otherUserId,
-  count,
-}: FollowingListButtonProps) {
+export default function FollowerListButton({ isMe, otherUserId, count }: FollowerListButtonProps) {
   const {
-    data: meFollowing,
-    isLoading: meFollowingLoading,
-    fetchNextPage: meFollowingFetchNextPage,
-    isFetchingNextPage: meFollowingIsFetchingNextPage,
-  } = useFollowing(isMe);
+    data: meFollower,
+    isLoading: meFollowerLoading,
+    fetchNextPage: meFollowerFetchNextPage,
+    isFetchingNextPage: meFollowerIsFetchingNextPage,
+  } = useFollower(isMe);
   const {
-    data: otherFollowing,
-    isLoading: otherFollowingLoading,
-    fetchNextPage: otherFollowingFetchNextPage,
-    isFetchingNextPage: otherFollowingIsFetchingNextPage,
-  } = useOtherFollowing(isMe, otherUserId);
+    data: otherFollower,
+    isLoading: otherFollowerLoading,
+    fetchNextPage: otherFollowerFetchNextPage,
+    isFetchingNextPage: otherFollowerIsFetchingNextPage,
+  } = useOtherFollower(isMe, otherUserId);
 
-  const isLoading = isMe ? meFollowingLoading : otherFollowingLoading;
-  const data = isMe ? meFollowing : otherFollowing;
-  const fetchNextPage = isMe ? meFollowingFetchNextPage : otherFollowingFetchNextPage;
-  const isFetchingNextPage = isMe
-    ? meFollowingIsFetchingNextPage
-    : otherFollowingIsFetchingNextPage;
+  const isLoading = isMe ? meFollowerLoading : otherFollowerLoading;
+  const data = isMe ? meFollower : otherFollower;
+  const fetchNextPage = isMe ? meFollowerFetchNextPage : otherFollowerFetchNextPage;
+  const isFetchingNextPage = isMe ? meFollowerIsFetchingNextPage : otherFollowerIsFetchingNextPage;
 
   const scrollRef = useBottomScrollTrigger(fetchNextPage, isFetchingNextPage, 20);
   return (
     <Dialog>
       <DialogTrigger asChild className="outline-none">
         <button className="flex items-center space-x-1">
-          <DialogDescription className="text-black text-[18px]">팔로잉</DialogDescription>
+          <DialogDescription className="text-black text-[18px]">팔로워</DialogDescription>
           <span className="font-bold text-center text-[18px]">{count}</span>
         </button>
       </DialogTrigger>
@@ -58,7 +51,7 @@ export default function FollowingListButton({
         <DialogTitle className="grid grid-cols-3 w-full mb-2 section-heading h-[50px] px-2.5">
           <div />
           <div className="flex items-center justify-center">
-            <span className="text-center">팔로잉</span>
+            <span className="text-center">팔로워</span>
           </div>
           <DialogClose
             asChild
@@ -75,23 +68,22 @@ export default function FollowingListButton({
               <Loading className="w-full pl-[5px]" />
             ) : (
               <>
-                {data?.pages.map((folloingList) =>
-                  folloingList.content.map((folloing) => (
+                {data?.pages.map((followerList) =>
+                  followerList.content.map((follower) => (
                     <article
-                      key={folloing.userId}
-                      className="flex items-center w-full py-[6px] between justify-between"
+                      key={follower.userId}
+                      className="flex items-center w-full py-[6px] between justify-start"
                     >
                       <figure className="flex items-center gap-[6px]">
                         <Avatar className="w-11 h-11">
                           <AvatarImage
-                            src={folloing.imageUrl}
-                            alt={`${folloing.name}님의 프로필`}
+                            src={follower.imageUrl}
+                            alt={`${follower.name}님의 프로필`}
                           />
-                          <AvatarFallback>{folloing.name}</AvatarFallback>
+                          <AvatarFallback>{follower.name}</AvatarFallback>
                         </Avatar>
-                        <figcaption className="font-bold text-text-xs">{folloing.name}</figcaption>
+                        <figcaption className="font-bold text-text-xs">{follower.name}</figcaption>
                       </figure>
-                      {isMe && <FollowingButton otherUserId={folloing.userId} />}
                     </article>
                   ))
                 )}
