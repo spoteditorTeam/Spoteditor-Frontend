@@ -1,7 +1,6 @@
-import { SpotIcon, SubtractIcon, TableIcon } from '@/components/Icons';
+import { SpotIcon, TableIcon } from '@/components/Icons';
 import LogCoverSkeleton from '@/components/Skeleton/LogCoverSkeleton';
 import PlaceItemSkeleton from '@/components/Skeleton/PlaceItemSkeleton';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,6 +12,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import PlaceItem from '@/features/detailpage/PlaceItem';
 import LogCard from '@/features/homepage/LogCard';
+import OtherUserProfileSection from '@/features/profile/OtherUserProfileSection';
 import useLog from '@/hooks/queries/log/useLog';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
@@ -32,6 +32,7 @@ const DetailPage = () => {
   const name = data?.name ?? '';
   const description = data?.description ?? '';
   const places = data?.places ?? [];
+  const userId = data?.userId;
   const isDataReady = isPending || !data;
 
   const onClickLogBookMark = async () => {
@@ -75,16 +76,7 @@ const DetailPage = () => {
       <div className="flex flex-col px-4 py-2.5 gap-[15px] web:px-[50px] web:py-5">
         <div className="web:grid web:grid-cols-[1fr_3fr] gap-5">
           {/* 프로필  */}
-          <div className="flex items-center gap-2 py-[15px]">
-            <Avatar className="w-6 h-6">
-              <AvatarImage src="https://github.com/shadcn.png" alt="user Avatar" />
-            </Avatar>
-            <p className="text-text-sm font-semibold">Teamspoteditor</p>
-            <SubtractIcon />
-            <Button variant={'ghost'} fullRounded size={'s'}>
-              팔로잉
-            </Button>
-          </div>
+          <OtherUserProfileSection userId={userId} />
 
           {/* 설명 */}
           {isDataReady ? (
