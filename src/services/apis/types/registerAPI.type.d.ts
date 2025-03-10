@@ -100,7 +100,13 @@ interface AddPlacesRequest {
   addPlaces: Place[];
 }
 interface UpdatePlacesRequest {
-  updatePlaces: Place[];
+  updatePlaces: {
+    id: number;
+    description: string;
+    deleteImageIds: number[];
+    originalFiles: string[];
+    uuids: string[];
+  }[];
 }
 export type UpdateRequest =
   | UpdateLogTitleRequest

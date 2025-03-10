@@ -1,20 +1,26 @@
 import { CameraIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Image } from '@/services/apis/types/registerAPI.type';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { useRef } from 'react';
 import ImagePreviewItem from './ImagePreviewItem';
 interface PlaceImagesInputProps {
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
   handleRemoveImage: (index: number) => void;
   imagePreviews: string[];
+  defaultplaceImgs?: Image[];
 }
 
 const PlaceImagesInput = ({
   handleFileChange,
   handleRemoveImage,
   imagePreviews,
+  defaultplaceImgs,
 }: PlaceImagesInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // const allImages = defaultplaceImgs && [...defaultplaceImgs, ...imagePreviews];
   return (
     <>
       <Button
@@ -35,6 +41,18 @@ const PlaceImagesInput = ({
               key={previewURL}
               idx={idx}
               imagePreview={previewURL}
+              onRemoveImage={handleRemoveImage}
+            />
+          ))}
+        </div>
+      )}
+      {defaultplaceImgs && (
+        <div className="flex overflow-x-auto mb-2.5">
+          {defaultplaceImgs.map((previewURL, idx) => (
+            <ImagePreviewItem
+              key={previewURL.imageId}
+              idx={idx}
+              imagePreview={getImgFromCloudFront(previewURL.storedFile)}
               onRemoveImage={handleRemoveImage}
             />
           ))}

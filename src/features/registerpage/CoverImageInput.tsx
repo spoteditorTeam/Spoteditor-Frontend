@@ -6,12 +6,14 @@ import { CircleX } from 'lucide-react';
 import { useRef } from 'react';
 
 interface CoverImageInputProps {
+  defaultImg?: string;
   imagePreview: string;
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
   handleClearImage: () => void;
 }
 
 const CoverImageInput = ({
+  defaultImg,
   imagePreview,
   handleFileChange,
   handleClearImage,
@@ -19,21 +21,22 @@ const CoverImageInput = ({
   const coverUploadInputRef = useRef<HTMLInputElement>(null);
   return (
     <>
-      {imagePreview && (
-        /* 커버 이미지  */
-        <div className="relative mb-3">
-          <Input
-            type="image"
-            src={imagePreview}
-            alt="커버 이미지"
-            className="w-full aspect-[2/1] p-0 object-cover"
-          />
-          <CircleX
-            className="stroke-primary-100 absolute top-4 right-4 cursor-pointer hover:fill-slate-50/50"
-            onClick={handleClearImage}
-          />
-        </div>
-      )}
+      {imagePreview ||
+        (defaultImg && (
+          /* 커버 이미지  */
+          <div className="relative mb-3">
+            <Input
+              type="image"
+              src={imagePreview || defaultImg}
+              alt="커버 이미지"
+              className="w-full aspect-[2/1] p-0 object-cover"
+            />
+            <CircleX
+              className="stroke-primary-100 absolute top-4 right-4 cursor-pointer hover:fill-slate-50/50"
+              onClick={handleClearImage}
+            />
+          </div>
+        ))}
       {/* 커버 이미지 업로드 버튼 */}
       <div className="px-4 w-full">
         <Input
@@ -47,7 +50,8 @@ const CoverImageInput = ({
           variant={'outline'}
           className={cn(
             'border w-full border-dashed gap-[5px] text-primary-600 px-2.5 py-3 my-3',
-            imagePreview && 'hidden'
+            imagePreview && 'hidden',
+            defaultImg && 'hidden'
           )}
           onClick={() => coverUploadInputRef.current?.click()}
         >

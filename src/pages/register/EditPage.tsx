@@ -3,12 +3,20 @@ import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import PlaceEditFormItem from '@/features/editpage/PlaceEditFormItem';
 import CoverImageInput from '@/features/registerpage/CoverImageInput';
 import LogEditBar from '@/features/registerpage/LogEditBar';
-import PlaceDetailFormItem from '@/features/registerpage/PlaceDetailFormItem';
 import useLog from '@/hooks/queries/log/useLog';
 import useImagePreview from '@/hooks/useImagePreview';
-import { PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
+import api from '@/services/apis/api';
+import {
+  PresignedUrlWithName,
+  UpdateLogCoverRequest,
+  UpdateLogDescriptionRequest,
+  UpdateLogTitleRequest,
+  UpdatePlacesRequest,
+} from '@/services/apis/types/registerAPI.type';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -37,12 +45,16 @@ const EditPage = () => {
   const [sido, , bname] = address.split(' ');
 
   const logDescripTextAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  /* 장소들 설명 넣을 ref */
+  /* textRef에 {장소 이름 : text} 로 저장하는 함수 */
   const textRefs = useRef<{ [placeId: string]: string }>({});
   const registerTextRef = (id: string, elem: HTMLTextAreaElement) => {
     if (elem) textRefs.current[id] = elem.value;
     else delete textRefs.current[id];
   };
 
+  console.log(textRefs.current);
   useEffect(() => {
     if (logData) {
       setLogTitle(logData.name);
@@ -99,13 +111,52 @@ const EditPage = () => {
   // };
 
   const handlePostLog = async () => {
-    // const formatedLog = formatLog(selectedPlaces);
-    // if (!formatedLog) return;
-    // const result = await api.register.createLog(formatedLog);
-    // if (result) {
-    //   resetSelectedPlaces();
-    //   navi(`/log/${result.placeLogId}`, { replace: true });
-    // }
+    if (!logData) return;
+
+    try {
+      // 제목 변경
+      if (logTitle !== logData.name) {
+        await api.log.updateLog(Number(placeLogId), { name: logTitle } as UpdateLogTitleRequest);
+      }
+
+      // 설명 변경
+      if (logDescripTextAreaRef.current?.value !== logData.description) {
+        await api.log.updateLog(Number(placeLogId), {
+          description: logDescripTextAreaRef.current?.value || '',
+        } as UpdateLogDescriptionRequest);
+      }
+
+      // 커버 이미지 변경
+      if (
+        presignedUrlObj?.originalFile &&
+        presignedUrlObj.originalFile !== logData.image?.originalFile
+      ) {
+        await api.log.updateLog(Number(placeLogId), {
+          originalFile: presignedUrlObj.originalFile,
+          uuid: presignedUrlObj.uuid,
+        } as UpdateLogCoverRequest);
+      }
+
+      // 장소 정보 변경
+      const newPlaces = logData.places.map((place) => ({
+        id: place.placeId,
+        description: textRefs.current[place.placeId] ?? '',
+      }));
+
+      const updatedPlaces = newPlaces.filter((place) => {
+        const originalPlace = logData.places.find((p) => p.placeId === place.id);
+        return originalPlace && originalPlace.description !== place.description;
+      });
+
+      if (updatedPlaces.length > 0) {
+        await api.log.updateLog(Number(placeLogId), {
+          updatePlaces: updatedPlaces,
+        } as UpdatePlacesRequest);
+      }
+      console.log('업데이트 성공');
+    } catch (error) {
+      console.error('업데이트 실패', error);
+    }
   };
 
   if (isLogPending) return <Loading />;
@@ -138,6 +189,7 @@ const EditPage = () => {
 
         {/* 커버 이미지 */}
         <CoverImageInput
+          defaultImg={logData && getImgFromCloudFront(logData?.image.storedFile)}
           imagePreview={imagePreview}
           handleFileChange={handleFileChange}
           handleClearImage={handleClearImage}
@@ -154,10 +206,10 @@ const EditPage = () => {
 
           {/* 장소 */}
           <div className="flex flex-col w-full mt-3">
-            {[].map((place, idx) => (
-              <PlaceDetailFormItem
+            {logData?.places.map((place, idx) => (
+              <PlaceEditFormItem
                 place={place}
-                key={place}
+                key={place.placeId}
                 idx={idx + 1}
                 registerTextRef={registerTextRef}
                 onChangePresignUrlList={setPresignUrlList}
