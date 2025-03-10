@@ -76,7 +76,7 @@ const DetailPage = () => {
             )}
 
             <div>
-              <div className="absolute flex flex-col web:top-4 web:left-4 space-y-2">
+              <div className="absolute flex flex-col top-4 left-4 space-y-2">
                 <div
                   className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-0 left-2.5 cursor-pointer z-10 hover:bg-white"
                   onClick={onClickBack}
@@ -84,7 +84,7 @@ const DetailPage = () => {
                   <ArrowLeft />
                 </div>
               </div>
-              <div className="absolute flex flex-col web:top-4 web:right-4 space-y-2">
+              <div className="absolute flex flex-col top-4 right-4 space-y-2">
                 <div
                   className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
                   onClick={onClickShare}
