@@ -1,4 +1,5 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
+import ModifyDrawer from '@/components/Drawer/ModifyDrawer';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import CoverImageInput from '@/features/registerpage/CoverImageInput';
@@ -15,18 +16,19 @@ import { useNavigate } from 'react-router-dom';
 
 const LogWritePage = () => {
   const navi = useNavigate();
+  /* states */
   const [logTitle, setLogTitle] = useState('');
   const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
   const resetSelectedPlaces = useRegisterStore((state) => state.resetSelectedPlaces);
   const { imagePreview, handleFileChange, handleClearImage, presignedUrlObj } = useImagePreview();
   const logDescripTextAreaRef = useRef<HTMLTextAreaElement>(null);
-
+  const [sido, , bname] = selectedPlaces[0].address_name.split(' '); // 뒤로가기 옆 로그 대표 지역 이름
   // 로그 등록 시 필요한 {presignedUrl, uuid}
   const [presignedUrlList, setPresignUrlList] = useState<{ [key: string]: PresignedUrlWithName[] }>(
     {}
   );
-
-  const handleClearTitle = () => setLogTitle('');
+  const [modifyTarget, setModifyTarget] =
+    useState<kakao.maps.services.PlacesSearchResultItem | null>(null); // 선택한 타켓 장소
 
   const textRefs = useRef<{ [placeId: string]: string }>({});
   const registerTextRef = (id: string, elem: HTMLTextAreaElement) => {
@@ -34,9 +36,19 @@ const LogWritePage = () => {
     else delete textRefs.current[id];
   };
 
-  const [sido, , bname] = selectedPlaces[0].address_name.split(' '); // 뒤로가기 옆 로그 대표 지역 이름
-  // 제출 형식에 맞춰 포맷
+  /* handlers */
+  const handleClearTitle = () => setLogTitle('');
+  const handlePostLog = async () => {
+    const formatedLog = formatLog(selectedPlaces);
+    if (!formatedLog) return;
+    const result = await api.register.createLog(formatedLog);
+    if (result) {
+      resetSelectedPlaces();
+      navi(`/log/${result.placeLogId}`, { replace: true });
+    }
+  };
 
+  // 제출 형식에 맞춰 포맷
   const formatPlace = (place: kakao.maps.services.PlacesSearchResultItem): Place | null => {
     const placeImages = presignedUrlList[place.place_name];
     if (!placeImages || placeImages.length === 0) {
@@ -53,7 +65,6 @@ const LogWritePage = () => {
       uuids: presignedUrlList[place.place_name].map((item) => item.uuid),
     };
   };
-
   const formatLog = (places: kakao.maps.services.PlacesSearchResult): Log | null => {
     if (!logTitle || !logDescripTextAreaRef.current?.value || !presignedUrlObj?.originalFile) {
       alert('로그 제목 / 설명 / 커버 이미지를 작성해주세요');
@@ -74,17 +85,6 @@ const LogWritePage = () => {
       tags: [],
       places: formattedPlaces as Place[],
     };
-  };
-
-  const handlePostLog = async () => {
-    const formatedLog = formatLog(selectedPlaces);
-    if (!formatedLog) return;
-
-    const result = await api.register.createLog(formatedLog);
-    if (result) {
-      resetSelectedPlaces();
-      navi(`/log/${result.placeLogId}`, { replace: true });
-    }
   };
 
   return (
@@ -137,6 +137,7 @@ const LogWritePage = () => {
                 idx={idx + 1}
                 registerTextRef={registerTextRef}
                 onChangePresignUrlList={setPresignUrlList}
+                setModifyTarget={setModifyTarget}
               />
             ))}
           </div>
@@ -145,6 +146,11 @@ const LogWritePage = () => {
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">
+        <ModifyDrawer
+          isOpen={!!modifyTarget}
+          setIsOpen={() => setModifyTarget(null)}
+          modifyTarget={modifyTarget}
+        />
         <ConfirmDialog
           title="로그를 등록하시겠어요?"
           showCheckbox={true}

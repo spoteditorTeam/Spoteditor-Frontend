@@ -10,6 +10,7 @@ interface PlaceDetailFormItemProps {
   idx: number;
   registerTextRef: (id: string, elem: HTMLTextAreaElement) => void;
   onChangePresignUrlList: Dispatch<SetStateAction<{ [key: number]: PresignedUrlWithName[] }>>;
+  setModifyTarget: Dispatch<SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>>;
 }
 
 const PlaceDetailFormItem = ({
@@ -17,9 +18,18 @@ const PlaceDetailFormItem = ({
   idx,
   registerTextRef,
   onChangePresignUrlList,
+  setModifyTarget,
 }: PlaceDetailFormItemProps) => {
   const [isChecked, setIsChecked] = useState(false);
-  const handleChecked = () => setIsChecked((prev) => !prev);
+  const handleChecked = () => {
+    setIsChecked((prev) => {
+      const newChcked = !prev;
+      if (newChcked) setModifyTarget(place);
+      else setModifyTarget(null);
+      return newChcked;
+    });
+  };
+
   const { handleFileChange, handleRemoveImage, imagePreviews, presignedUrls } = useImages();
 
   useEffect(() => {

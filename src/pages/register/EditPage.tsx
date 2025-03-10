@@ -114,7 +114,7 @@ const EditPage = () => {
     <div className="h-full flex flex-col">
       {/* 헤더 */}
 
-      <LogEditBar sido={sido} bname={bname} logTitle={logTitle} />
+      <LogEditBar sido={sido} bname={bname} logTitle={logTitle} placeLogId={placeLogId} />
 
       <main className="flex flex-col items-center grow min-h-0 overflow-y-auto scrollbar-hide">
         {/* 로그 제목 */}
