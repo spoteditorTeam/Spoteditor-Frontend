@@ -1,3 +1,4 @@
+import { useRegisterStore } from '@/store/registerStore';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import { ArrowDown, ArrowUp, Trash } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
@@ -12,10 +13,13 @@ interface ModifyDrawerProps {
 }
 
 const ModifyDrawer = ({ isOpen, modifyTarget }: ModifyDrawerProps) => {
+  const removeSelectedPlace = useRegisterStore((state) => state.removeSelectedPlace);
+  const moveUpSelectedPlace = useRegisterStore((state) => state.moveUpSelectedPlace);
+  const moveDownSelectedPlace = useRegisterStore((state) => state.moveDownSelectedPlace);
   if (!modifyTarget) return null;
-  const handleUpClick = () => console.log(modifyTarget, '위로');
-  const handleDownClick = () => console.log(modifyTarget, '아래로');
-  const handleDeleteClick = () => console.log(modifyTarget, '삭제');
+  const handleUpClick = () => moveUpSelectedPlace(modifyTarget);
+  const handleDownClick = () => moveDownSelectedPlace(modifyTarget);
+  const handleDeleteClick = () => removeSelectedPlace(modifyTarget);
   return (
     <Drawer.Root open={isOpen}>
       <Drawer.Portal>
