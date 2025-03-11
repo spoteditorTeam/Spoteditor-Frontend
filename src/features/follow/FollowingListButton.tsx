@@ -14,6 +14,7 @@ import useOtherFollowing from '@/hooks/queries/follow/useOtherFollowing';
 import useBottomScrollTrigger from '@/hooks/useBottomScrollTrigger';
 import FollowingButton from './FollowingButton';
 import { Link } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 interface FollowingListButtonProps {
   isMe: boolean;
@@ -50,8 +51,15 @@ export default function FollowingListButton({
   return (
     <Dialog>
       <DialogTrigger asChild className="outline-none">
-        <button className="flex items-center space-x-1">
-          <DialogDescription className="text-black text-[18px]">팔로잉</DialogDescription>
+        <button
+          disabled={count <= 0}
+          className={cn('flex items-center space-x-1', count <= 0 && 'text-primarySlate')}
+        >
+          <DialogDescription
+            className={cn('text-black text-[18px]', count <= 0 && 'text-primarySlate')}
+          >
+            팔로잉
+          </DialogDescription>
           <span className="font-bold text-center text-[18px]">{count}</span>
         </button>
       </DialogTrigger>
