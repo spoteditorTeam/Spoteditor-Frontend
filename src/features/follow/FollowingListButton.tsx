@@ -78,8 +78,11 @@ export default function FollowingListButton({
             </button>
           </DialogClose>
         </DialogTitle>
-        <div ref={scrollRef} className="pr-[5px] w-full">
-          <article className="w-full px-[19px] h-[370px] flex flex-col overflow-y-scroll">
+        <div className="pr-[5px] w-full">
+          <article
+            ref={scrollRef}
+            className="w-full px-[19px] h-[370px] flex flex-col overflow-y-scroll"
+          >
             {isLoading ? (
               <Loading className="w-full pl-[5px]" />
             ) : (
@@ -109,7 +112,7 @@ export default function FollowingListButton({
                     </DialogClose>
                   ))
                 )}
-                {isFetchingNextPage && <Loading className="w-full" />}
+                {isFetchingNextPage && <Loading className="w-full h-5" />}
               </>
             )}
           </article>

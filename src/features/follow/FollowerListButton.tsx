@@ -71,14 +71,17 @@ export default function FollowerListButton({ isMe, otherUserId, count }: Followe
             </button>
           </DialogClose>
         </DialogTitle>
-        <div ref={scrollRef} className="pr-[5px] w-full">
-          <article className="w-full px-[19px] h-[370px] flex flex-col overflow-y-scroll">
+        <div className="pr-[5px] w-full">
+          <article
+            ref={scrollRef}
+            className="w-full px-[19px] h-[370px] flex flex-col overflow-y-scroll"
+          >
             {isLoading ? (
               <Loading className="w-full pl-[5px]" />
             ) : (
               <>
-                {data?.pages.map((followerList) =>
-                  followerList.content.map((follower) => (
+                {data?.pages?.map((followerList) =>
+                  followerList?.content?.map((follower) => (
                     <DialogClose asChild>
                       <Link
                         to={`/profile/${follower?.userId}`}
@@ -101,7 +104,7 @@ export default function FollowerListButton({ isMe, otherUserId, count }: Followe
                     </DialogClose>
                   ))
                 )}
-                {isFetchingNextPage && <Loading className="w-full" />}
+                {isFetchingNextPage && <Loading className="w-full h-5" />}
               </>
             )}
           </article>
