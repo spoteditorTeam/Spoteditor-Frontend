@@ -42,7 +42,6 @@ const DetailPage = () => {
   const isDataReady =
     isLogPending || isPlaceBookmarkPending || isLoading || isLogBookmarkPending || !user;
 
-  const userId = logData?.userId;
   const name = logData?.name ?? '';
   const description = logData?.description ?? '';
   const places = logData?.places ?? [];

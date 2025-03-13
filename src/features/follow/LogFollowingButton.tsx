@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { useFollowingMutation } from '@/hooks/mutations/follow/useFollowingMutation';
+import { useUnfollowMutation } from '@/hooks/mutations/follow/useUnfollowMutation';
 
 interface LogFollowingButtonProps {
   userId: number;
@@ -14,10 +15,13 @@ export default function LogFollowingButton({
   userImage,
   isFollowing,
 }: LogFollowingButtonProps) {
-  const { mutate } = useFollowingMutation({
+  const { mutate: onMutate } = useFollowingMutation({
     otherUserName: userName,
     otherUserImage: userImage,
   });
+  const { mutate: unMutate } = useUnfollowMutation();
+
+  const mutate = isFollowing ? unMutate : onMutate;
 
   const onFollowClick = () => {
     mutate(userId);
