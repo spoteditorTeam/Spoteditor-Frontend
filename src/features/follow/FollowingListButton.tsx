@@ -12,9 +12,10 @@ import {
 import useFollowing from '@/hooks/queries/follow/useFollowing';
 import useOtherFollowing from '@/hooks/queries/follow/useOtherFollowing';
 import useBottomScrollTrigger from '@/hooks/useBottomScrollTrigger';
-import FollowingButton from './FollowingButton';
+import FollowingButton from './LogFollowingButton';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import ProfileFollowingButton from './ProfileFollowingButton';
 
 interface FollowingListButtonProps {
   isMe: boolean;
@@ -107,7 +108,13 @@ export default function FollowingListButton({
                             {folloing.name}
                           </figcaption>
                         </figure>
-                        {isMe && <FollowingButton otherUserId={folloing.userId} />}
+                        {isMe && (
+                          <ProfileFollowingButton
+                            otherUserId={folloing.userId}
+                            otherUserName={folloing.name}
+                            otherUserImage={folloing.imageUrl}
+                          />
+                        )}
                       </Link>
                     </DialogClose>
                   ))
