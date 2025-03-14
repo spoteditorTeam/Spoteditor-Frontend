@@ -1,5 +1,6 @@
 import { Textarea } from '@/components/ui/textarea';
 import { LogWriteFormData } from '@/pages/register/LogWritePage';
+import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
@@ -7,7 +8,7 @@ import PlaceImagesInput from './PlaceImagesInput';
 
 interface PlaceFormItemProps {
   control: Control<LogWriteFormData>;
-  place: kakao.maps.services.PlacesSearchResultItem;
+  place: kakao.maps.services.PlacesSearchResultItem | PlaceInLog;
   idx: number;
   setModifyTarget?: Dispatch<SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>>;
   setValue: UseFormSetValue<LogWriteFormData>;
@@ -33,6 +34,14 @@ const PlaceFormItem = ({
     });
   };
 
+  const placeName = 'place_name' in place ? place.place_name : place.name;
+  const category = 'category_group_name' in place ? place.category_group_name : place.category;
+  const address =
+    'road_address_name' in place ? place.road_address_name : place.address?.roadAddress;
+  const roadAddress =
+    'road_address_name' in place ? place.road_address_name : place.address?.roadAddress;
+  const placeDescription = 'description' in place && place.description;
+
   return (
     <div className="py-[5px]">
       {/* 장소 설명 */}
@@ -47,21 +56,21 @@ const PlaceFormItem = ({
             )}
           </div>
           <p className="flex items-center">
-            {place.place_name} <ChevronRight className="w-[1.2em] h-[1.2em]" />
+            {placeName} <ChevronRight className="w-[1.2em] h-[1.2em]" />
           </p>
         </div>
 
         <div className="flex flex-col text-primary-400">
           <div className="flex gap-2 items-center text-text-sm">
             <Clock size={16} />
-            <p className="after:ml-1.5">{place.category_group_name}</p>
+            <p className="after:ml-1.5">{category}</p>
           </div>
           <div className="flex gap-2 items-center text-text-sm">
             <MapPin size={16} />
             <p className="after:ml-1.5 after:content-['|'] after:text-primary-100">
-              {place.road_address_name.split(' ')[0]}
+              {address.split(' ')[0]}
             </p>
-            <p>{place.road_address_name}</p>
+            <p>{roadAddress}</p>
           </div>
         </div>
       </section>
@@ -73,6 +82,7 @@ const PlaceFormItem = ({
       <Controller
         name={`places.${idx}.placeDescription`}
         control={control}
+        defaultValue={placeDescription || ''}
         render={({ field }) => (
           <Textarea
             {...field}

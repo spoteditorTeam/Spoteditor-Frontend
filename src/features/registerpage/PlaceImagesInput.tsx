@@ -1,12 +1,14 @@
 import { CameraIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import useLog from '@/hooks/queries/log/useLog';
 import useImages from '@/hooks/useImages';
 import { LogWriteFormData } from '@/pages/register/LogWritePage';
 import { Image } from '@/services/apis/types/registerAPI.type';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 interface PlaceImagesInputProps {
   control: Control<LogWriteFormData>;
   defaultplaceImgs?: Image[];
@@ -16,9 +18,11 @@ interface PlaceImagesInputProps {
 }
 
 const PlaceImagesInput = ({ control, setValue, idx, trigger }: PlaceImagesInputProps) => {
+  const { placeLogId } = useParams();
+  const { data: logData } = useLog(Number(placeLogId));
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { imagePreviews, handleFileChange, handleRemoveImage, isUploading, presignedUrlObjs } =
-    useImages();
+    useImages(logData?.places?.[idx].images.map((img) => img.storedFile));
 
   useEffect(() => {
     if (presignedUrlObjs) {

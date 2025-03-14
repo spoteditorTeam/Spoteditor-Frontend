@@ -1,3 +1,5 @@
+import { PlaceInLog } from './logAPI.type';
+
 // getPresignUrl
 export interface PresignUrlRequest {
   originalFile: string;
@@ -51,12 +53,6 @@ export interface Image {
   storedFile: string;
 }
 
-export interface ResponsePlace
-  extends Pick<Place, 'name' | 'description' | 'address' | 'category'> {
-  placeId: number;
-  images: Image[];
-}
-
 export interface LogResponse {
   placeLogId: number;
   name: string;
@@ -66,7 +62,7 @@ export interface LogResponse {
   status: 'public'; // 고정된 값
   views: number;
   tags: [];
-  places: ResponsePlace[];
+  places: PlaceInLog[];
   userId: number;
 }
 

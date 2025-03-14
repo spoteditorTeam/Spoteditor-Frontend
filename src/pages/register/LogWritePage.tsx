@@ -9,6 +9,7 @@ import PlaceFormItem from '@/features/registerpage/PlaceFormItem';
 import { cn } from '@/lib/utils';
 import api from '@/services/apis/api';
 import { Log, PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
+import { PlaceSchema, PresignUrlSchema } from '@/services/schemas/logSchema';
 import { useRegisterStore } from '@/store/registerStore';
 import { formatAddress } from '@/utils/formatLogForm';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,17 +25,6 @@ export interface LogWriteFormData {
   coverImgSrc: PresignUrlResponse | null;
   places: { photos: PresignUrlResponse[]; placeDescription?: string }[];
 }
-
-const PresignUrlSchema = z.object({
-  preSignedUrl: z.string(),
-  uuid: z.string(),
-  originalFile: z.string(),
-});
-
-const PlaceSchema = z.object({
-  photos: z.array(PresignUrlSchema).min(1, '사진은 최소 1개 이상이어야 합니다.'),
-  placeDescription: z.string().optional(),
-});
 
 export const LogWriteFormSchema = z.object({
   title: z.string().min(1, '제목은 최소 1자 이상 입력해야 합니다.'),
