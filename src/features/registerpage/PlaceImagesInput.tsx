@@ -6,27 +6,31 @@ import { LogWriteFormData } from '@/pages/register/LogWritePage';
 import { Image } from '@/services/apis/types/registerAPI.type';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { Control, Controller, UseFormSetValue } from 'react-hook-form';
+import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 interface PlaceImagesInputProps {
-  name: string;
   control: Control<LogWriteFormData>;
   defaultplaceImgs?: Image[];
   setValue: UseFormSetValue<LogWriteFormData>;
+  idx: number;
+  trigger: UseFormTrigger<LogWriteFormData>;
 }
 
-const PlaceImagesInput = ({ name, control, setValue }: PlaceImagesInputProps) => {
+const PlaceImagesInput = ({ control, setValue, idx, trigger }: PlaceImagesInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { imagePreviews, handleFileChange, handleRemoveImage, isUploading, presignedUrlObjs } =
     useImages();
 
   useEffect(() => {
-    if (presignedUrlObjs) setValue(name, presignedUrlObjs);
-  }, [presignedUrlObjs]);
+    if (presignedUrlObjs) {
+      setValue(`places.${idx}.photos`, presignedUrlObjs);
+      trigger(`places.${idx}.photos`);
+    }
+  }, [presignedUrlObjs, setValue, idx, trigger]);
 
   return (
     <>
       <Button
-        variant={'outline'}
+        variant="outline"
         className="border w-full border-dashed gap-[5px] text-primary-600 px-2.5 py-3 mt-[15px] mb-2.5"
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
@@ -38,14 +42,13 @@ const PlaceImagesInput = ({ name, control, setValue }: PlaceImagesInputProps) =>
       </Button>
 
       <Controller
-        name={name} //{`${name}.photo`}
+        name={`places.${idx}.photos`}
         control={control}
         render={({ field }) => (
           <div className="flex overflow-x-auto mb-2.5">
-            {imagePreviews.map((previewURL, idx) => (
-              <div className="relative m-1 shrink-0" key={idx}>
+            {imagePreviews.map((previewURL, previewIdx) => (
+              <div className="relative m-1 shrink-0" key={previewIdx}>
                 <Input
-                  {...field}
                   type="image"
                   src={previewURL}
                   alt="장소 이미지"
@@ -53,7 +56,9 @@ const PlaceImagesInput = ({ name, control, setValue }: PlaceImagesInputProps) =>
                 />
                 <CircleX
                   className="stroke-primary-300 fill-slate-100 stroke-1 absolute top-2 right-2  cursor-pointer hover:fill-slate-50/50"
-                  onClick={() => handleRemoveImage(idx)}
+                  onClick={() => {
+                    handleRemoveImage(previewIdx);
+                  }}
                 />
               </div>
             ))}

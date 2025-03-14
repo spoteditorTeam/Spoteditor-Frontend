@@ -2,25 +2,25 @@ import { Textarea } from '@/components/ui/textarea';
 import { LogWriteFormData } from '@/pages/register/LogWritePage';
 import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Control, Controller, UseFormSetValue } from 'react-hook-form';
+import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import PlaceImagesInput from './PlaceImagesInput';
 
 interface PlaceFormItemProps {
-  name: string;
   control: Control<LogWriteFormData>;
   place: kakao.maps.services.PlacesSearchResultItem;
   idx: number;
   setModifyTarget?: Dispatch<SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>>;
   setValue: UseFormSetValue<LogWriteFormData>;
+  trigger: UseFormTrigger<LogWriteFormData>;
 }
 
 const PlaceFormItem = ({
-  name,
   place,
   idx,
   setModifyTarget,
   control,
   setValue,
+  trigger,
 }: PlaceFormItemProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const handleChecked = () => {
@@ -39,7 +39,7 @@ const PlaceFormItem = ({
       <section className="flex flex-col gap-2">
         <div className="text-text-lg font-bold">
           <div className="flex justify-between">
-            <p>{String(idx).padStart(2, '0')}</p>
+            <p>{String(idx + 1).padStart(2, '0')}</p>
             {isChecked ? (
               <CircleCheck className="fill-black stroke-white" onClick={handleChecked} />
             ) : (
@@ -67,11 +67,11 @@ const PlaceFormItem = ({
       </section>
 
       {/* 사진 첨부 */}
-      <PlaceImagesInput name={`${name}.photos`} control={control} setValue={setValue} />
+      <PlaceImagesInput control={control} setValue={setValue} idx={idx} trigger={trigger} />
 
       {/* 내용 */}
       <Controller
-        name={`${name}.placeDescription`}
+        name={`places.${idx}.placeDescription`}
         control={control}
         render={({ field }) => (
           <Textarea

@@ -6,29 +6,37 @@ import useImagePreview from '@/hooks/useImagePreview';
 import { LogWriteFormData } from '@/pages/register/LogWritePage';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { Control, Controller, UseFormSetValue } from 'react-hook-form';
+import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
 interface CoverImageInputProps {
   name: 'coverImgSrc';
   control: Control<LogWriteFormData>;
   setValue: UseFormSetValue<LogWriteFormData>;
   defaultImg?: string;
+  trigger: UseFormTrigger<LogWriteFormData>;
 }
 
-const LogCoverImgInput = ({ name, control, defaultImg, setValue }: CoverImageInputProps) => {
+const LogCoverImgInput = ({
+  name,
+  control,
+  defaultImg,
+  setValue,
+  trigger,
+}: CoverImageInputProps) => {
   const { presignedUrlObj, imagePreview, handleFileChange, handleClearImage, isUploading } =
     useImagePreview(defaultImg);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (presignedUrlObj) setValue(name, presignedUrlObj);
-  }, [presignedUrlObj]);
+    trigger(name);
+  }, [name, presignedUrlObj, setValue, trigger]);
 
   return (
     <Controller
       control={control}
       name={name}
-      render={({ field }) => {
+      render={({ field, fieldState }) => {
         return (
           <>
             {/* 커버 이미지 */}
@@ -70,7 +78,7 @@ const LogCoverImgInput = ({ name, control, defaultImg, setValue }: CoverImageInp
               />
               {!imagePreview && (
                 <Button
-                  variant="outline"
+                  variant={fieldState.error ? 'default' : 'outline'}
                   className="border w-full border-dashed gap-[5px] text-primary-600 px-2.5 py-3 my-3"
                   onClick={() => fileInputRef.current?.click()}
                 >
