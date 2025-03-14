@@ -1,25 +1,27 @@
 import { Textarea } from '@/components/ui/textarea';
-import useImages from '@/hooks/useImages';
-import { PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
+import { LogWriteFormData } from '@/pages/register/LogWritePage';
 import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { Control, Controller, UseFormSetValue } from 'react-hook-form';
 import PlaceImagesInput from './PlaceImagesInput';
 
-interface PlaceDetailFormItemProps {
+interface PlaceFormItemProps {
+  name: string;
+  control: Control<LogWriteFormData>;
   place: kakao.maps.services.PlacesSearchResultItem;
   idx: number;
-  registerTextRef: (id: string, elem: HTMLTextAreaElement) => void;
-  onChangePresignUrlList: Dispatch<SetStateAction<{ [key: number]: PresignedUrlWithName[] }>>;
   setModifyTarget?: Dispatch<SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>>;
+  setValue: UseFormSetValue<LogWriteFormData>;
 }
 
-const PlaceDetailFormItem = ({
+const PlaceFormItem = ({
+  name,
   place,
   idx,
-  registerTextRef,
-  onChangePresignUrlList,
   setModifyTarget,
-}: PlaceDetailFormItemProps) => {
+  control,
+  setValue,
+}: PlaceFormItemProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const handleChecked = () => {
     if (!setModifyTarget) return;
@@ -30,15 +32,6 @@ const PlaceDetailFormItem = ({
       return newChcked;
     });
   };
-
-  const { handleFileChange, handleRemoveImage, imagePreviews, presignedUrls } = useImages();
-
-  useEffect(() => {
-    onChangePresignUrlList((prev) => ({
-      ...prev,
-      [place.place_name]: presignedUrls,
-    }));
-  }, [onChangePresignUrlList, presignedUrls, place.place_name]);
 
   return (
     <div className="py-[5px]">
@@ -74,21 +67,23 @@ const PlaceDetailFormItem = ({
       </section>
 
       {/* 사진 첨부 */}
-      <PlaceImagesInput
-        handleFileChange={handleFileChange}
-        handleRemoveImage={handleRemoveImage}
-        imagePreviews={imagePreviews}
-      />
+      <PlaceImagesInput name={`${name}.photos`} control={control} setValue={setValue} />
 
       {/* 내용 */}
-      <Textarea
-        className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
-        placeholder="내용을 입력해주세요. (최대 500자)"
-        maxLength={500}
-        ref={(el) => registerTextRef(place.id, el!)}
+      <Controller
+        name={`${name}.placeDescription`}
+        control={control}
+        render={({ field }) => (
+          <Textarea
+            {...field}
+            value={(field.value as string) ?? ''}
+            className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            placeholder="내용을 입력해주세요. (최대 500자)"
+          />
+        )}
       />
     </div>
   );
 };
 
-export default PlaceDetailFormItem;
+export default PlaceFormItem;

@@ -32,14 +32,14 @@ PlaceEditFormItemProps) => {
     // });
   };
 
-  const { handleFileChange, handleRemoveImage, imagePreviews, presignedUrls } = useImages();
+  const { handleFileChange, handleRemoveImage, imagePreviews, presignedUrlObjs } = useImages();
 
   useEffect(() => {
     onChangePresignUrlList((prev) => ({
       ...prev,
-      [place.name]: presignedUrls,
+      [place.name]: presignedUrlObjs,
     }));
-  }, [onChangePresignUrlList, presignedUrls, place.name]);
+  }, [onChangePresignUrlList, presignedUrlObjs, place.name]);
 
   return (
     <div className="py-[5px]">

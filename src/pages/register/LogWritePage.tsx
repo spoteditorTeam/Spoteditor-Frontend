@@ -1,43 +1,77 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import ModifyDrawer from '@/components/Drawer/ModifyDrawer';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import CoverImageInput from '@/features/registerpage/CoverImageInput';
+import LogCoverImgInput from '@/features/registerpage/LogCoverImgInput';
 import LogWriteBar from '@/features/registerpage/LogWriteBar';
-import PlaceDetailFormItem from '@/features/registerpage/PlaceDetailFormItem';
-import useImagePreview from '@/hooks/useImagePreview';
+import PlaceFormItem from '@/features/registerpage/PlaceFormItem';
 import api from '@/services/apis/api';
-import { Log, Place, PresignedUrlWithName } from '@/services/apis/types/registerAPI.type';
+import { Log, Place, PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
 import { useRegisterStore } from '@/store/registerStore';
 import { formatAddress } from '@/utils/formatLogForm';
 import { CircleX } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+export interface LogWriteFormData {
+  title: string;
+  description: string;
+  coverImgSrc: PresignUrlResponse | null;
+  places: { photos: PresignUrlResponse[] | null; placeDescription?: '' }[];
+}
+
+const PlaceSchema = z.object({
+  photo: z.array(z.string()).nullable(),
+  placeDescription: z.string().optional(),
+});
+
+// PresignUrlResponse;
+const PresignUrlSchema = z.object({
+  preSignedUrl: z.string(),
+  uuid: z.string(),
+  originalFile: z.string(),
+});
+
+export const LogWriteFormSchema = z.object({
+  title: z
+    .string()
+    .min(1, '제목은 최소 1자 이상 입력해야 합니다.')
+    .max(30, '제목은 30자를 초과할 수 없습니다.'),
+  description: z
+    .string()
+    .min(1, '설명은 최소 1자 이상 입력해야 합니다.')
+    .max(500, '설명은 500자를 초과할 수 없습니다.'),
+  coverImgSrc: PresignUrlSchema,
+  places: PlaceSchema,
+});
 
 const LogWritePage = () => {
   const navi = useNavigate();
+  // const form = useForm<LogWriteFormData>({
+  const form = useForm({
+    // resolver: zodResolver(LogWriteFormSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      coverImgSrc: {},
+      places: [],
+    },
+  });
+
   /* states */
-  const [logTitle, setLogTitle] = useState('');
   const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
   const resetSelectedPlaces = useRegisterStore((state) => state.resetSelectedPlaces);
-  const { imagePreview, handleFileChange, handleClearImage, presignedUrlObj } = useImagePreview();
-  const logDescripTextAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [sido, , bname] = selectedPlaces[0].address_name.split(' '); // 뒤로가기 옆 로그 대표 지역 이름
-  // 로그 등록 시 필요한 {presignedUrl, uuid}
-  const [presignedUrlList, setPresignUrlList] = useState<{ [key: string]: PresignedUrlWithName[] }>(
+  const [sido, , bname] = selectedPlaces[0].address_name.split(' ');
+  const [presignedUrlList, setPresignUrlList] = useState<{ [key: string]: PresignUrlResponse[] }>(
     {}
   );
   const [modifyTarget, setModifyTarget] =
     useState<kakao.maps.services.PlacesSearchResultItem | null>(null); // 선택한 타켓 장소
 
-  const textRefs = useRef<{ [placeId: string]: string }>({});
-  const registerTextRef = (id: string, elem: HTMLTextAreaElement) => {
-    if (elem) textRefs.current[id] = elem.value;
-    else delete textRefs.current[id];
-  };
-
   /* handlers */
-  const handleClearTitle = () => setLogTitle('');
   const handlePostLog = async () => {
     const formatedLog = formatLog(selectedPlaces);
     if (!formatedLog) return;
@@ -87,62 +121,79 @@ const LogWritePage = () => {
     };
   };
 
+  const onSubmit = (values: FieldValues) => {
+    console.log(values);
+  };
+
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
       <LogWriteBar sido={sido} bname={bname} />
 
-      <main className="flex flex-col items-center grow min-h-0 overflow-y-auto scrollbar-hide">
-        {/* 로그 제목 */}
-        <section className="flex items-center w-full border-b px-4 relative">
-          <Input
-            name="logTitle"
-            placeholder="제목을 입력해주세요. (최대 30자) *"
-            className=" placeholder:text-primary-300 placeholder:after:content-['*'] font-medium px-0"
-            maxLength={30}
-            value={logTitle}
-            onChange={(e) => setLogTitle(e.target.value)}
+      <Form {...form}>
+        <form
+          className="flex flex-col items-center grow min-h-0 overflow-y-auto scrollbar-hide "
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FormField
+            name="title"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="flex items-center w-full border-b px-4 relative">
+                <Input
+                  {...field}
+                  placeholder="제목을 입력해주세요. (최대 30자) *"
+                  className=" placeholder:text-primary-300 placeholder:after:content-['*'] font-medium px-0"
+                />
+                {field.value && (
+                  <CircleX
+                    className="stroke-white fill-primary-100 absolute stroke-1 top-2 right-4  cursor-pointer hover:fill-slate-50/50"
+                    size={24}
+                    onClick={() => console.log('모두 비우기')}
+                  />
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          {logTitle && (
-            <CircleX
-              className="stroke-white fill-primary-100 absolute stroke-1 top-2 right-4  cursor-pointer hover:fill-slate-50/50"
-              size={24}
-              onClick={handleClearTitle}
-            />
-          )}
-        </section>
 
-        {/* 커버 이미지 */}
-        <CoverImageInput
-          imagePreview={imagePreview}
-          handleFileChange={handleFileChange}
-          handleClearImage={handleClearImage}
-        />
-
-        <div className="px-4 w-full">
-          {/* 로그 설명 */}
-          <Textarea
-            className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm  placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
-            placeholder="내용을 입력해주세요. (최대 500자)"
-            maxLength={500}
-            ref={logDescripTextAreaRef}
+          {/* 커버 이미지 */}
+          <LogCoverImgInput name="coverImgSrc" control={form.control} setValue={form.setValue} />
+          <FormField
+            name="description"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="px-4 w-full">
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    className="bg-primary-50 min-h-[85px] px-[18px] py-2.5 text-primary-300 text-text-sm  placeholder:text-primary-300 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    placeholder="내용을 입력해주세요. (최대 500자)"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
 
           {/* 장소 */}
-          <div className="flex flex-col w-full mt-3">
+          <div className="flex flex-col w-full mt-3 px-4">
             {selectedPlaces.map((place, idx) => (
-              <PlaceDetailFormItem
+              <PlaceFormItem
+                name={`places[${idx}]`}
+                control={form.control}
                 place={place}
                 key={place.id}
                 idx={idx + 1}
-                registerTextRef={registerTextRef}
-                onChangePresignUrlList={setPresignUrlList}
                 setModifyTarget={setModifyTarget}
+                setValue={form.setValue}
               />
             ))}
           </div>
-        </div>
-      </main>
+
+          <Button type="submit">Test</Button>
+        </form>
+      </Form>
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">

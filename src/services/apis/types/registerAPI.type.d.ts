@@ -6,9 +6,6 @@ export interface PresignUrlRequest {
 export interface PresignUrlResponse {
   preSignedUrl: string;
   uuid: string;
-}
-
-export interface PresignedUrlWithName extends PresignUrlResponse {
   originalFile: string;
 }
 
