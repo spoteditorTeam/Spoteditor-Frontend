@@ -1,10 +1,13 @@
 import api from '@/services/apis/api';
 import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { useState } from 'react';
 
 function useImages(initialImageUrls: string[] = []) {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>(initialImageUrls);
+  const [imagePreviews, setImagePreviews] = useState<string[]>(
+    initialImageUrls.map(getImgFromCloudFront)
+  );
   const [presignedUrlObjs, setPresignedUrlObjs] = useState<PresignUrlResponse[]>([]);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -42,7 +45,13 @@ function useImages(initialImageUrls: string[] = []) {
     setPresignedUrlObjs((prev) => prev.filter((_, i) => i !== index));
   };
 
-  return { imagePreviews, handleFileChange, handleRemoveImage, isUploading, presignedUrlObjs };
+  return {
+    imagePreviews,
+    handleFileChange,
+    handleRemoveImage,
+    isUploading,
+    presignedUrlObjs,
+  };
 }
 
 const filterNewFiles = (files: File[], imageFiles: File[]) => {

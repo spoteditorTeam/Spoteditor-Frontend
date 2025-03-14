@@ -1,5 +1,6 @@
 import api from '@/services/apis/api';
 import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { useCallback, useEffect, useState } from 'react';
 
 function useImagePreview(initialImageUrl = '') {
@@ -51,7 +52,7 @@ function useImagePreview(initialImageUrl = '') {
 
   return {
     imageFile,
-    imagePreview,
+    imagePreview: initialImageUrl ? getImgFromCloudFront(imagePreview) : imagePreview,
     handleFileChange,
     handleClearImage,
     isUploading,
