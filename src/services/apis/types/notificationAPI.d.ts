@@ -1,23 +1,12 @@
 import { LogsQueryParams } from './logAPI.type';
 
-export type NotificationParams = LogsQueryParams;
-
-export interface INotification {
-  from: string;
-  to: string;
-  type: string;
-  message: string;
+export interface Notification {
+  id: number
+  imageUrl: string
+  message: string
+  type: string
+  createdAt: string
+  isRead: boolean
 }
 
-export interface NotificationResponse {
-  content: INotification[];
-  totalCount: number;
-  pageNumber: number;
-  pageSize: number;
-  totalPages: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-}
+export type NotificationResponse = Notification[]

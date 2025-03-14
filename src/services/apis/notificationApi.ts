@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { NotificationParams, NotificationResponse } from './types/notificationAPI';
+import {  NotificationResponse } from './types/notificationAPI';
 
 export default class NotificationAPI {
   private axios: AxiosInstance;
@@ -8,10 +8,8 @@ export default class NotificationAPI {
     this.axios = axios;
   }
 
-  async getNotificationList(params: NotificationParams): Promise<NotificationResponse> {
-    const response = await this.axios.get('/api/notice', {
-      params,
-    });
+  async getNotificationList(): Promise<NotificationResponse> {
+    const response = await this.axios.get('/api/notice');
     return response.data;
   }
 
