@@ -12,6 +12,7 @@ import useOtherUserBookmarkPlaces from '@/hooks/queries/userLog/useOtherUserBook
 import useUserBookmarkPlaces from '@/hooks/queries/userLog/useUserBookmarkPlaces';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { useParams, useSearchParams } from 'react-router-dom';
+import NotProfileData from '../NotProfileData';
 
 function SavedSpaces() {
   const { user } = useUser();
@@ -38,7 +39,7 @@ function SavedSpaces() {
     <>
       {isPending ? (
         <Loading className="min-h-[350px]" />
-      ) : (
+      ) : data?.content.length !== 0 ? (
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.content.map((place) => (
@@ -63,6 +64,8 @@ function SavedSpaces() {
             />
           </section>
         </>
+      ) : (
+        <NotProfileData />
       )}
     </>
   );

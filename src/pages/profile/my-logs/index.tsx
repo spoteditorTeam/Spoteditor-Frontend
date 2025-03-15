@@ -12,6 +12,7 @@ import useOtherUserLogs from '@/hooks/queries/userLog/useOtherUserLogs';
 import useUserLogs from '@/hooks/queries/userLog/useUserLogs';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
+import NotProfileData from '../NotProfileData';
 
 function MyLogs() {
   const { user } = useUser();
@@ -34,14 +35,15 @@ function MyLogs() {
 
   const data = isMyLogs ? myLogsData : otherLogsData;
   const isPending = isMyLogs ? isMyLogsPending : isOtherLogsPending;
+
   return (
     <>
       {isPending ? (
         <Loading className="min-h-[350px]" />
-      ) : (
+      ) : data?.content.length !== 0 ? (
         <>
           <PostCardWrapper className="mb-[50px]">
-            {data?.content.map((log) => (
+            {data?.content?.map((log) => (
               <Link to={`/log/${log.placeLogId}`}>
                 <MotionCard key={log.placeLogId}>
                   <PostCardImage lable imageUrl={getImgFromCloudFront(log.image.storedFile)} />
@@ -59,6 +61,8 @@ function MyLogs() {
             <CustomPagination currentPage={data?.pageNumber!} totalPages={data?.totalPages!} />
           </section>
         </>
+      ) : (
+        <NotProfileData />
       )}
     </>
   );

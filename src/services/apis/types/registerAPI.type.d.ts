@@ -62,6 +62,10 @@ export interface ResponsePlace
 
 export interface LogResponse {
   placeLogId: number;
+  userId: 0;
+  userName: 'string';
+  userImage: 'string';
+  isFollowing: true;
   name: string;
   description: string;
   image: Image;
