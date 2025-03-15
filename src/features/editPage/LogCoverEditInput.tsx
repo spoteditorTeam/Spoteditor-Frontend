@@ -2,11 +2,13 @@ import { CameraIcon } from '@/components/Icons';
 import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import useLog from '@/hooks/queries/log/useLog';
 import useImagePreview from '@/hooks/useImagePreview';
 import { LogWriteFormData } from '@/pages/register/LogWritePage';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
 interface CoverImageInputProps {
   name: 'coverImgSrc';
@@ -15,9 +17,11 @@ interface CoverImageInputProps {
   trigger: UseFormTrigger<LogWriteFormData>;
 }
 
-const LogCoverImgInput = ({ name, control, setValue, trigger }: CoverImageInputProps) => {
+const LogCoverEditInput = ({ name, control, setValue, trigger }: CoverImageInputProps) => {
+  const { placeLogId } = useParams();
+  const { data: logData } = useLog(Number(placeLogId)) || undefined;
   const { presignedUrlObj, imagePreview, handleFileChange, handleClearImage, isUploading } =
-    useImagePreview();
+    useImagePreview(logData?.image.storedFile);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -90,4 +94,4 @@ const LogCoverImgInput = ({ name, control, setValue, trigger }: CoverImageInputP
   );
 };
 
-export default LogCoverImgInput;
+export default LogCoverEditInput;

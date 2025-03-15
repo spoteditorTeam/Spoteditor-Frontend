@@ -4,6 +4,7 @@ import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
+import PlaceEditImagesInput from '../editPage/PlaceEditImagesInput';
 import PlaceImagesInput from './PlaceImagesInput';
 
 interface PlaceFormItemProps {
@@ -13,6 +14,7 @@ interface PlaceFormItemProps {
   setModifyTarget?: Dispatch<SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>>;
   setValue: UseFormSetValue<LogWriteFormData>;
   trigger: UseFormTrigger<LogWriteFormData>;
+  edit?: boolean;
 }
 
 const PlaceFormItem = ({
@@ -22,6 +24,7 @@ const PlaceFormItem = ({
   control,
   setValue,
   trigger,
+  edit,
 }: PlaceFormItemProps) => {
   const [isChecked, setIsChecked] = useState(false);
   const handleChecked = () => {
@@ -76,7 +79,11 @@ const PlaceFormItem = ({
       </section>
 
       {/* 사진 첨부 */}
-      <PlaceImagesInput control={control} setValue={setValue} idx={idx} trigger={trigger} />
+      {edit ? (
+        <PlaceEditImagesInput control={control} setValue={setValue} idx={idx} trigger={trigger} />
+      ) : (
+        <PlaceImagesInput control={control} setValue={setValue} idx={idx} trigger={trigger} />
+      )}
 
       {/* 내용 */}
       <Controller

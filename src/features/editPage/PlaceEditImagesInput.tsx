@@ -1,13 +1,15 @@
 import { CameraIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import useLog from '@/hooks/queries/log/useLog';
 import useImages from '@/hooks/useImages';
 import { LogWriteFormData } from '@/pages/register/LogWritePage';
 import { Image } from '@/services/apis/types/registerAPI.type';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
-interface PlaceImagesInputProps {
+import { useParams } from 'react-router-dom';
+interface PlaceEditImagesInputProps {
   control: Control<LogWriteFormData>;
   defaultplaceImgs?: Image[];
   setValue: UseFormSetValue<LogWriteFormData>;
@@ -15,10 +17,12 @@ interface PlaceImagesInputProps {
   trigger: UseFormTrigger<LogWriteFormData>;
 }
 
-const PlaceImagesInput = ({ control, setValue, idx, trigger }: PlaceImagesInputProps) => {
+const PlaceEditImagesInput = ({ control, setValue, idx, trigger }: PlaceEditImagesInputProps) => {
+  const { placeLogId } = useParams();
+  const { data: logData } = useLog(Number(placeLogId));
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { imagePreviews, handleFileChange, handleRemoveImage, isUploading, presignedUrlObjs } =
-    useImages();
+    useImages(logData?.places?.[idx].images.map((img) => img.storedFile));
 
   useEffect(() => {
     if (presignedUrlObjs) {
@@ -81,4 +85,4 @@ const PlaceImagesInput = ({ control, setValue, idx, trigger }: PlaceImagesInputP
   );
 };
 
-export default PlaceImagesInput;
+export default PlaceEditImagesInput;
