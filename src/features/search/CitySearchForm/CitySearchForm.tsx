@@ -14,7 +14,11 @@ import useLocationToAddress from '@/hooks/useLocationToAddress';
 function CitySearchForm() {
   const [open, setOpen] = useState(false);
   const { permission, position } = useGeolocationPermission();
-
+  const {address} = useLocationToAddress(Number(position?.latitude), Number(position?.longitude))
+  console.log('position', position);
+  
+  console.log('address', address);
+  
   const form = useForm({
     resolver: zodResolver(citySearchSchema),
     defaultValues: {
