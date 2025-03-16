@@ -8,6 +8,7 @@ export interface LogsQueryParams {
 
 export interface LogContent {
   placeLogId: number;
+  author: string;
   name: string;
   image: Image;
   address: Address;
