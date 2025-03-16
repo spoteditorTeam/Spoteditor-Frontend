@@ -9,6 +9,7 @@ import { citySearchSchema } from '@/services/schemas/searchSchema';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import useLocationToAddress from '@/hooks/useLocationToAddress';
 
 function CitySearchForm() {
   const [open, setOpen] = useState(false);
@@ -65,6 +66,7 @@ function CitySearchForm() {
           >
             검색
           </Button>
+          <CitySearchDropbox />
         </form>
       </Form>
       {open ? <GeoConsentModal /> : null}
