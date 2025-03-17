@@ -11,21 +11,22 @@ const MainCarousel = () => {
   const { content } = data ?? {};
   const isDataReady = isPending || !data || isError;
 
-  const [api, setApi] = useState<CarouselApi>();
+  const [api, setApi] = useState<CarouselApi | null>(null);
   const [current, setCurrent] = useState(0);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    if (!api) {
-      return;
+    if (api) {
+      const totalSlides = api.scrollSnapList().length;
+      const selectedSlide = api.selectedScrollSnap() + 1;
+
+      setTotal(totalSlides);
+      setCurrent(selectedSlide);
+
+      api.on('select', () => {
+        setCurrent(api.selectedScrollSnap() + 1);
+      });
     }
-
-    setTotal(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
   }, [api]);
 
   const progress = total > 0 ? (current / total) * 100 : 0;
