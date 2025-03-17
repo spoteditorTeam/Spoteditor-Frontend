@@ -19,7 +19,6 @@ function CitySearchForm() {
   const { permission, position } = useGeolocationPermission();
   const { address } = useLocationToAddress(position?.latitude ?? null, position?.longitude ?? null);
   const { isDropBox, sido, bname, realBname, openDropBox } = useCitySearchStore();
-  console.log('realBname', realBname);
 
   const defaultValues = useMemo(
     () => ({
