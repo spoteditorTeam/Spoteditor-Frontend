@@ -13,6 +13,7 @@ import useUserBookmarkLogs from '@/hooks/queries/userLog/useUserBookmarkLogs';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import NotProfileData from '../NotProfileData';
 
 function SavedLogs() {
   const { user } = useUser();
@@ -39,7 +40,7 @@ function SavedLogs() {
     <>
       {isPending ? (
         <Loading className="min-h-[350px]" />
-      ) : (
+      ) : data?.content.length !== 0 ? (
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.content.map((log) => (
@@ -67,6 +68,8 @@ function SavedLogs() {
             />
           </section>
         </>
+      ) : (
+        <NotProfileData />
       )}
     </>
   );
