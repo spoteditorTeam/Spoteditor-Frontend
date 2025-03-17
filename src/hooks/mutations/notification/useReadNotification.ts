@@ -8,16 +8,17 @@ export default function useReadNotification() {
   const queryClient = useQueryClient();
 
   return useMutation<void, ApiErrorResponse, number>({
-    mutationFn: () => api.notification.putNotiAllAsRead(),
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: notificationKeys.all });
+    mutationFn: (notiId) => api.notification.putNotiRead(notiId),
+    onMutate: async (notiId) => {
+      await queryClient.cancelQueries({ queryKey: notificationKeys.list() });
 
-      const notificationPrevious = queryClient.getQueryData(notificationKeys.all);
+      const notificationPrevious = queryClient.getQueryData(notificationKeys.list());
 
-      queryClient.setQueryData(notificationKeys.all, (oldData: NotificationResponse) => {
+      queryClient.setQueryData(notificationKeys.list(), (oldData: NotificationResponse) => {
+        const filterNoti = oldData.filter((noti) => noti.id !== notiId)
         return {
           ...oldData,
-          content: [],
+          content: filterNoti,
         };
       });
 
@@ -25,11 +26,11 @@ export default function useReadNotification() {
     },
 
     onError(_, __, context: any) {
-      queryClient.setQueryData(notificationKeys.all, context.notificationPrevious);
+      queryClient.setQueryData(notificationKeys.list(), context.notificationPrevious);
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: notificationKeys.all });
+      queryClient.invalidateQueries({ queryKey: notificationKeys.list() });
     },
   });
 }

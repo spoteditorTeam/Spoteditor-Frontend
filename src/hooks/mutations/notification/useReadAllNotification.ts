@@ -1,17 +1,10 @@
 import { notificationKeys } from '@/hooks/queries/notification/notificationQueryKeys';
 import api from '@/services/apis/api';
 import { ApiErrorResponse } from '@/services/apis/types/commonApi';
-import { INotification, NotificationResponse } from '@/services/apis/types/notificationAPI';
+import { NotificationResponse } from '@/services/apis/types/notificationAPI';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-type useReadAllNotificationProps = INotification;
-
-export default function useReadAllNotification({
-  from,
-  to,
-  type,
-  message,
-}: useReadAllNotificationProps) {
+export default function useReadAllNotification() {
   const queryClient = useQueryClient();
 
   return useMutation<void, ApiErrorResponse, number>({
@@ -22,18 +15,9 @@ export default function useReadAllNotification({
       const notificationPrevious = queryClient.getQueryData(notificationKeys.all);
 
       queryClient.setQueryData(notificationKeys.all, (oldData: NotificationResponse) => {
-        const fiterNoti = oldData.content.filter(
-          (noti) =>
-            !(
-              noti.from === from &&
-              noti.to === to &&
-              noti.type === type &&
-              noti.message === message
-            )
-        );
         return {
           ...oldData,
-          content: fiterNoti,
+          content: [],
         };
       });
 
