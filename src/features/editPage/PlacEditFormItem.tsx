@@ -1,24 +1,25 @@
 import { Textarea } from '@/components/ui/textarea';
-import { LogWriteFormData } from '@/pages/register/LogWritePage';
+import { LogEditFormData } from '@/pages/register/EditPage';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import useDrawerStore from '@/store/drawerStore';
 import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
-import PlaceImagesInput from './PlaceImagesInput';
+import PlaceEditImagesInput from '../editPage/PlaceEditImagesInput';
 
-interface PlaceFormItemProps {
-  control: Control<LogWriteFormData>;
+interface PlaceEditFormItemProps {
+  control: Control<LogEditFormData>;
   place: kakao.maps.services.PlacesSearchResultItem | PlaceInLog;
   idx: number;
-  setValue: UseFormSetValue<LogWriteFormData>;
-  trigger: UseFormTrigger<LogWriteFormData>;
+  setValue: UseFormSetValue<LogEditFormData>;
+  trigger: UseFormTrigger<LogEditFormData>;
 }
 
-const PlaceFormItem = ({ place, idx, control, setValue, trigger }: PlaceFormItemProps) => {
+const PlaceEditFormItem = ({ place, idx, control, setValue, trigger }: PlaceEditFormItemProps) => {
   const isOpen = useDrawerStore((state) => state.isOpen); // 열림 여부
   const openModal = useDrawerStore((state) => state.openDrawer); // 열림 + 타켓 지정
   const closeModal = useDrawerStore((state) => state.closeDrawer);
   const targetPlace = useDrawerStore((state) => state.targetPlace);
+  //  const isTarget = targetPlace && 'placeId' in targetPlace ? placeId === targetPlace.placeId : false;
   const targetPlaceId = targetPlace && 'id' in targetPlace ? targetPlace?.id : targetPlace?.placeId;
 
   const placeId = 'id' in place ? place.id : place.placeId;
@@ -64,7 +65,7 @@ const PlaceFormItem = ({ place, idx, control, setValue, trigger }: PlaceFormItem
       </section>
 
       {/* 사진 첨부 */}
-      <PlaceImagesInput control={control} setValue={setValue} idx={idx} trigger={trigger} />
+      <PlaceEditImagesInput control={control} setValue={setValue} idx={idx} trigger={trigger} />
 
       {/* 내용 */}
       <Controller
@@ -84,4 +85,4 @@ const PlaceFormItem = ({ place, idx, control, setValue, trigger }: PlaceFormItem
   );
 };
 
-export default PlaceFormItem;
+export default PlaceEditFormItem;

@@ -1,18 +1,26 @@
 import api from '@/services/apis/api';
-import { PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
+import { Image, PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { useState } from 'react';
 
-function useImages(initialImageUrls: string[] = []) {
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+function useImages(initialImageUrls: Image[] = []) {
+  const [imageFiles, setImageFiles] = useState<File[]>([]); // 실제 파일 객체(추가된거만)
   const [imagePreviews, setImagePreviews] = useState<string[]>(
-    initialImageUrls.map(getImgFromCloudFront)
+    initialImageUrls.map((img) => getImgFromCloudFront(img.storedFile))
   );
-  const [presignedUrlObjs, setPresignedUrlObjs] = useState<PresignUrlResponse[]>([]);
+  const [presignedUrlObjs, setPresignedUrlObjs] = useState<PresignUrlResponse[]>(
+    initialImageUrls.map((img) => ({
+      preSignedUrl: '',
+      uuid: String(img.imageId),
+      originalFile: img.originalFile,
+    }))
+  );
   const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    // 이미지 추가
     if (!event.target.files) return;
+    console.log(event.target.files);
 
     const files = Array.from(event.target.files);
     const filteredFiles = filterNewFiles(files, imageFiles); // 중복 파일 제거

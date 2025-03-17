@@ -5,12 +5,10 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 interface LogEditBarProps {
-  sido?: string;
-  bname?: string;
   logTitle: string;
 }
 
-const LogEditBar = ({ sido = '', bname = '', logTitle }: LogEditBarProps) => {
+const LogEditBar = ({ logTitle }: LogEditBarProps) => {
   const navi = useNavigate();
   const { placeLogId } = useParams();
   const { mutate: deleteLog } = useDeleteLog(Number(placeLogId));
@@ -28,9 +26,7 @@ const LogEditBar = ({ sido = '', bname = '', logTitle }: LogEditBarProps) => {
         >
           <ArrowLeft size={24} />
         </Button>
-        <p className="text-text-2xl font-bold">
-          {sido} · {bname}
-        </p>
+        <p className="text-text-2xl font-bold">로그 수정</p>
       </div>
 
       <ConfirmDialog

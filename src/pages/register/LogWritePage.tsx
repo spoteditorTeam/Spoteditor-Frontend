@@ -9,15 +9,13 @@ import PlaceFormItem from '@/features/registerpage/PlaceFormItem';
 import { cn } from '@/lib/utils';
 import api from '@/services/apis/api';
 import { Log, PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
-import { PlaceSchema, PresignUrlSchema } from '@/services/schemas/logSchema';
+import { LogWriteFormSchema } from '@/services/schemas/logSchema';
 import { useRegisterStore } from '@/store/registerStore';
 import { formatAddress } from '@/utils/formatLogForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleX } from 'lucide-react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 
 export interface LogWriteFormData {
   title: string;
@@ -25,16 +23,6 @@ export interface LogWriteFormData {
   coverImgSrc: PresignUrlResponse | null;
   places: { photos: PresignUrlResponse[]; placeDescription?: string }[];
 }
-
-export const LogWriteFormSchema = z.object({
-  title: z.string().min(1, '제목은 최소 1자 이상 입력해야 합니다.'),
-  description: z
-    .string()
-    .min(1, '설명은 최소 1자 이상 입력해야 합니다.')
-    .max(500, '설명은 500자를 초과할 수 없습니다.'),
-  coverImgSrc: PresignUrlSchema,
-  places: z.array(PlaceSchema).min(1, '장소는 최소 1개 이상 입력해야 합니다.'),
-});
 
 const LogWritePage = () => {
   const navi = useNavigate();
@@ -53,8 +41,6 @@ const LogWritePage = () => {
   const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
   const resetSelectedPlaces = useRegisterStore((state) => state.resetSelectedPlaces);
   const [sido = '', , bname = ''] = selectedPlaces[0]?.address_name?.split(' ') || [];
-  const [modifyTarget, setModifyTarget] =
-    useState<kakao.maps.services.PlacesSearchResultItem | null>(null); // 선택한 타켓 장소
 
   /* handlers */
   const formatLog = ({ title, description, coverImgSrc, places }: LogWriteFormData): Log => {
@@ -154,7 +140,6 @@ const LogWritePage = () => {
                 place={place}
                 key={place.id}
                 idx={idx}
-                setModifyTarget={setModifyTarget}
                 setValue={form.setValue}
                 trigger={form.trigger}
               />
@@ -165,11 +150,7 @@ const LogWritePage = () => {
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">
-        <ModifyDrawer
-          isOpen={!!modifyTarget}
-          setIsOpen={() => setModifyTarget(null)}
-          modifyTarget={modifyTarget}
-        />
+        <ModifyDrawer />
         <ConfirmDialog
           title="로그를 등록하시겠어요?"
           showCheckbox={true}

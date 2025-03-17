@@ -39,7 +39,7 @@ function useImagePreview(initialImageUrl = '') {
 
   const handleClearImage = () => {
     setImageFile(null);
-    setImagePreview(initialImageUrl);
+    setImagePreview('');
     setPresignedUrlObj(null);
   };
 

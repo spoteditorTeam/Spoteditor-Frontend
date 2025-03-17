@@ -2,26 +2,30 @@ import { CameraIcon } from '@/components/Icons';
 import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import useLog from '@/hooks/queries/log/useLog';
 import useImagePreview from '@/hooks/useImagePreview';
-import { LogWriteFormData } from '@/pages/register/LogWritePage';
+import { LogEditFormData } from '@/pages/register/EditPage';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import {
+  Control,
+  Controller,
+  useController,
+  UseFormSetValue,
+  UseFormTrigger,
+} from 'react-hook-form';
 
 interface CoverImageInputProps {
   name: 'coverImgSrc';
-  control: Control<LogWriteFormData>;
-  setValue: UseFormSetValue<LogWriteFormData>;
-  trigger: UseFormTrigger<LogWriteFormData>;
+  control: Control<LogEditFormData>;
+  setValue: UseFormSetValue<LogEditFormData>;
+  trigger: UseFormTrigger<LogEditFormData>;
 }
 
 const LogCoverEditInput = ({ name, control, setValue, trigger }: CoverImageInputProps) => {
-  const { placeLogId } = useParams();
-  const { data: logData } = useLog(Number(placeLogId)) || undefined;
+  const { field } = useController({ name, control });
+  const storedFile = field.value && 'storedFile' in field.value ? field.value.storedFile : ''; // Image일때만 있음
   const { presignedUrlObj, imagePreview, handleFileChange, handleClearImage, isUploading } =
-    useImagePreview(logData?.image.storedFile);
+    useImagePreview(storedFile);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 

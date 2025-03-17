@@ -1,28 +1,32 @@
 import { CameraIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import useLog from '@/hooks/queries/log/useLog';
 import useImages from '@/hooks/useImages';
-import { LogWriteFormData } from '@/pages/register/LogWritePage';
+import { LogEditFormData } from '@/pages/register/EditPage';
 import { Image } from '@/services/apis/types/registerAPI.type';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import {
+  Control,
+  Controller,
+  useController,
+  UseFormSetValue,
+  UseFormTrigger,
+} from 'react-hook-form';
 interface PlaceEditImagesInputProps {
-  control: Control<LogWriteFormData>;
+  control: Control<LogEditFormData>;
   defaultplaceImgs?: Image[];
-  setValue: UseFormSetValue<LogWriteFormData>;
+  setValue: UseFormSetValue<LogEditFormData>;
   idx: number;
-  trigger: UseFormTrigger<LogWriteFormData>;
+  trigger: UseFormTrigger<LogEditFormData>;
 }
 
 const PlaceEditImagesInput = ({ control, setValue, idx, trigger }: PlaceEditImagesInputProps) => {
-  const { placeLogId } = useParams();
-  const { data: logData } = useLog(Number(placeLogId));
+  const { field } = useController({ name: `places.${idx}.photos`, control });
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const { imagePreviews, handleFileChange, handleRemoveImage, isUploading, presignedUrlObjs } =
-    useImages(logData?.places?.[idx].images.map((img) => img.storedFile));
+    useImages(field.value as Image[]);
 
   useEffect(() => {
     if (presignedUrlObjs) {
@@ -50,6 +54,7 @@ const PlaceEditImagesInput = ({ control, setValue, idx, trigger }: PlaceEditImag
         control={control}
         render={({ field }) => (
           <div className="flex overflow-x-auto mb-2.5">
+            {/* 기존 이미지 */}
             {imagePreviews.map((previewURL, previewIdx) => (
               <div className="relative m-1 shrink-0" key={previewIdx}>
                 <Input
