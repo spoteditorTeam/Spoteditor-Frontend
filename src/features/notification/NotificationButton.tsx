@@ -1,7 +1,6 @@
 import BellIcon from '@/components/Icons/BellIconIcon';
 import XIcon from '@/components/Icons/XIcon';
 import NotificationSkeleton from '@/components/Skeleton/NotificationSkeleton';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import {
   Sheet,
   SheetClose,
@@ -11,20 +10,32 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import useNotificationList from '@/hooks/queries/notification/useNotificationList';
-import useNotificationWebSocket from '@/hooks/useNotificationWebSocket';
-import { cn } from '@/lib/utils';
-import { formatNotificationJSX } from '@/utils/notificationUtils';
-import { formatRelativeTime } from '@/utils/timeUtils';
 import NotNotification from './NotNotification';
+import NotificationItem from './NotificationItem';
+import { useEffect } from 'react';
+import { notificationStore } from '@/store/notificationStore';
 
 function NotificationButton() {
-  useNotificationWebSocket();
-  const { data: notisData, isLoading: isNotiLoading } = useNotificationList();  
+  //useNotificationWebSocket(); //추후 웹소켓 훅 사용해서 실시간 알림 받기
+  const { data: notisData, isLoading: isNotiLoading } = useNotificationList();
+  const { notifications, isNotiCount, readAsRead } = notificationStore();
+
+  useEffect(() => {
+    if (notisData) {
+      notisData.forEach((noti) => notificationStore.getState().addNotification(noti));
+    }
+  }, [notisData]);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button>
+        <button className="relative">
           <BellIcon />
+          {isNotiCount > 0 && (
+            <div className="absolute flex items-center justify-center w-5 h-5 bg-red-500 rounded-full left-3 bottom-3">
+              <span className="text-text-xs">{isNotiCount}</span>
+            </div>
+          )}
         </button>
       </SheetTrigger>
       <SheetContent className="p-0 mobile:w-screen">
@@ -35,29 +46,15 @@ function NotificationButton() {
           </SheetClose>
         </SheetHeader>
         <section>
-          {isNotiLoading ? (<NotificationSkeleton />) : notisData?.length === 0 ? (<NotNotification />) : notisData?.map((noti) => (
-            <article
-            key={noti.id}
-            className={cn(
-              'w-full web:px-5 mobile:px-4 py-2.5 flex justify-start gap-3 items-center border-y border-white',
-              noti.isRead ? '' : 'bg-[#EFF6FF]'
-            )}
-          >
-            <figure>
-              <Avatar className="w-9 h-9">
-                <AvatarImage src={noti.imageUrl} alt='userAvatar' />
-              </Avatar>
-            </figure>
-            <figcaption className="flex text-text-xs web:max-w-[342px]">
-              <span>
-                {formatNotificationJSX(noti.message)}
-                <time className="ml-1 whitespace-nowrap text-text-xs font-medium text-[#81858F]">
-                  {formatRelativeTime(noti.createdAt)}
-                  </time>
-              </span>
-            </figcaption>
-          </article>
-          ))}
+          {isNotiLoading ? (
+            <NotificationSkeleton />
+          ) : notifications?.length === 0 ? (
+            <NotNotification />
+          ) : (
+            notisData?.map((noti) => (
+              <NotificationItem {...noti} readAsReadClick={() => readAsRead(noti.id)} />
+            ))
+          )}
         </section>
       </SheetContent>
     </Sheet>
