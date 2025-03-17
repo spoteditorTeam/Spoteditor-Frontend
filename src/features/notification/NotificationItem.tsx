@@ -32,7 +32,7 @@ export default function NotificationItem({
       key={id}
       onClick={onReadClick}
       className={cn(
-        'w-full web:px-5 mobile:px-4 py-2.5 flex justify-start gap-3 items-center border-y border-white hover:scale-105 transition',
+        'w-full web:px-5 mobile:px-4 py-2.5 flex justify-start gap-3 items-center border-y border-white transition',
         isRead ? '' : 'bg-[#EFF6FF]'
       )}
     >
