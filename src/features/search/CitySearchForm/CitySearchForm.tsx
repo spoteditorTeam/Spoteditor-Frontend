@@ -1,7 +1,6 @@
 import GeoConsentModal from '@/components/GeoConsentModal';
 import { Button } from '@/components/ui/button';
 import useGeolocationPermission from '@/hooks/useGeolocationPermission';
-import { useState } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import CitySearchDropbox from './CitySearchDropbox';
 import { useForm } from 'react-hook-form';
@@ -19,18 +18,21 @@ function CitySearchForm() {
   const nav = useNavigate();
   const { toggleSearchBar } = useSearchStore();
   const { permission, position } = useGeolocationPermission();
-  const {address} = useLocationToAddress(Number(position?.latitude), Number(position?.longitude))
-  console.log('position', position);
-  
-  console.log('address', address);
-  
+  const { address } = useLocationToAddress(position?.latitude ?? null, position?.longitude ?? null);
+  const { sido, sigungu } = useCitySearchStore();
+
+  const defaultValues = useMemo(
+    () => ({
+      sido: sido || address?.region_1depth_name || '서울',
+      sigungu: sigungu || address?.region_2depth_name || '송파구',
+    }),
+    [sido, sigungu, address]
+  );
+
   const form = useForm({
     resolver: zodResolver(citySearchSchema),
-    defaultValues: {
-      sido: '서울',
-      sidogu: '송파구'
-    },
-    });
+    defaultValues,
+  });
 
   // 쥬스탄드 값이 변경되었을 때 form 상태 업데이트
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface AddressData {
   address_name: string; // 전체 주소 (예: "서울 송파구 가락동 199-4")
@@ -15,38 +15,36 @@ export default function useLocationToAddress(latitude: number | null, longitude:
     const [address, setAddress] = useState<AddressData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const prevCoords = useRef<{ lat: number; lng: number } | null>(null);
+
+    const coordKey = useMemo(() => `${latitude},${longitude}`, [latitude, longitude]);
   
     useEffect(() => {
       if (latitude === null || longitude === null) return;
-  
       if (!window.kakao || !window.kakao.maps) {
         setError("카카오맵 API가 로드되지 않았습니다.");
         return;
       }
   
-      const loadKakaoMap = () => {
-        window.kakao.maps.load(() => {
-          setLoading(true);
-          setError(null);
-  
-          const geocoder = new window.kakao.maps.services.Geocoder();
-  
-          geocoder.coord2Address(longitude, latitude, (result: any, status: any) => {
-            if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
-              setAddress(result[0].address); // 도로명 주소 대신 법정동 주소 사용
-            } else {
-              setError("주소 정보를 가져올 수 없습니다.");
-            }
-            setLoading(false);
-          });
-        });
-      };
-  
-      // 카카오맵 API가 이미 로드되었는지 확인 후 실행
-      if (window.kakao.maps) {
-        loadKakaoMap();
+      //같은 좌표에 대한 중복 요청 방지
+      if (prevCoords.current?.lat === latitude && prevCoords.current?.lng === longitude) {
+        return; // 같은 좌표일 경우 API 요청 안 함
       }
-    }, [latitude, longitude]);
+      prevCoords.current = { lat: latitude, lng: longitude }; // 이전 좌표 저장
+  
+      setLoading(true);
+      setError(null);
+  
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.coord2Address(longitude, latitude, (result: any, status: any) => {
+        if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
+          setAddress(result[0].address);
+        } else {
+          setError("주소 정보를 가져올 수 없습니다.");
+        }
+        setLoading(false);
+      });
+    }, [coordKey]);
   
     return { address, loading, error };
   }
