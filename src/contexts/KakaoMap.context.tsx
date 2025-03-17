@@ -37,21 +37,13 @@ export function KakaoMapProvider({ children }: PropsWithChildren) {
   const currentLocationRef = useRef<{ lat: number; lon: number } | null>(null); /* 현재 위치 */
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
 
-  /* sdk 로드 */
-  useEffect(() => {
-    loadKakaoMapSDK(() => setIsSDKLoaded(true));
-  }, []);
-
   /* 지도 api 로드 */
   useEffect(() => {
-    if (isSDKLoaded) {
-      window.kakao.maps.load(() => setIsMapLoaded(true));
-    }
-  }, [isSDKLoaded]);
+    if (window.kakao) window.kakao.maps.load(() => setIsMapLoaded(true));
+  }, []);
 
   /* 지도 초기화 */
   useEffect(() => {
@@ -119,17 +111,6 @@ export function KakaoMapProvider({ children }: PropsWithChildren) {
     [isLoading, initMap, map]
   );
   return <KakaoMapContext.Provider value={value}>{children}</KakaoMapContext.Provider>;
-}
-
-/* sdk */
-function loadKakaoMapSDK(loadedCallback: () => void) {
-  const script = document.createElement('script');
-  script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${
-    import.meta.env.VITE_KAKAO_MAP_KEY
-  }&autoload=false&libraries=services`;
-  script.async = true;
-  script.onload = loadedCallback;
-  document.head.appendChild(script);
 }
 
 /* geolocation */
