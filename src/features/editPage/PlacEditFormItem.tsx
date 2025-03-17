@@ -2,7 +2,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { LogEditFormData } from '@/pages/Register/EditPage';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import useDrawerStore from '@/store/drawerStore';
-import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
+import { Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import PlaceEditImagesInput from '../editPage/PlaceEditImagesInput';
 
@@ -43,9 +43,7 @@ const PlaceEditFormItem = ({ place, idx, control, setValue, trigger }: PlaceEdit
               <Circle className="stroke-neutral-200" onClick={() => openModal(place)} />
             )}
           </div>
-          <p className="flex items-center">
-            {placeName} <ChevronRight className="w-[1.2em] h-[1.2em]" />
-          </p>
+          <p className="flex items-center">{placeName}</p>
         </div>
 
         <div className="flex flex-col text-primary-400">
