@@ -45,7 +45,11 @@ function SavedSpaces() {
               <div>
                 {/* 추후 주소가 나오면 링크 컴포넌트로 보내는 기능 추가 */}
                 <MotionCard key={place.placeId}>
-                  <PostCardImage lable imageUrl={getImgFromCloudFront(place.image.storedFile)} />
+                  <PostCardImage
+                    lable
+                    author={place.author}
+                    imageUrl={getImgFromCloudFront(place.image.storedFile)}
+                  />
                   <PostCardTitle title={place.name} />
                   <PostCardLocation
                     sido={place.address.sido}

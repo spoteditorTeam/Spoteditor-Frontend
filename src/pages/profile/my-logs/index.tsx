@@ -34,6 +34,8 @@ function MyLogs() {
 
   const data = isMyLogs ? myLogsData : otherLogsData;
   const isPending = isMyLogs ? isMyLogsPending : isOtherLogsPending;
+  console.log('data', data);
+
   return (
     <>
       {isPending ? (
@@ -44,7 +46,11 @@ function MyLogs() {
             {data?.content.map((log) => (
               <Link to={`/log/${log.placeLogId}`}>
                 <MotionCard key={log.placeLogId}>
-                  <PostCardImage lable imageUrl={getImgFromCloudFront(log.image.storedFile)} />
+                  <PostCardImage
+                    lable
+                    author={log.author}
+                    imageUrl={getImgFromCloudFront(log.image.storedFile)}
+                  />
                   <PostCardTitle title={log.name} />
                   <PostCardLocation
                     sido={log.address.sido}
