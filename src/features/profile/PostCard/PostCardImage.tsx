@@ -19,14 +19,14 @@ function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProp
       className={cn(
         'relative flex-1 w-full web:mb-[10px] mobile:mb-[6px] bg-[linear-gradient(180deg,rgba(0,0,0,0)_74.97%,rgba(0,0,0,0.7)_94.58%)]',
         className,
-        'aspect-[324/218]'
+        'aspect-[324/218] overflow-hidden'
       )}
     >
       {imageUrl && (
         <img
           src={imageUrl}
           alt="Post Thumbnail"
-          className="object-cover w-full h-full rounded-md"
+          className="object-cover object-center w-full max-h-full rounded-md"
         />
       )}
       {lable && (
