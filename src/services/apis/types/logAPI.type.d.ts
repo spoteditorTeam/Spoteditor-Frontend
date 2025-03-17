@@ -2,7 +2,7 @@ import { Address, Image } from './registerAPI.type';
 
 export interface LogsQueryParams {
   page: number;
-  size: number;
+  size?: number;
   direction?: 'ASC' | 'DESC';
 }
 

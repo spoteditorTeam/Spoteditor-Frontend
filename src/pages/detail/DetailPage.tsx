@@ -1,4 +1,5 @@
 import { SpotIcon, TableIcon } from '@/components/Icons';
+import LogCard from '@/components/LogCard/LogCard';
 import LogCoverSkeleton from '@/components/Skeleton/LogCoverSkeleton';
 import PlaceItemSkeleton from '@/components/Skeleton/PlaceItemSkeleton';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,6 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import PlaceItem from '@/features/detailpage/PlaceItem';
-import LogCard from '@/features/homepage/LogCard';
 import OtherUserProfileSection from '@/features/profile/OtherUserProfileSection';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLog from '@/hooks/queries/log/useLog';

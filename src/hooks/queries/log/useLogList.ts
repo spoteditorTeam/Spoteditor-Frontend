@@ -6,7 +6,7 @@ import { logKeys } from './logQueryKeys';
 const useLogList = (params?: LogsQueryParams) => {
   const defaultParams: LogsQueryParams = {
     page: 1,
-    size: 15,
+    size: 8,
     direction: 'ASC',
   };
 
