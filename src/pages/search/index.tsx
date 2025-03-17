@@ -4,6 +4,7 @@ import PageLayout from '@/layouts/PageLayout';
 import LogCard from '@/features/homepage/LogCard';
 import { cn } from '@/lib/utils';
 import SectionHeader from '@/components/Header/SectionHeader';
+import LogCard from '@/features/homepage/LogCard';
 import SearchTitleHeader from '@/features/search/SearchTitleHeader';
 import CustomPagination from '@/components/CustomPagination';
 import useSearchAddresLog from '@/hooks/queries/searchLog/useSearchAddresLog';

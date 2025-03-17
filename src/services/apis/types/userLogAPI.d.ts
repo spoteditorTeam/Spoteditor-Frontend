@@ -25,6 +25,7 @@ interface Place {
 
 interface PlaceLog {
   placeLogId: number;
+  author: string;
   name: string;
   image: Image;
   address: Address;
