@@ -11,5 +11,5 @@ export type SearchForm = z.infer<typeof searchSchema>;
 
 export const citySearchSchema = z.object({
   sido: z.string(),
-  sidogu: z.string()
+  sigungu: z.string()
 });
