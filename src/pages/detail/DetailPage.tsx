@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import { SpotIcon, TableIcon } from '@/components/Icons';
 import LogCoverSkeleton from '@/components/Skeleton/LogCoverSkeleton';
 import PlaceItemSkeleton from '@/components/Skeleton/PlaceItemSkeleton';
@@ -13,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import PlaceItem from '@/features/detailpage/PlaceItem';
 import LogCard from '@/features/homepage/LogCard';
 import OtherUserProfileSection from '@/features/profile/OtherUserProfileSection';
+import useDeleteLog from '@/hooks/mutations/log/useDeleteLogMutation';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLog from '@/hooks/queries/log/useLog';
 import useLogBookMark from '@/hooks/queries/log/useLogBookMark';
@@ -22,7 +24,7 @@ import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
-import { ArrowLeft, Bookmark, PencilLine, Share2 } from 'lucide-react';
+import { ArrowLeft, Bookmark, Share2, Trash2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
   /* hooks */
@@ -37,7 +39,7 @@ const DetailPage = () => {
     Number(placeLogId)
   );
   const { user, isLoading } = useUser();
-
+  const { mutate: deleteLog } = useDeleteLog(Number(placeLogId));
   /* state */
   const isDataReady =
     isLogPending || isPlaceBookmarkPending || isLoading || isLogBookmarkPending || !user;
@@ -66,7 +68,8 @@ const DetailPage = () => {
         console.error('클립보드 복사 실패:', err);
       });
   };
-  const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
+  // const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
+  const onClickDelete = () => deleteLog();
 
   return (
     <>
@@ -101,12 +104,16 @@ const DetailPage = () => {
                   <Share2 />
                 </div>
                 {isOwner && (
-                  <div
-                    className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
-                    onClick={onClickPencil}
-                  >
-                    <PencilLine />
-                  </div>
+                  <ConfirmDialog
+                    title={name}
+                    description="로그를 삭제하시겠습니까?"
+                    trigger={
+                      <div className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white">
+                        <Trash2 />
+                      </div>
+                    }
+                    onConfirm={onClickDelete}
+                  />
                 )}
               </div>
             </div>
