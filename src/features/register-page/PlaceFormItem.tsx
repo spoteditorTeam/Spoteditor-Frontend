@@ -1,20 +1,20 @@
 import { Textarea } from '@/components/ui/textarea';
-import { LogEditFormData } from '@/pages/Register/EditPage';
+import { LogWriteFormData } from '@/pages/register-page/LogWritePage';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import useDrawerStore from '@/store/drawerStore';
 import { Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
-import PlaceEditImagesInput from '../editPage/PlaceEditImagesInput';
+import PlaceImagesInput from './PlaceImagesInput';
 
-interface PlaceEditFormItemProps {
-  control: Control<LogEditFormData>;
+interface PlaceFormItemProps {
+  control: Control<LogWriteFormData>;
   place: kakao.maps.services.PlacesSearchResultItem | PlaceInLog;
   idx: number;
-  setValue: UseFormSetValue<LogEditFormData>;
-  trigger: UseFormTrigger<LogEditFormData>;
+  setValue: UseFormSetValue<LogWriteFormData>;
+  trigger: UseFormTrigger<LogWriteFormData>;
 }
 
-const PlaceEditFormItem = ({ place, idx, control, setValue, trigger }: PlaceEditFormItemProps) => {
+const PlaceFormItem = ({ place, idx, control, setValue, trigger }: PlaceFormItemProps) => {
   const isOpen = useDrawerStore((state) => state.isOpen); // 열림 여부
   const openModal = useDrawerStore((state) => state.openDrawer); // 열림 + 타켓 지정
   const closeModal = useDrawerStore((state) => state.closeDrawer);
@@ -62,7 +62,7 @@ const PlaceEditFormItem = ({ place, idx, control, setValue, trigger }: PlaceEdit
       </section>
 
       {/* 사진 첨부 */}
-      <PlaceEditImagesInput control={control} setValue={setValue} idx={idx} trigger={trigger} />
+      <PlaceImagesInput control={control} setValue={setValue} idx={idx} trigger={trigger} />
 
       {/* 내용 */}
       <Controller
@@ -82,4 +82,4 @@ const PlaceEditFormItem = ({ place, idx, control, setValue, trigger }: PlaceEdit
   );
 };
 
-export default PlaceEditFormItem;
+export default PlaceFormItem;

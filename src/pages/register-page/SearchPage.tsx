@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { REGISTER_DETAILS, REGISTER_SELECT } from '@/constants/pathname';
-import PlaceListItem from '@/features/registerpage/PlaceListItem';
-import RegisterSearchBar from '@/features/registerpage/RegisterSearchBar';
-import SelectedPlacePreview from '@/features/registerpage/SelectedPlacePreview';
+import PlaceListItem from '@/features/register-page/PlaceListItem';
+import RegisterSearchBar from '@/features/register-page/RegisterSearchBar';
+import SelectedPlacePreview from '@/features/register-page/SelectedPlacePreview';
 import { useRegisterStore } from '@/store/registerStore';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { HOME, REGISTER_SEARCH } from '@/constants/pathname';
-import RegisterBar from '@/features/registerpage/RegisterBar';
+import RegisterBar from '@/features/register-page/RegisterBar';
 import { useRegisterStore } from '@/store/registerStore';
 import { Link, useNavigate } from 'react-router-dom';
 

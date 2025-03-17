@@ -1,6 +1,6 @@
 import LogCardSkeleton from '@/components/Skeleton/LogCardSkeleton';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel';
-import LogCard from '@/features/homepage/LogCard';
+import LogCard from '@/features/home/LogCard';
 import useLogList from '@/hooks/queries/log/useLogList';
 import { LogContent } from '@/services/apis/types/logAPI.type';
 import Autoplay from 'embla-carousel-autoplay';

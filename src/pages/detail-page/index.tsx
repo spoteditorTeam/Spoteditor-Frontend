@@ -11,8 +11,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import PlaceItem from '@/features/detailpage/PlaceItem';
-import LogCard from '@/features/homepage/LogCard';
+import LogCard from '@/features/home/LogCard';
 import OtherUserProfileSection from '@/features/profile/OtherUserProfileSection';
 import useDeleteLog from '@/hooks/mutations/log/useDeleteLogMutation';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
@@ -22,6 +21,7 @@ import usePlaceBookMark from '@/hooks/queries/log/usePlaceBookMark';
 import useUser from '@/hooks/queries/user/useUser';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
+import PlaceItem from '@/pages/detail-page/components/PlaceItem';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { ArrowLeft, Bookmark, Share2, Trash2 } from 'lucide-react';

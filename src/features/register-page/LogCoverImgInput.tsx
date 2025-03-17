@@ -3,7 +3,7 @@ import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useImagePreview from '@/hooks/useImagePreview';
-import { LogWriteFormData } from '@/pages/Register/LogWritePage';
+import { LogWriteFormData } from '@/pages/register-page/LogWritePage';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Control, Controller, UseFormSetValue, UseFormTrigger } from 'react-hook-form';

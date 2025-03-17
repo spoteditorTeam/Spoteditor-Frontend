@@ -2,7 +2,7 @@ import { CameraIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useImages from '@/hooks/useImages';
-import { LogWriteFormData } from '@/pages/Register/LogWritePage';
+import { LogWriteFormData } from '@/pages/register-page/LogWritePage';
 import { Image } from '@/services/apis/types/registerAPI.type';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
