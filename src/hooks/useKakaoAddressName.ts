@@ -4,8 +4,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 //반환값: { lat: 37.514575, lng: 127.107931 }
 
 interface Coordinates {
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
 }
 
 export default function useKakaoAddressName(addressName: string) {
@@ -45,7 +45,7 @@ export default function useKakaoAddressName(addressName: string) {
       geocoderRef.current.addressSearch(memoizedAddress, (result, status) => {
         if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
           const { x, y } = result[0];
-          setCoordinates({ lat: parseFloat(y), lng: parseFloat(x) });
+          setCoordinates({ latitude: parseFloat(y), longitude: parseFloat(x) });
         } else {
           setError('위경도 정보를 찾을 수 없습니다.');
         }

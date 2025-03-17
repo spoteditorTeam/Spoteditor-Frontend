@@ -11,22 +11,22 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import useLocationToAddress from '@/hooks/useLocationToAddress';
 import { useNavigate } from 'react-router-dom';
-import { useCitySearchStore, useSearchStore } from '@/store/searchStore';
+import { useCitySearchStore } from '@/store/searchStore';
 
 function CitySearchForm() {
   const [open, setOpen] = useState(false);
   const nav = useNavigate();
-  const { toggleSearchBar } = useSearchStore();
   const { permission, position } = useGeolocationPermission();
   const { address } = useLocationToAddress(position?.latitude ?? null, position?.longitude ?? null);
-  const { sido, sigungu } = useCitySearchStore();
+  const { isDropBox, sido, bname, realBname, openDropBox } = useCitySearchStore();
+  console.log('realBname', realBname);
 
   const defaultValues = useMemo(
     () => ({
       sido: sido || address?.region_1depth_name || '서울',
-      sigungu: sigungu || address?.region_2depth_name || '송파구',
+      bname: bname || address?.region_2depth_name || '송파구',
     }),
-    [sido, sigungu, address]
+    [sido, bname, address]
   );
 
   const form = useForm({
@@ -39,20 +39,24 @@ function CitySearchForm() {
     if (sido) {
       form.setValue('sido', sido);
     }
-    if (sigungu) {
-      form.setValue('sigungu', sigungu);
+    if (bname) {
+      form.setValue('bname', bname);
     }
-  }, [sido, sigungu, form]);
+  }, [sido, bname, form]);
 
-  const onSearchSubmit = ({ sido, sigungu }: z.infer<typeof citySearchSchema>) => {
+  const onSearchSubmit = ({ sido, bname: valueBname }: z.infer<typeof citySearchSchema>) => {
+    const bname = realBname ? realBname : valueBname;
     if (permission === 'prompt') {
       setOpen(true);
     }
     /* 추후 모달창 닫혔을 경우 검색할 수 있는 기능 추가 */
     nav('/search', {
-      state: { sido, sigungu },
+      state: { sido, bname },
     });
-    toggleSearchBar();
+  };
+
+  const openDropBoxClick = () => {
+    openDropBox();
   };
   return (
     <>
@@ -72,6 +76,7 @@ function CitySearchForm() {
                   </FormLabel>
                   <FormControl>
                     <Input
+                      onClick={openDropBoxClick}
                       placeholder="서울"
                       readOnly
                       {...field}
@@ -84,12 +89,13 @@ function CitySearchForm() {
 
             <FormField
               control={form.control}
-              name="sigungu"
+              name="bname"
               render={({ field }) => (
                 <FormItem className="flex flex-col bg-white px-3 py-2.5 gap-2">
                   <FormLabel className="text-primary-400 text-text-sm">더 상세히 검색!</FormLabel>
                   <FormControl>
                     <Input
+                      onClick={openDropBoxClick}
                       placeholder="송파구"
                       readOnly
                       {...field}
@@ -106,7 +112,7 @@ function CitySearchForm() {
           >
             검색
           </Button>
-          <CitySearchDropbox />
+          {isDropBox ? <CitySearchDropbox /> : null}
         </form>
       </Form>
       {open ? <GeoConsentModal /> : null}
