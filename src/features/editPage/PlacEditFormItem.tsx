@@ -1,5 +1,5 @@
 import { Textarea } from '@/components/ui/textarea';
-import { LogEditFormData } from '@/pages/register/EditPage';
+import { LogEditFormData } from '@/pages/Register/EditPage';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import useDrawerStore from '@/store/drawerStore';
 import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';
@@ -19,7 +19,6 @@ const PlaceEditFormItem = ({ place, idx, control, setValue, trigger }: PlaceEdit
   const openModal = useDrawerStore((state) => state.openDrawer); // 열림 + 타켓 지정
   const closeModal = useDrawerStore((state) => state.closeDrawer);
   const targetPlace = useDrawerStore((state) => state.targetPlace);
-  //  const isTarget = targetPlace && 'placeId' in targetPlace ? placeId === targetPlace.placeId : false;
   const targetPlaceId = targetPlace && 'id' in targetPlace ? targetPlace?.id : targetPlace?.placeId;
 
   const placeId = 'id' in place ? place.id : place.placeId;

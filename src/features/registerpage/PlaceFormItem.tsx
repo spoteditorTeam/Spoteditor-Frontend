@@ -1,5 +1,5 @@
 import { Textarea } from '@/components/ui/textarea';
-import { LogWriteFormData } from '@/pages/register/LogWritePage';
+import { LogWriteFormData } from '@/pages/Register/LogWritePage';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import useDrawerStore from '@/store/drawerStore';
 import { ChevronRight, Circle, CircleCheck, Clock, MapPin } from 'lucide-react';

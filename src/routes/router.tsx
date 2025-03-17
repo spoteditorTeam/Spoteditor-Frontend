@@ -1,9 +1,9 @@
 import MainLayout from '@/layouts/MainLayout';
 import RegisterLayout from '@/layouts/RegisterLayout';
-import DetailPage from '@/pages/detail/DetailPage';
-import PlacesCollectionPage from '@/pages/detail/PlacesCollectionPage';
+import DetailPage from '@/pages/Detail/DetailPage';
+import PlacesCollectionPage from '@/pages/Detail/PlacesCollectionPage';
 import NotFoundPage from '@/pages/Error/NotFoundPage';
-import HomePage from '@/pages/home/HomePage';
+import HomePage from '@/pages/Home/HomePage';
 import Notice from '@/pages/notice';
 import NoticeDetail from '@/pages/notice/notice-detail';
 import Profile from '@/pages/profile';
@@ -18,8 +18,8 @@ import {
   SearchPage,
   SelectPage,
   WritePage,
-} from '@/pages/register';
-import LogWritePage from '@/pages/register/LogWritePage';
+} from '@/pages/Register';
+import LogWritePage from '@/pages/Register/LogWritePage';
 import Search from '@/pages/search';
 import { createBrowserRouter } from 'react-router-dom';
 
