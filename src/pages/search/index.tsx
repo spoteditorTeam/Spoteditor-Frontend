@@ -1,7 +1,7 @@
 import mockImg3 from '@/assets/mock/3.png';
 import CustomPagination from '@/components/CustomPagination';
 import SectionHeader from '@/components/Header/SectionHeader';
-import LogCard from '@/components/LogCard/LogCard';
+import LogCard from '@/features/homepage/LogCard';
 import SearchTitleHeader from '@/features/search/SearchTitleHeader';
 import PageLayout from '@/layouts/PageLayout';
 import { cn } from '@/lib/utils';

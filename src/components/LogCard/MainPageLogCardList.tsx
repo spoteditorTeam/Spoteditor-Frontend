@@ -2,8 +2,8 @@ import MainPagination from '@/components/Pagination/MainPagination';
 import useLogList from '@/hooks/queries/log/useLogList';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import LogCard from '../../features/homepage/LogCard';
 import { Skeleton } from '../ui/skeleton';
-import LogCard from './LogCard';
 
 const MainPageLogCardList = () => {
   const [currentPage, setCurrentPage] = useState(1);

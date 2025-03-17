@@ -1,4 +1,4 @@
-import LogCard from '@/components/LogCard/LogCard';
+import LogCard from '@/features/homepage/LogCard';
 import useLog from '@/hooks/queries/log/useLog';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { X } from 'lucide-react';
