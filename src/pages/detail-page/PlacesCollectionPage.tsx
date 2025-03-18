@@ -1,4 +1,4 @@
-import LogCard from '@/components/LogCard/LogCard';
+import ModalLogCard from '@/components/LogCard/ModalLogCard';
 import useLog from '@/hooks/queries/log/useLog';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { X } from 'lucide-react';
@@ -19,7 +19,7 @@ const PlacesCollectionPage = () => {
 
       <div className="py-[18px] grid grid-cols-3 gap-x-[5px] gap-y-5">
         {places.map((place: PlaceInLog) => (
-          <LogCard key={place.placeId} place={place} vertical isModal />
+          <ModalLogCard key={place.placeId} place={place} placeLogId={Number(placeLogId)} />
         ))}
       </div>
     </div>
