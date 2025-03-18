@@ -6,7 +6,6 @@ const usePlaceBookMark = (placeLogId: number) => {
   return useQuery({
     queryKey: [...logKeys.bookMark(placeLogId)],
     queryFn: () => api.place.getPlaceBookMark(placeLogId),
-    staleTime: 0,
   });
 };
 
