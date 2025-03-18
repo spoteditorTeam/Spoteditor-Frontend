@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import LogCard from '@/features/home/LogCard';
+import LogCard from '@/features/home-page/LogCard';
 import OtherUserProfileSection from '@/features/profile/OtherUserProfileSection';
 import useDeleteLog from '@/hooks/mutations/log/useDeleteLogMutation';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
@@ -23,6 +23,7 @@ import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import PlaceItem from '@/pages/detail-page/components/PlaceItem';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
+import { copyUrlToClipboard } from '@/utils/copyUrlToClipboard';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { ArrowLeft, Bookmark, Share2, Trash2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -31,15 +32,14 @@ const DetailPage = () => {
   const navi = useNavigate();
   const { placeLogId } = useParams();
   const { isMobile } = useResponsive();
-
+  const NumericPlaceLogId = Number(placeLogId);
   /* query */
-  const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
-  const { data: LogBookmark, isPending: isLogBookmarkPending } = useLogBookMark(Number(placeLogId));
-  const { data: placeBookmark, isPending: isPlaceBookmarkPending } = usePlaceBookMark(
-    Number(placeLogId)
-  );
+  const { data: logData, isPending: isLogPending } = useLog(NumericPlaceLogId);
+  const { data: LogBookmark, isPending: isLogBookmarkPending } = useLogBookMark(NumericPlaceLogId);
+  const { data: placeBookmark, isPending: isPlaceBookmarkPending } =
+    usePlaceBookMark(NumericPlaceLogId);
   const { user, isLoading } = useUser();
-  const { mutate: deleteLog } = useDeleteLog(Number(placeLogId));
+  const { mutate: deleteLog } = useDeleteLog(NumericPlaceLogId);
   /* state */
   const isDataReady =
     isLogPending || isPlaceBookmarkPending || isLoading || isLogBookmarkPending || !user;
@@ -53,21 +53,13 @@ const DetailPage = () => {
   /* mutatation */
   const { mutate } = useLogBookmarkMutation({
     isBookMark: placebookmark,
-    placeLogId: Number(placeLogId),
+    placeLogId: NumericPlaceLogId,
   });
 
   /* handlers */
   const onClickLogBookmark = async () => mutate();
   const onClickBack = () => navi(-1);
-  const onClickShare = () => {
-    navigator.clipboard
-      .writeText(window.location.href)
-      .then(() => alert('URL이 클립보드에 복사되었습니다!'))
-      .catch((err) => {
-        alert('URL 복사에 실패했습니다.');
-        console.error('클립보드 복사 실패:', err);
-      });
-  };
+  const onClickShare = () => copyUrlToClipboard();
   // const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
   const onClickDelete = () => deleteLog();
 

@@ -60,6 +60,7 @@
 
 html {
   @apply font-pretendard;
+  scroll-behavior: smooth;
 }
 
 .section-heading {

@@ -3,8 +3,9 @@ import ArrowIcon from '@/components/Icons/ArrowIcon';
 import MainPageLogCardList from '@/components/LogCard/MainPageLogCardList';
 import { Button } from '@/components/ui/button';
 import { REGISTER_SELECT } from '@/constants/pathname';
-import MainHero from '@/features/home/MainHero';
-import TypingText from '@/features/home/TypingText';
+import MainHero from '@/features/home-page/MainHero';
+import TypingText from '@/features/home-page/TypingText';
+
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {

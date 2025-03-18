@@ -64,7 +64,7 @@ const PlaceItem = ({ place, idx, isBookMark }: PlaceItemProps) => {
         <Carousel className="my-[15px] web:my-0" opts={{ active: isMobile }}>
           <CarouselContent>
             {images.map((img: Image) => (
-              <CarouselItem className="flex-none web:basis-1/3" key={img.imageId}>
+              <CarouselItem className="flex-none" key={img.imageId}>
                 <ImageDialog
                   images={images}
                   triggerImg={getImgFromCloudFront(img.storedFile)}

@@ -1,8 +1,8 @@
 import MainPagination from '@/components/Pagination/MainPagination';
+import LogCard from '@/features/home-page/LogCard';
 import useLogList from '@/hooks/queries/log/useLogList';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import LogCard from '../../features/home/LogCard';
 import { Skeleton } from '../ui/skeleton';
 
 const MainPageLogCardList = () => {
