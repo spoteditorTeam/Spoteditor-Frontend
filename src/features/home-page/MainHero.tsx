@@ -2,6 +2,8 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import CourseButton from './CourseButton';
 import CitySearchForm from '../search/CitySearchForm/CitySearchForm';
+import { useCitySearchStore } from '@/store/searchStore';
+import useResponsive from '@/hooks/useResponsive';
 
 const categories: string[] = [
   '로.맨.틱 데이트 코스!',
@@ -14,22 +16,25 @@ const categories: string[] = [
 ];
 const MainHero = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const { isDropBox } = useCitySearchStore();
+  const { isWeb } = useResponsive();
 
   return (
-    <div className="bg-black px-4 py-[30px] gap-9 flex flex-col web:grid web:grid-cols-2 web:gap-[30px] web:px-[50px] web:py-10 relative">
-      <div className="flex flex-col justify-between web:justify-center">
-        <div className="text-white text-md font-medium web:text-xl pb-[25px]">
-          반가워요! <br />
-          Spoteditor는 "어디 가서 놀지?"
-          <br className="web:hidden" />
-          하고 고민하는
-          <br className="hidden web:block" />
-          여러분을 위해
-          <br className="web:hidden" />
-          만들어졌어요.
+    <>
+      <div className="z-20 bg-black px-4 py-[30px] gap-9 flex flex-col web:grid web:grid-cols-2 web:gap-[30px] web:px-[50px] web:py-10 relative">
+        <div className="flex flex-col justify-between web:justify-center">
+          <div className="text-white text-md font-medium web:text-xl pb-[25px]">
+            반가워요! <br />
+            Spoteditor는 "어디 가서 놀지?"
+            <br className="web:hidden" />
+            하고 고민하는
+            <br className="hidden web:block" />
+            여러분을 위해
+            <br className="web:hidden" />
+            만들어졌어요.
+          </div>
+          <CitySearchForm />
         </div>
-        <CitySearchForm />
-      </div>
 
       {/* 접히는 부분 */}
       {/* 위쪽 */}
@@ -67,6 +72,10 @@ const MainHero = () => {
         </div>
       </div>
     </div>
+      {isWeb && isDropBox && (
+        <div className="fill-black/50 backdrop-blur-[10px] w-screen h-screen fixed top-0 left-0 z-10" />
+      )}
+    </>
   );
 };
 
