@@ -4,7 +4,7 @@ import { HOME } from '@/constants/pathname';
 import { Link } from 'react-router-dom';
 const NotFoundPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-full grow">
+    <div className="flex flex-col items-center justify-center h-dvh grow">
       <img src={notFound} />
       <div className="flex flex-col mt-[50px] mb-5">
         <h4 className="text-text-xl font-bold">찾으시는 페이지를 찾을 수 없습니다.</h4>
