@@ -6,8 +6,8 @@ import { Textarea } from '@/components/ui/textarea';
 import LogCoverImgInput from '@/features/register-page/LogCoverImgInput';
 import LogWriteBar from '@/features/register-page/LogWriteBar';
 import PlaceFormItem from '@/features/register-page/PlaceFormItem';
+import useCreateLogMutation from '@/hooks/mutations/log/useCreateLogMutation';
 import { cn } from '@/lib/utils';
-import api from '@/services/apis/api';
 import { Log, PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
 import { LogWriteFormSchema } from '@/services/schemas/logSchema';
 import { useRegisterStore } from '@/store/registerStore';
@@ -15,7 +15,6 @@ import { formatAddress } from '@/utils/formatLogForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleX } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 export interface LogWriteFormData {
   title: string;
@@ -25,7 +24,6 @@ export interface LogWriteFormData {
 }
 
 const LogWritePage = () => {
-  const navi = useNavigate();
   const form = useForm<LogWriteFormData>({
     resolver: zodResolver(LogWriteFormSchema),
     mode: 'onBlur',
@@ -36,6 +34,7 @@ const LogWritePage = () => {
       places: [],
     },
   });
+  const { mutateAsync: logCreateMuatation } = useCreateLogMutation();
 
   /* states */
   const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
@@ -67,11 +66,8 @@ const LogWritePage = () => {
   const onSubmit = async (values: LogWriteFormData) => {
     const formatedLog = formatLog(values);
     if (!formatedLog) return;
-    const result = await api.register.createLog(formatedLog);
-    if (result) {
-      resetSelectedPlaces();
-      navi(`/log/${result.placeLogId}`, { replace: true });
-    }
+    const { status } = await logCreateMuatation(formatedLog);
+    if (status === 201) resetSelectedPlaces();
   };
 
   return (
