@@ -36,7 +36,7 @@ const LogCard = memo(({ isLarge, vertical, log }: LogCardProps) => {
       className={cn('h-full gap-1.5', isLarge ? 'flex flex-col' : 'grid grid-rows-[auto_1fr]')}
       onClick={handleCardClick}
     >
-      {/* 이미지 */}
+      {/* 이미지 - 그룹 */}
       <div className={cn('relative grow group cursor-pointer')}>
         <img
           src={getImgFromCloudFront(log?.image.storedFile ?? '')}
@@ -47,12 +47,13 @@ const LogCard = memo(({ isLarge, vertical, log }: LogCardProps) => {
             vertical && isMobile && 'max-w-xs mx-auto'
           )}
         />
-        <div className="absolute inset-0 card-id-gradient"></div>
-        <div className="absolute inset-0 hover:bg-black/25 transition-colors"></div>
+        <div className="absolute inset-0 card-id-gradient" />
+        <div className="absolute inset-0 group-hover:bg-black/25 transition-colors" />
         <span className="flex items-center gap-1 p-2.5 text-white text-text-2xs font-semibold absolute bottom-0">
           {log?.author}
         </span>
 
+        {/* 북마크 */}
         <div
           onClick={handleBookmarkClick}
           className="bg-white absolute top-4 right-4 p-[11px] opacity-0 group-hover:opacity-100 group/bookmark"

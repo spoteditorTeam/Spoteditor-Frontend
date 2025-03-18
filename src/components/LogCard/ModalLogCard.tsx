@@ -34,7 +34,7 @@ const ModalLogCard = memo(({ place, isPlaceBookMark, placeLogId }: ModalLogCard)
           className={cn('object-cover w-full aspect-[3/4]', isMobile && 'max-w-xs mx-auto')}
         />
         <div className="absolute inset-0 card-id-gradient"></div>
-        <div className="absolute inset-0 hover:bg-black/25 transition-colors"></div>
+        <div className="absolute inset-0 group-hover:bg-black/25 transition-colors"></div>
 
         <div
           onClick={handleBookmarkClick}
