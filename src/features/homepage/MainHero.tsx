@@ -20,21 +20,21 @@ const MainHero = () => {
   const { isWeb } = useResponsive();
 
   return (
-      <div className="flex flex-col justify-between web:justify-center">
-        <div className="text-white text-md font-medium web:text-xl pb-[25px]">
-          반가워요! <br />
-          Spoteditor는 "어디 가서 놀지?"
-          <br className="web:hidden" />
-          하고 고민하는
-          <br className="hidden web:block" />
-          여러분을 위해
-          <br className="web:hidden" />
-          만들어졌어요.
     <>
       <div className="z-20 bg-black px-4 py-[30px] gap-9 flex flex-col web:grid web:grid-cols-2 web:gap-[30px] web:px-[50px] web:py-10 relative">
+        <div className="flex flex-col justify-between web:justify-center">
+          <div className="text-white text-md font-medium web:text-xl pb-[25px]">
+            반가워요! <br />
+            Spoteditor는 "어디 가서 놀지?"
+            <br className="web:hidden" />
+            하고 고민하는
+            <br className="hidden web:block" />
+            여러분을 위해
+            <br className="web:hidden" />
+            만들어졌어요.
+          </div>
+          <CitySearchForm />
         </div>
-        <CitySearchForm />
-      </div>
 
       {/* 접히는 부분 */}
       {/* 위쪽 */}
