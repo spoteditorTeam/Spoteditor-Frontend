@@ -63,7 +63,7 @@ const MainCarousel = () => {
               ))
             : content?.map((log: LogContent) => (
                 <CarouselItem className="flex-none basis-1/1.5 web:basis-1/4" key={log.placeLogId}>
-                  <LogCard vertical log={log} placeLogId={log.placeLogId} />
+                  <LogCard vertical log={log} />
                 </CarouselItem>
               ))}
         </CarouselContent>

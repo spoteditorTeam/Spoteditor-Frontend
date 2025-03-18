@@ -8,22 +8,21 @@ import { Bookmark, Loader2 } from 'lucide-react';
 import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 type LogCardProps = {
-  isLarge?: boolean;
-  vertical?: boolean;
+  isLarge?: boolean; // latest의 3번째 이미지
+  vertical?: boolean; // popularity 세로형 vs latest 가로형
   log?: LogContent;
   place?: PlaceInLog;
   isModal?: boolean;
-  placeLogId?: number;
 };
 
-const LogCard = memo(({ isLarge, vertical, log, place, isModal, placeLogId }: LogCardProps) => {
+const LogCard = memo(({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
   const navi = useNavigate();
-  const { data, isPending } = useLogBookMark(Number(placeLogId));
+  const { data, isPending } = useLogBookMark(Number(log?.placeLogId));
   const isBookmarked = data?.isBookmarked;
 
   const { mutate } = useLogBookmarkMutation({
     isBookMark: data?.isBookmarked,
-    placeLogId: Number(placeLogId),
+    placeLogId: Number(log?.placeLogId),
   });
 
   const handleCardClick = () => {
