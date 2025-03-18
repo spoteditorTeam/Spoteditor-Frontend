@@ -1,9 +1,9 @@
 import MainCarousel from '@/components/Carousel/MainCarousel';
-import ArrowIcon from '@/components/Icons/ArrowIcon';
 import { Button } from '@/components/ui/button';
 import { REGISTER_SELECT } from '@/constants/pathname';
 import MainHero from '@/features/home-page/MainHero';
 import TypingText from '@/features/home-page/TypingText';
+import { MoveUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import MainPageLogCardList from '../detail-page/components/MainPageLogCardList';
 
@@ -40,9 +40,13 @@ const HomePage = () => {
               >
                 나의 추천 코스 등록하기
               </Button>
-              <div className="flex items-center justify-center w-10 h-10 bg-black rounded-full">
-                <ArrowIcon />
-              </div>
+              <Button
+                fullRounded
+                onClick={handleGotoRegisterPage}
+                className="h-full aspect-square p-0"
+              >
+                <MoveUpRight strokeWidth={3} />
+              </Button>
             </div>
           </div>
 
