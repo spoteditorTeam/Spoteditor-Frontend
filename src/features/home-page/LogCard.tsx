@@ -1,8 +1,11 @@
+import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
+import useLogBookMark from '@/hooks/queries/log/useLogBookMark';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import { LogContent, PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
-import { Bookmark } from 'lucide-react';
+import { Bookmark, Loader2 } from 'lucide-react';
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 type LogCardProps = {
   isLarge?: boolean;
@@ -10,14 +13,28 @@ type LogCardProps = {
   log?: LogContent;
   place?: PlaceInLog;
   isModal?: boolean;
+  placeLogId?: number;
 };
 
-const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
+const LogCard = memo(({ isLarge, vertical, log, place, isModal, placeLogId }: LogCardProps) => {
   const navi = useNavigate();
+  const { data, isPending } = useLogBookMark(Number(placeLogId));
+  const isBookmarked = data?.isBookmarked;
+
+  const { mutate } = useLogBookmarkMutation({
+    isBookMark: data?.isBookmarked,
+    placeLogId: Number(placeLogId),
+  });
+
   const handleCardClick = () => {
     if (!isModal) navi(`/log/${log?.placeLogId}`);
   };
   const { isMobile } = useResponsive();
+  const handleBookmarkClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    mutate();
+  };
+
   return (
     <div
       className={cn('h-full gap-1.5', isLarge ? 'flex flex-col' : 'grid grid-rows-[auto_1fr]')}
@@ -43,15 +60,25 @@ const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
         )}
 
         <div
+          onClick={handleBookmarkClick}
           className={cn(
             'bg-white absolute top-4 right-4 p-[11px] opacity-0 group-hover:opacity-100 group/bookmark',
             isModal && 'top-1 right-1'
           )}
         >
-          <Bookmark className="group-hover/bookmark:stroke-primary-400" />
+          {isPending ? (
+            <Loader2 className="animate-spin text-gray-400" size={20} />
+          ) : (
+            <Bookmark
+              className={cn(
+                'group-hover/bookmark:text-primary-400',
+                isBookmarked && 'fill-black stroke-black'
+              )}
+              size={20}
+            />
+          )}
         </div>
       </div>
-
       {/* 설명 */}
       <div className="text-text-sm web:text-text-md">
         <h5 className="font-bold">{log?.name || place?.name} </h5>
@@ -62,6 +89,6 @@ const LogCard = ({ isLarge, vertical, log, place, isModal }: LogCardProps) => {
       </div>
     </div>
   );
-};
+});
 
 export default LogCard;

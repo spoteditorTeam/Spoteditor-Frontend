@@ -20,6 +20,10 @@ const MainCarousel = () => {
     setProgress(newProgress);
   }, [api]);
 
+  const handleSetApi = useCallback((carouselApi: CarouselApi | null) => {
+    setApi(carouselApi);
+  }, []);
+
   useEffect(() => {
     if (!api) return;
     const onScroll = () => requestAnimationFrame(updateProgress);
@@ -48,7 +52,7 @@ const MainCarousel = () => {
         opts={{
           slidesToScroll: 4,
         }}
-        setApi={setApi}
+        setApi={handleSetApi}
       >
         <CarouselContent className="flex">
           {isDataReady
@@ -59,7 +63,7 @@ const MainCarousel = () => {
               ))
             : content?.map((log: LogContent) => (
                 <CarouselItem className="flex-none basis-1/1.5 web:basis-1/4" key={log.placeLogId}>
-                  <LogCard vertical log={log} />
+                  <LogCard vertical log={log} placeLogId={log.placeLogId} />
                 </CarouselItem>
               ))}
         </CarouselContent>
