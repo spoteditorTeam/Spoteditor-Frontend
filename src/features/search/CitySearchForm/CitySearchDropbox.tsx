@@ -2,46 +2,14 @@ import XIcon from '@/components/Icons/XIcon';
 import { useCitySearchStore } from '@/store/searchStore';
 import CitySearchButton from './CitySearchButton';
 import { cityCategories } from '@/services/data/cityData';
-import useKakaoAddressName from '@/hooks/useKakaoAddressName';
-import useLocationToAddress from '@/hooks/useLocationToAddress';
 import BnameButtonList from './BnameButtonList';
-import { useEffect, useState } from 'react';
 
 export default function CitySearchDropbox() {
-  const { sido, bname, setSido, setBname, closeDropBox, setRealBname, resetCityState } =
-    useCitySearchStore();
-  const { coordinates } = useKakaoAddressName(bname);
-  const [validCoordinates, setValidCoordinates] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
-
-  // coordinates가 유효한 값이 있을 때만 업데이트
-  useEffect(() => {
-    if (coordinates?.latitude && coordinates?.longitude) {
-      setValidCoordinates(coordinates);
-    }
-  }, [coordinates]);
-
-  // 좌표가 설정된 경우에만 주소 검색 실행
-  const { address } = useLocationToAddress(
-    validCoordinates?.latitude ?? null,
-    validCoordinates?.longitude ?? null
-  );
-
-  useEffect(() => {
-    if (address?.region_2depth_name) {
-      setRealBname(address.region_2depth_name);
-
-      // 상태 초기화를 지연하여 setRealBname()이 먼저 실행되도록 함
-      setTimeout(() => {
-        resetCityState();
-      }, 100);
-    }
-  }, [address]);
+  const { sido, bname, setSido, setBname, closeDropBox } = useCitySearchStore();
 
   const onSidoClick = (sido: string) => {
     setSido(sido);
+    setBname('');
   };
 
   const onBnameClick = (bname: string) => {
