@@ -16,15 +16,17 @@ const MainCarousel = () => {
 
   const updateProgress = useCallback(() => {
     if (!api) return;
-    const newProgress = api.scrollProgress() * 100;
+    const newProgress = api.scrollProgress();
     setProgress(newProgress);
   }, [api]);
 
   useEffect(() => {
     if (!api) return;
-    api.on('scroll', updateProgress);
+    const onScroll = () => requestAnimationFrame(updateProgress);
+    api.on('scroll', onScroll);
+
     return () => {
-      api.off('scroll', updateProgress);
+      api.off('scroll', onScroll);
     };
   }, [api, updateProgress]);
 
@@ -33,9 +35,10 @@ const MainCarousel = () => {
       <div className="w-full flex justify-end relative bottom-[50px]">
         <div className="w-20 h-1 bg-primary-200">
           <div
-            className="h-full bg-black transition-all duration-300 ease-out"
+            className="h-full bg-black transition-transform duration-300 ease-out"
             style={{
-              width: ` ${progress}%`,
+              transform: `scaleX(${progress})`,
+              transformOrigin: 'left',
             }}
           />
         </div>
