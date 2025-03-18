@@ -1,6 +1,6 @@
 import CustomPagination from '@/components/CustomPagination';
 import SectionHeader from '@/components/Header/SectionHeader';
-import LogCard from '@/features/home-page/LogCard';
+import LogCard from '@/components/LogCard/LogCard';
 import SearchNotFound from '@/features/search/SearchNotFound';
 import SearchTitleHeader from '@/features/search/SearchTitleHeader';
 import useSearchAddresLog from '@/hooks/queries/searchLog/useSearchAddresLog';

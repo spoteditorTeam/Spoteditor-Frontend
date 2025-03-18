@@ -1,5 +1,6 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import { SpotIcon, TableIcon } from '@/components/Icons';
+import ModalLogCard from '@/components/LogCard/ModalLogCard';
 import LogCoverSkeleton from '@/components/Skeleton/LogCoverSkeleton';
 import PlaceItemSkeleton from '@/components/Skeleton/PlaceItemSkeleton';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import LogCard from '@/features/home-page/LogCard';
 import OtherUserProfileSection from '@/features/profile/OtherUserProfileSection';
 import useDeleteLog from '@/hooks/mutations/log/useDeleteLogMutation';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
@@ -193,8 +193,13 @@ const DetailPage = () => {
               </DialogHeader>
 
               <div className="grid grid-cols-3 gap-x-[5px] gap-y-5 w-full h-[680px] overflow-y-auto scrollbar-hide py-[18px]">
-                {places.map((place: PlaceInLog) => (
-                  <LogCard key={place.placeId} place={place} vertical isModal />
+                {places.map((place: PlaceInLog, idx) => (
+                  <ModalLogCard
+                    key={place.placeId}
+                    place={place}
+                    isPlaceBookMark={placeBookmark?.[idx]?.isBookmarked as boolean}
+                    placeLogId={Number(logData?.placeLogId)}
+                  />
                 ))}
               </div>
             </DialogContent>
