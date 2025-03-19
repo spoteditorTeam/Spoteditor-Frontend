@@ -22,8 +22,9 @@ export default function ProfileFollowingButton({
   const { mutate: unMutate } = useUnfollowMutation();
 
   const userId = otherUserId;
+  console.log('userData?.isFollowing', userData?.isFollowing);
 
-  const mutate = userData?.isFollowing ? unMutate : onMutate;
+  const mutate = userData && userData?.isFollowing ? unMutate : onMutate;
   const onFollowClick = () => {
     mutate(userId);
   };
@@ -31,12 +32,12 @@ export default function ProfileFollowingButton({
   return (
     <Button
       onClick={onFollowClick}
-      variant={userData?.isFollowing ? 'ghost' : 'outline'}
+      variant={userData && userData?.isFollowing ? 'ghost' : 'outline'}
       size="s"
       className="font-medium"
       fullRounded
     >
-      {userData?.isFollowing ? '팔로잉' : '팔로워'}
+      {userData && userData?.isFollowing ? '팔로잉' : '팔로워'}
     </Button>
   );
 }

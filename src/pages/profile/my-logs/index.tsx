@@ -44,8 +44,8 @@ function MyLogs() {
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.content?.map((log) => (
-              <Link to={`/log/${log.placeLogId}`}>
-                <MotionCard key={log.placeLogId}>
+              <Link key={log.placeLogId} to={`/log/${log.placeLogId}`}>
+                <MotionCard>
                   <PostCardImage
                     lable
                     author={log.author}
