@@ -6,4 +6,5 @@ export const logKeys = {
   detail: (placeLogId: number) => [...logKeys.all, 'detail', placeLogId] as const,
   bookMark: (placeLogId: number) => [...logKeys.detail(placeLogId), 'bookmark', 'place'] as const,
   logBookMark: (placeLogId: number) => [...logKeys.detail(placeLogId), 'bookmark', 'log'] as const,
+  placeBookMarkCheck: (placeId: number) => [...logKeys.all, 'bookmark', 'check', placeId] as const,
 };
