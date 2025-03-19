@@ -5,28 +5,18 @@ import useOtherUser from '@/hooks/queries/user/useOtherUser';
 
 interface ProfileFollowingButtonProps {
   otherUserId: number;
-  otherUserName: string;
-  otherUserImage: string;
 }
 
-export default function ProfileFollowingButton({
-  otherUserId,
-  otherUserName,
-  otherUserImage,
-}: ProfileFollowingButtonProps) {
+export default function ProfileFollowingButton({ otherUserId }: ProfileFollowingButtonProps) {
   const { data: userData } = useOtherUser(otherUserId);
-  const { mutate: onMutate } = useFollowingMutation({
-    otherUserName,
-    otherUserImage,
-  });
-  const { mutate: unMutate } = useUnfollowMutation();
-
-  const userId = otherUserId;
-  console.log('userData?.isFollowing', userData?.isFollowing);
+  const { mutate: onMutate, status: onStatus } = useFollowingMutation();
+  const { mutate: unMutate, status: unStatus } = useUnfollowMutation();
 
   const mutate = userData && userData?.isFollowing ? unMutate : onMutate;
+  const status = onStatus || unStatus;
   const onFollowClick = () => {
-    mutate(userId);
+    if (status === 'pending') return;
+    mutate(otherUserId);
   };
 
   return (

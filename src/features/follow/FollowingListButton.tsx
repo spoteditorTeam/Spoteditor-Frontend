@@ -114,11 +114,7 @@ export default function FollowingListButton({
                       </DialogClose>
                       {isMe && (
                         <div className="z-20">
-                          <ProfileFollowingButton
-                            otherUserId={following.userId}
-                            otherUserName={following.name}
-                            otherUserImage={following.imageUrl}
-                          />
+                          <ProfileFollowingButton otherUserId={following.userId} />
                         </div>
                       )}
                     </div>
