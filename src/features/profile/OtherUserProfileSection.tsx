@@ -27,7 +27,7 @@ export default function OtherUserProfileSection({ userId }: OtherUserProfileSect
           <SubtractIcon />
         </div>
       </Link>
-      {!isMe && (
+      {userData && userData?.userId && !isMe && (
         <LogFollowingButton
           otherUserId={userId}
           isFollowing={Boolean(otherUserData?.isFollowing)}

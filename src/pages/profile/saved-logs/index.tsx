@@ -14,9 +14,7 @@ import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import NotProfileData from '../NotProfileData';
-import { Button } from '@/components/ui/button';
-import { Bookmark } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import SaveLogBookMarkButton from '@/features/profile/profileBookMark/SaveLogBookMarkButton';
 
 function SavedLogs() {
   const { user } = useUser();
@@ -39,6 +37,7 @@ function SavedLogs() {
 
   const data = isMySaveLogs ? mySaveLogsData : otherSaveLogsData;
   const isPending = isMySaveLogs ? isMySaveLogsPending : isOtherSaveLogsPending;
+
   return (
     <>
       {isPending ? (
@@ -47,26 +46,22 @@ function SavedLogs() {
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.content.map((log) => (
-              <article key={log.placeLogId} className="relative">
+              <MotionCard key={log.placeLogId} className="relative">
                 <Link to={`/log/${log.placeLogId}`}>
-                  <MotionCard>
-                    <PostCardImage
-                      lable
-                      author={log.author}
-                      imageUrl={getImgFromCloudFront(log.image.storedFile)}
-                    />
-                    <PostCardTitle title={log.name} />
-                    <PostCardLocation
-                      sido={log.address.sido}
-                      bname={log.address.bname}
-                      sigungu={log.address.sigungu}
-                    />
-                  </MotionCard>
+                  <PostCardImage
+                    lable
+                    author={log.author}
+                    imageUrl={getImgFromCloudFront(log.image.storedFile)}
+                  />
+                  <PostCardTitle title={log.name} />
+                  <PostCardLocation
+                    sido={log.address.sido}
+                    bname={log.address.bname}
+                    sigungu={log.address.sigungu}
+                  />
                 </Link>
-                <button className="w-[42px] h-[42px] bg-white flex p-[6px] justify-center items-center absolute top-[15px] right-[15px]">
-                  <Bookmark className={cn('w-5 h-5', 'fill-black')} />
-                </button>
-              </article>
+                {user && <SaveLogBookMarkButton placeLogId={log.placeLogId} />}
+              </MotionCard>
             ))}
           </PostCardWrapper>
           <section className="mt-[50px]">

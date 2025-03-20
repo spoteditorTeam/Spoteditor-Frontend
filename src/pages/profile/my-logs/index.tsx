@@ -13,6 +13,7 @@ import useUserLogs from '@/hooks/queries/userLog/useUserLogs';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import NotProfileData from '../NotProfileData';
+import SaveLogBookMarkButton from '@/features/profile/profileBookMark/SaveLogBookMarkButton';
 
 function MyLogs() {
   const { user } = useUser();
@@ -44,8 +45,8 @@ function MyLogs() {
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.content?.map((log) => (
-              <Link key={log.placeLogId} to={`/log/${log.placeLogId}`}>
-                <MotionCard>
+              <MotionCard key={log.placeLogId} className="relative">
+                <Link to={`/log/${log.placeLogId}`}>
                   <PostCardImage
                     lable
                     author={log.author}
@@ -57,8 +58,11 @@ function MyLogs() {
                     bname={log.address.bname}
                     sigungu={log.address.sigungu}
                   />
-                </MotionCard>
-              </Link>
+                </Link>
+                {user && user?.userId !== Number(userId) && (
+                  <SaveLogBookMarkButton placeLogId={log.placeLogId} />
+                )}
+              </MotionCard>
             ))}
           </PostCardWrapper>
           <section className="mt-[50px]">

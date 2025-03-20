@@ -38,11 +38,6 @@ function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProp
         </div>
       )}
       <div className="absolute inset-0 transition-colors hover:bg-black/25" />
-      {Number(userId) !== user?.userId && (
-        <div className="bg-white absolute top-[15px] right-[15px] p-[11px] z-20">
-          <Bookmark />
-        </div>
-      )}
     </div>
   );
 }
