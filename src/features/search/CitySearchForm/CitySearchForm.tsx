@@ -15,7 +15,7 @@ import { useCitySearchStore } from '@/store/searchStore';
 
 function CitySearchForm() {
   const nav = useNavigate();
-  const { permission, position, setOpen } = useGeolocationPermission();
+  const { permission, position, setOpen, checkPermission } = useGeolocationPermission();
   const { address } = useLocationToAddress(position?.latitude ?? null, position?.longitude ?? null);
   const { isDropBox, sido, bname, openDropBox, closeDropBox } = useCitySearchStore();
 
@@ -42,7 +42,8 @@ function CitySearchForm() {
     }
   }, [sido, bname, form]);
 
-  const onSearchSubmit = ({ sido, bname }: z.infer<typeof citySearchSchema>) => {
+  const onSearchSubmit = async ({ sido, bname }: z.infer<typeof citySearchSchema>) => {
+    await checkPermission();
     if (permission === 'prompt') {
       setOpen(true);
       return;

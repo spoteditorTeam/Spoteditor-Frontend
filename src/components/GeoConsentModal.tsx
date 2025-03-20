@@ -70,7 +70,11 @@ export default function GeoConsentModal() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex flex-row items-center gap-2 py-5">
-            <Button variant="outline" className="flex-1 font-semibold">
+            <Button
+              onClick={() => setOpen(false)}
+              variant="outline"
+              className="flex-1 font-semibold"
+            >
               거절
             </Button>
             <Button className="font-semibold web:flex-1" onClick={requestLocation}>
