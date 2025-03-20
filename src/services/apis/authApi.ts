@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/store/loginStore';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -59,6 +60,10 @@ class AuthClient {
           } catch (err) {
             console.error('RefreshToken도 만료 → 로그아웃 필요');
             this.refreshFailed = true; // RefreshToken 만료 상태 설정 (1분 동안 재시도 안 함)
+
+            /* 쥬스탄드 상태 업데이트 (로그아웃) */
+            useAuthStore.getState().logout();
+
             return Promise.reject(err);
           }
         }
@@ -82,6 +87,9 @@ class AuthClient {
       this.refreshFailed = false;
       this.lastRefreshAttempt = 0;
 
+      //쥬스탄드 상태 업데이트 (로그아웃)
+      await useAuthStore.getState().logout();
+
       return res.data;
     } catch (error) {
       console.error('로그아웃 실패:', error);
@@ -93,3 +101,12 @@ class AuthClient {
 export const authClient = new AuthClient(`${API_BASE_URL}/api`);
 export const currentAuth = authClient.getInstance();
 export const logoutAuth = () => authClient.logoutUser();
+/* 로그인여부 판별 상태관리용 함스 */
+export const checkAuthStatus = async () => {
+  try {
+    await authClient.getInstance().post('/auth/refresh');
+    return true;
+  } catch {
+    return false;
+  }
+};
