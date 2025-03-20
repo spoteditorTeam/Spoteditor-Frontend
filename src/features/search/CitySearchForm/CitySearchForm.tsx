@@ -1,7 +1,7 @@
 import GeoConsentModal from '@/components/GeoConsentModal';
 import { Button } from '@/components/ui/button';
 import useGeolocationPermission from '@/hooks/useGeolocationPermission';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import CitySearchDropbox from './CitySearchDropbox';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,9 +14,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCitySearchStore } from '@/store/searchStore';
 
 function CitySearchForm() {
-  const [open, setOpen] = useState(false);
   const nav = useNavigate();
-  const { permission, position } = useGeolocationPermission();
+  const { permission, position, setOpen } = useGeolocationPermission();
   const { address } = useLocationToAddress(position?.latitude ?? null, position?.longitude ?? null);
   const { isDropBox, sido, bname, openDropBox, closeDropBox } = useCitySearchStore();
 
@@ -46,6 +45,7 @@ function CitySearchForm() {
   const onSearchSubmit = ({ sido, bname }: z.infer<typeof citySearchSchema>) => {
     if (permission === 'prompt') {
       setOpen(true);
+      return;
     }
     /* 추후 모달창 닫혔을 경우 검색할 수 있는 기능 추가 */
     nav('/search', {
@@ -117,7 +117,7 @@ function CitySearchForm() {
           {isDropBox ? <CitySearchDropbox /> : null}
         </form>
       </Form>
-      {open ? <GeoConsentModal /> : null}
+      <GeoConsentModal />
     </>
   );
 }
