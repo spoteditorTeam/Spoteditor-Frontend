@@ -35,10 +35,12 @@ const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) =>
     form.trigger(`places.${placeName}.newPhotos`);
   }, [presignedUrlObjs, form, placeName]);
 
-  const handleRemove = (previewIdx: number, isNew: boolean) => {
-    handleRemoveImage(previewIdx, isNew);
-    console.log(removedImageIds);
-  };
+  const handleRemove = (previewIdx: number, isNew: boolean) => handleRemoveImage(previewIdx, isNew);
+
+  useEffect(() => {
+    form.setValue(`places.${placeName}.deleteImageIds`, removedImageIds, { shouldDirty: true });
+  }, [removedImageIds]); // removedImageIds가 변경될 때마다 실행
+
   // const handleRemove = (previewIdx: number, isNew: boolean) => console.log(previewIdx, isNew);
 
   return (

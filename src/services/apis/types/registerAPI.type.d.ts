@@ -79,10 +79,10 @@ export type UpdateRequest = {
   deletePlaceIds?: number[];
   addPlaces?: Place[];
   updatePlaces?: {
-    id: number;
-    description: string;
-    deleteImageIds: number[];
-    originalFiles: string[];
-    uuids: string[];
+    id?: number;
+    description?: string;
+    deleteImageIds?: number[];
+    originalFiles?: string[];
+    uuids?: string[];
   }[];
 };

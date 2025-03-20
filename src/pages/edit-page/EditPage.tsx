@@ -29,6 +29,7 @@ export interface PlaceItem {
   placeDescription?: string;
   photos?: Image[]; // 이미지 관련 정보를 객체로 관리
   newPhotos?: PresignUrlResponse[];
+  deleteImageIds?: number[];
 }
 
 const EditPage = () => {
@@ -51,6 +52,7 @@ const EditPage = () => {
           placeDescription: '',
           photos: [],
           newPhotos: [],
+          deleteImageIds: [],
         },
       },
     },
@@ -67,6 +69,7 @@ const EditPage = () => {
             placeDescription: item.description || '',
             photos: item.images,
             newPhotos: [],
+            deleteImageIds: [],
           };
           return acc;
         }, {} as { [placeId: string]: PlaceItem })
@@ -76,9 +79,7 @@ const EditPage = () => {
 
   const onSubmit = async (values: FieldValues) => {
     const { dirtyFields } = form.formState;
-    console.log(values);
     const numbericPlaceLogId = Number(placeLogId);
-    console.log();
 
     const updateData: UpdateRequest = {};
 
@@ -94,21 +95,22 @@ const EditPage = () => {
       updateData.uuid = newCover?.uuid;
     }
     if (dirtyFields.places) {
-      const updatedPlaces = Object.entries(values.places)
-        .map(([placeName, placeData]: [string, PlaceItem]) => {
-          if (dirtyFields.places[placeName]) {
-            const place = {
-              id: placeData.placeId, // 해당 장소의 ID
-              description: placeData.placeDescription, // 장소 설명
-              // deleteImageIds: placeData.deletedImageIds || [], // 삭제된 이미지 아이디들 (있다면)
-              // originalFiles: placeData.newFiles || [], // 새로운 파일들
-              // uuids: placeData.presignedUrls || [], // presigned URL들
-            };
-            return place;
-          }
-          return null;
-        })
-        .filter((place) => place !== null);
+      console.log(dirtyFields.places);
+      const changedPlaces = Object.keys(dirtyFields.places).reduce((acc, placeName) => {
+        acc[placeName] = {
+          name: placeName,
+          ...values.places[placeName],
+        };
+        return acc;
+      }, {} as { [placeName: string]: PlaceItem });
+
+      const updatedPlaces = Object.values(changedPlaces).map((place) => ({
+        id: place.placeId, // 해당 장소의 ID
+        description: place.placeDescription, // 장소 설명
+        deleteImageIds: place.deleteImageIds || [], // 삭제된 이미지 아이디들 (있다면)
+        // originalFiles: place.newFiles || [], // 새로운 파일들
+        // uuids: place.presignedUrls || [], // presigned URL들
+      }));
 
       if (updatedPlaces.length > 0) updateData.updatePlaces = updatedPlaces;
     }
@@ -116,16 +118,16 @@ const EditPage = () => {
     console.log(updateData);
 
     // updateData에 데이터가 있으면 한 번에 API 호출
-    // if (Object.keys(updateData).length > 0) {
-    //   try {
-    //     await mutate({
-    //       placeLogId: numbericPlaceLogId,
-    //       data: updateData,
-    //     });
-    //   } catch (error) {
-    //     console.error('수정 중 오류 발생:', error);
-    //   }
-    // }
+    if (Object.keys(updateData).length > 0) {
+      try {
+        await mutate({
+          placeLogId: numbericPlaceLogId,
+          data: updateData,
+        });
+      } catch (error) {
+        console.error('수정 중 오류 발생:', error);
+      }
+    }
   };
   return (
     <div className="h-full flex flex-col">
@@ -198,7 +200,6 @@ const EditPage = () => {
       <Button
         onClick={() => {
           console.log(form.watch());
-          console.log(form.formState.dirtyFields);
           console.log(form.formState.errors);
         }}
       >
