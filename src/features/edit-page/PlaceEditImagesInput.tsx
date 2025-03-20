@@ -2,38 +2,44 @@ import { CameraIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useImages from '@/hooks/useImages';
-import { LogEditFormData } from '@/pages/register-page/EditPage';
-import { Image } from '@/services/apis/types/registerAPI.type';
+import { LogEditFormData } from '@/pages/edit-page/EditPage';
 import { CircleX } from 'lucide-react';
-import { useEffect, useRef } from 'react';
-import {
-  Control,
-  Controller,
-  useController,
-  UseFormSetValue,
-  UseFormTrigger,
-} from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { Controller, Path, useController, UseFormReturn } from 'react-hook-form';
+
 interface PlaceEditImagesInputProps {
-  control: Control<LogEditFormData>;
-  defaultplaceImgs?: Image[];
-  setValue: UseFormSetValue<LogEditFormData>;
-  idx: number;
-  trigger: UseFormTrigger<LogEditFormData>;
+  form: UseFormReturn<LogEditFormData>;
+  placeName: string;
 }
 
-const PlaceEditImagesInput = ({ control, setValue, idx, trigger }: PlaceEditImagesInputProps) => {
-  const { field } = useController({ name: `places.${idx}.photos`, control });
+const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const { imagePreviews, handleFileChange, handleRemoveImage, isUploading, presignedUrlObjs } =
-    useImages(field.value as Image[]);
+  const { field } = useController({ name: `places.${placeName}.photos` }); // 기존 이미지들 (Image)
+  const [photos, setPhotos] = useState(field.value || []);
 
   useEffect(() => {
-    if (presignedUrlObjs) {
-      setValue(`places.${idx}.photos`, presignedUrlObjs);
-      trigger(`places.${idx}.photos`);
-    }
-  }, [presignedUrlObjs, setValue, idx, trigger]);
+    if (field.value) setPhotos(field.value);
+  }, [field.value]);
+
+  const {
+    imagePreviews,
+    handleFileChange,
+    handleRemoveImage,
+    isUploading,
+    presignedUrlObjs,
+    removedImageIds, // 삭제된 기존 이미지 ID 리스트
+  } = useImages(photos);
+
+  useEffect(() => {
+    form.setValue(`places.${placeName}.newPhotos`, presignedUrlObjs, { shouldValidate: true });
+    form.trigger(`places.${placeName}.newPhotos`);
+  }, [presignedUrlObjs, form, placeName]);
+
+  const handleRemove = (previewIdx: number, isNew: boolean) => {
+    handleRemoveImage(previewIdx, isNew);
+    console.log(removedImageIds);
+  };
+  // const handleRemove = (previewIdx: number, isNew: boolean) => console.log(previewIdx, isNew);
 
   return (
     <>
@@ -50,8 +56,8 @@ const PlaceEditImagesInput = ({ control, setValue, idx, trigger }: PlaceEditImag
       </Button>
 
       <Controller
-        name={`places.${idx}.photos`}
-        control={control}
+        name={`places.${placeName}.photos` as Path<LogEditFormData>}
+        control={form.control}
         render={({ field }) => (
           <div className="flex overflow-x-auto mb-2.5">
             {/* 기존 이미지 */}
@@ -59,15 +65,13 @@ const PlaceEditImagesInput = ({ control, setValue, idx, trigger }: PlaceEditImag
               <div className="relative m-1 shrink-0" key={previewIdx}>
                 <Input
                   type="image"
-                  src={previewURL}
+                  src={previewURL.previewUrl}
                   alt="장소 이미지"
-                  className="h-[300px] object-cover p-0 "
+                  className="h-[300px] object-cover p-0"
                 />
                 <CircleX
-                  className="stroke-primary-300 fill-slate-100 stroke-1 absolute top-2 right-2  cursor-pointer hover:fill-slate-50/50"
-                  onClick={() => {
-                    handleRemoveImage(previewIdx);
-                  }}
+                  className="stroke-primary-300 fill-slate-100 stroke-1 absolute top-2 right-2 cursor-pointer hover:fill-slate-50/50"
+                  onClick={() => handleRemove(previewIdx, previewURL.isNew)}
                 />
               </div>
             ))}
@@ -75,10 +79,7 @@ const PlaceEditImagesInput = ({ control, setValue, idx, trigger }: PlaceEditImag
             <Input
               type="file"
               accept="image/*"
-              onChange={async (e) => {
-                await handleFileChange(e);
-                field.onChange(presignedUrlObjs);
-              }}
+              onChange={handleFileChange}
               ref={fileInputRef}
               className="hidden"
               multiple

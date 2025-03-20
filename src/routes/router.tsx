@@ -2,6 +2,7 @@ import MainLayout from '@/layouts/MainLayout';
 import RegisterLayout from '@/layouts/RegisterLayout';
 import DetailPage from '@/pages/detail-page';
 import PlacesCollectionPage from '@/pages/detail-page/PlacesCollectionPage';
+import EditPage from '@/pages/edit-page/EditPage';
 import NotFoundPage from '@/pages/error-page';
 import HomePage from '@/pages/home';
 import Notice from '@/pages/notice';
@@ -11,14 +12,7 @@ import ProfileSetting from '@/pages/profile-setting';
 import MyLogs from '@/pages/profile/my-logs';
 import SavedLogs from '@/pages/profile/saved-logs';
 import SavedSpaces from '@/pages/profile/saved-spaces';
-import {
-  EditPage,
-  MapPage,
-  NewPlacePage,
-  SearchPage,
-  SelectPage,
-  WritePage,
-} from '@/pages/register-page';
+import { MapPage, NewPlacePage, SearchPage, SelectPage, WritePage } from '@/pages/register-page';
 import LogWritePage from '@/pages/register-page/LogWritePage';
 import Search from '@/pages/search';
 import { createBrowserRouter } from 'react-router-dom';

@@ -7,93 +7,126 @@ import { Textarea } from '@/components/ui/textarea';
 import LogCoverEditInput from '@/features/edit-page/LogCoverEditInput';
 import LogEditBar from '@/features/edit-page/LogEditBar';
 import PlaceEditFormItem from '@/features/edit-page/PlacEditFormItem';
+import useUpdateLogMutation from '@/hooks/mutations/log/useUpdateLogMutation';
 import useLog from '@/hooks/queries/log/useLog';
 import { cn } from '@/lib/utils';
-import api from '@/services/apis/api';
-import { Image, PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
-import { LogEditFormSchema } from '@/services/schemas/logSchema';
+import { Image, PresignUrlResponse, UpdateRequest } from '@/services/apis/types/registerAPI.type';
 import { useEditLogStore } from '@/store/editLogStore';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleX } from 'lucide-react';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { FieldValues, useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
 export interface LogEditFormData {
   title: string;
   description: string;
-  coverImgSrc: PresignUrlResponse | Image | null;
-  places: {
-    photos: (PresignUrlResponse | Image)[]; // 기존 + 새이미지
-    placeDescription?: string;
-  }[];
+  coverImgSrc: Image | PresignUrlResponse | null;
+  places: { [placeName: string]: PlaceItem } | null;
+}
+
+export interface PlaceItem {
+  placeId: number;
+  placeDescription?: string;
+  photos?: Image[]; // 이미지 관련 정보를 객체로 관리
+  newPhotos?: PresignUrlResponse[];
 }
 
 const EditPage = () => {
-  const navi = useNavigate();
   const { placeLogId } = useParams();
-  const { data: logData } = useLog(Number(placeLogId));
-  const selectedPlaces = useEditLogStore((state) => state.selectedPlaces);
+  const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
+  const places = useEditLogStore((state) => state.places); // 장소 클라이언트로 관리하기 위해
   const setInitialPlaces = useEditLogStore((state) => state.setInitialPlaces);
+  const { mutate } = useUpdateLogMutation();
 
   const form = useForm<LogEditFormData>({
-    resolver: zodResolver(LogEditFormSchema),
+    // resolver: zodResolver(LogEditFormSchema),
     mode: 'onBlur',
     defaultValues: {
       title: logData?.name || '',
       description: logData?.description || '',
       coverImgSrc: logData?.image || null,
-      places:
-        logData?.places.map((item) => ({
-          photos: item.images,
-          placeDescription: item.description || '',
-        })) || [],
+      places: {
+        placeName: {
+          placeId: 0,
+          placeDescription: '',
+          photos: [],
+          newPhotos: [],
+        },
+      },
     },
   });
 
   useEffect(() => {
-    if (logData?.places) setInitialPlaces(logData?.places);
-  }, [logData?.places, setInitialPlaces]);
-
-  const onSubmit = async (values: LogEditFormData) => {
-    const { dirtyFields } = form.formState;
-    try {
-      const NumericPlaceId = Number(placeLogId);
-      if (dirtyFields.title) {
-        const result = await api.log.updateLog(NumericPlaceId, { name: values.title });
-        if (result) navi(`/log/${placeLogId}`, { replace: true });
-        console.log('제목 변경');
-      }
-
-      if (dirtyFields.description) {
-        const result = await api.log.updateLog(NumericPlaceId, {
-          description: values.description,
-        });
-        if (result) navi(`/log/${placeLogId}`, { replace: true });
-        console.log('설명 변경');
-      }
-
-      if (dirtyFields.coverImgSrc) {
-        const newCover = values.coverImgSrc as PresignUrlResponse;
-        const result = await api.log.updateLog(NumericPlaceId, {
-          originalFile: newCover?.originalFile,
-          uuid: newCover?.uuid,
-        });
-        if (result) navi(`/log/${placeLogId}`, { replace: true });
-        console.log('커버 이미지 변경');
-      }
-
-      // if (dirtyFields.places) {
-      //   const result = await api.log.updateLog(NumericPlaceId, { places: values.places });
-      //   console.log('장소 변경:', result);
-      // }
-
-      console.log('수정 완료!');
-    } catch (error) {
-      console.error('수정 중 오류 발생:', error);
+    if (!isLogPending && logData?.places) {
+      setInitialPlaces(logData?.places);
+      form.setValue(
+        'places',
+        logData?.places.reduce((acc, item) => {
+          acc[item.name] = {
+            placeId: item.placeId,
+            placeDescription: item.description || '',
+            photos: item.images,
+            newPhotos: [],
+          };
+          return acc;
+        }, {} as { [placeId: string]: PlaceItem })
+      );
     }
-  };
+  }, [logData?.places, setInitialPlaces, isLogPending, form]);
 
+  const onSubmit = async (values: FieldValues) => {
+    const { dirtyFields } = form.formState;
+    console.log(values);
+    const numbericPlaceLogId = Number(placeLogId);
+    console.log();
+
+    const updateData: UpdateRequest = {};
+
+    if (dirtyFields.title) {
+      updateData.name = values.title;
+    }
+    if (dirtyFields.description) {
+      updateData.description = values.description;
+    }
+    if (dirtyFields.coverImgSrc) {
+      const newCover = values.coverImgSrc as PresignUrlResponse;
+      updateData.originalFile = newCover?.originalFile;
+      updateData.uuid = newCover?.uuid;
+    }
+    if (dirtyFields.places) {
+      const updatedPlaces = Object.entries(values.places)
+        .map(([placeName, placeData]: [string, PlaceItem]) => {
+          if (dirtyFields.places[placeName]) {
+            const place = {
+              id: placeData.placeId, // 해당 장소의 ID
+              description: placeData.placeDescription, // 장소 설명
+              // deleteImageIds: placeData.deletedImageIds || [], // 삭제된 이미지 아이디들 (있다면)
+              // originalFiles: placeData.newFiles || [], // 새로운 파일들
+              // uuids: placeData.presignedUrls || [], // presigned URL들
+            };
+            return place;
+          }
+          return null;
+        })
+        .filter((place) => place !== null);
+
+      if (updatedPlaces.length > 0) updateData.updatePlaces = updatedPlaces;
+    }
+
+    console.log(updateData);
+
+    // updateData에 데이터가 있으면 한 번에 API 호출
+    // if (Object.keys(updateData).length > 0) {
+    //   try {
+    //     await mutate({
+    //       placeLogId: numbericPlaceLogId,
+    //       data: updateData,
+    //     });
+    //   } catch (error) {
+    //     console.error('수정 중 오류 발생:', error);
+    //   }
+    // }
+  };
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
@@ -104,6 +137,7 @@ const EditPage = () => {
           className="flex flex-col items-center grow min-h-0 overflow-y-auto scrollbar-hide "
           onSubmit={form.handleSubmit(onSubmit)}
         >
+          {/* 로그 제목 */}
           <FormField
             name="title"
             control={form.control}
@@ -127,7 +161,6 @@ const EditPage = () => {
               </FormItem>
             )}
           />
-
           {/* 커버 이미지 */}
           <LogCoverEditInput
             name="coverImgSrc"
@@ -135,6 +168,7 @@ const EditPage = () => {
             setValue={form.setValue}
             trigger={form.trigger}
           />
+          {/* 로그 설명 */}
           <FormField
             name="description"
             control={form.control}
@@ -154,15 +188,8 @@ const EditPage = () => {
 
           {/* 장소 */}
           <div className="flex flex-col w-full mt-3 px-4">
-            {selectedPlaces.map((place, idx) => (
-              <PlaceEditFormItem
-                control={form.control}
-                place={place}
-                key={place.placeId}
-                idx={idx}
-                setValue={form.setValue}
-                trigger={form.trigger}
-              />
+            {places.map((place, idx) => (
+              <PlaceEditFormItem key={place.placeId} form={form} place={place} idx={idx} />
             ))}
           </div>
         </form>
