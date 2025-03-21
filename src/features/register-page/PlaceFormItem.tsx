@@ -16,10 +16,9 @@ interface PlaceFormItemProps {
 
 const PlaceFormItem = ({ place, idx, control, setValue, trigger }: PlaceFormItemProps) => {
   const isOpen = useDrawerStore((state) => state.isOpen); // 열림 여부
-  const openModal = useDrawerStore((state) => state.openDrawer); // 열림 + 타켓 지정
+  const openModal = useDrawerStore((state) => state.openLogDrawer); // 열림 + 타켓 지정
   const closeModal = useDrawerStore((state) => state.closeDrawer);
-  const targetPlace = useDrawerStore((state) => state.targetPlace);
-  const targetPlaceId = targetPlace && 'id' in targetPlace ? targetPlace?.id : targetPlace?.placeId;
+  const targetPlace = useDrawerStore((state) => state.newLogTargetPlace);
 
   const placeId = 'id' in place ? place.id : place.placeId;
   const placeName = 'place_name' in place ? place.place_name : place.name;
@@ -37,7 +36,7 @@ const PlaceFormItem = ({ place, idx, control, setValue, trigger }: PlaceFormItem
         <div className="text-text-lg font-bold">
           <div className="flex justify-between">
             <p>{String(idx + 1).padStart(2, '0')}</p>
-            {isOpen && targetPlaceId === placeId ? (
+            {isOpen && targetPlace?.id === placeId ? (
               <CircleCheck className="fill-black stroke-white" onClick={closeModal} />
             ) : (
               <Circle className="stroke-neutral-200" onClick={() => openModal(place)} />

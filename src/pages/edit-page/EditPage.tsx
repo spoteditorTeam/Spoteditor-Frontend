@@ -11,7 +11,9 @@ import useUpdateLogMutation from '@/hooks/mutations/log/useUpdateLogMutation';
 import useLog from '@/hooks/queries/log/useLog';
 import { cn } from '@/lib/utils';
 import { Image, PresignUrlResponse, UpdateRequest } from '@/services/apis/types/registerAPI.type';
+import { LogEditFormSchema } from '@/services/schemas/logSchema';
 import { useEditLogStore } from '@/store/editLogStore';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleX } from 'lucide-react';
 import { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -40,7 +42,7 @@ const EditPage = () => {
   const { mutate } = useUpdateLogMutation();
 
   const form = useForm<LogEditFormData>({
-    // resolver: zodResolver(LogEditFormSchema),
+    resolver: zodResolver(LogEditFormSchema),
     mode: 'onBlur',
     defaultValues: {
       title: logData?.name || '',
@@ -105,7 +107,6 @@ const EditPage = () => {
       }, {} as { [placeName: string]: PlaceItem });
 
       const updatedPlaces = Object.values(changedPlaces).map((place) => {
-        console.log(place);
         return {
           id: place.placeId, // 해당 장소의 ID
           description: place.placeDescription, // 장소 설명
@@ -204,6 +205,10 @@ const EditPage = () => {
         onClick={() => {
           console.log(form.watch());
           console.log(form.formState.errors);
+          console.log(
+            !!Object.keys(form.formState.errors).length &&
+              !Object.keys(form.formState.dirtyFields).length
+          );
         }}
       >
         체크
@@ -217,7 +222,10 @@ const EditPage = () => {
           showCheckbox={true}
           checkboxLabel="비공개"
           onConfirm={form.handleSubmit(onSubmit)}
-          disabled={!!Object.keys(form.formState.errors).length || !form.formState.isDirty}
+          disabled={
+            !Object.keys(form.formState.dirtyFields).length ||
+            !!Object.keys(form.formState.errors).length
+          }
         />
       </div>
     </div>

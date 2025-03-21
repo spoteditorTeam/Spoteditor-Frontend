@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useImages from '@/hooks/useImages';
 import { LogEditFormData } from '@/pages/edit-page/EditPage';
+import { isEqual } from 'lodash';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Controller, Path, useController, UseFormReturn } from 'react-hook-form';
@@ -31,17 +32,15 @@ const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) =>
   } = useImages(photos);
 
   useEffect(() => {
-    form.setValue(`places.${placeName}.newPhotos`, presignedUrlObjs, { shouldDirty: true });
+    form.setValue(`places.${placeName}.newPhotos`, presignedUrlObjs, { shouldValidate: true });
   }, [presignedUrlObjs, form, placeName]);
 
   const handleRemove = (previewIdx: number, isNew: boolean) => handleRemoveImage(previewIdx, isNew);
 
   useEffect(() => {
-    if (removedImageIds.length > 0) {
-      // 삭제된 이미지 있는 장소
+    const currentValue = form.getValues(`places.${placeName}.deleteImageIds`);
+    if (!isEqual(currentValue, removedImageIds)) {
       form.setValue(`places.${placeName}.deleteImageIds`, removedImageIds, { shouldDirty: true });
-    } else {
-      form.setValue(`places.${placeName}.deleteImageIds`, removedImageIds, { shouldDirty: false });
     }
   }, [removedImageIds, form, placeName]);
 
@@ -62,7 +61,7 @@ const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) =>
       <Controller
         name={`places.${placeName}.photos` as Path<LogEditFormData>}
         control={form.control}
-        render={({ field }) => (
+        render={() => (
           <div className="flex overflow-x-auto mb-2.5">
             {/* 기존 이미지 */}
             {imagePreviews.map((previewURL, previewIdx) => (

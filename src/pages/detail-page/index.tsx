@@ -1,4 +1,3 @@
-import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import { SpotIcon, TableIcon } from '@/components/Icons';
 import ModalLogCard from '@/components/LogCard/ModalLogCard';
 import LogCoverSkeleton from '@/components/Skeleton/LogCoverSkeleton';
@@ -13,7 +12,6 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import OtherUserProfileSection from '@/features/profile/OtherUserProfileSection';
-import useDeleteLog from '@/hooks/mutations/log/useDeleteLogMutation';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLog from '@/hooks/queries/log/useLog';
 import useLogBookMark from '@/hooks/queries/log/useLogBookMark';
@@ -25,7 +23,7 @@ import PlaceItem from '@/pages/detail-page/components/PlaceItem';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { copyUrlToClipboard } from '@/utils/copyUrlToClipboard';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
-import { ArrowLeft, Bookmark, Share2, Trash2 } from 'lucide-react';
+import { ArrowLeft, Bookmark, PencilLine, Share2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
   /* hooks */
@@ -39,7 +37,7 @@ const DetailPage = () => {
   const { data: placeBookmark, isPending: isPlaceBookmarkPending } =
     usePlaceBookMark(NumericPlaceLogId);
   const { user, isLoading } = useUser();
-  const { mutate: deleteLog } = useDeleteLog(NumericPlaceLogId);
+
   /* state */
   const isDataReady =
     isLogPending || isPlaceBookmarkPending || isLoading || isLogBookmarkPending || !user;
@@ -60,8 +58,8 @@ const DetailPage = () => {
   const onClickLogBookmark = async () => mutate();
   const onClickBack = () => navi(-1);
   const onClickShare = () => copyUrlToClipboard();
-  // const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
-  const onClickDelete = () => deleteLog();
+  const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
+  // const onClickDelete = () => deleteLog();
 
   return (
     <>
@@ -96,16 +94,12 @@ const DetailPage = () => {
                   <Share2 />
                 </div>
                 {isOwner && (
-                  <ConfirmDialog
-                    title={name}
-                    description="로그를 삭제하시겠습니까?"
-                    trigger={
-                      <div className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white">
-                        <Trash2 />
-                      </div>
-                    }
-                    onConfirm={onClickDelete}
-                  />
+                  <div
+                    className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
+                    onClick={onClickPencil}
+                  >
+                    <PencilLine />
+                  </div>
                 )}
               </div>
             </div>

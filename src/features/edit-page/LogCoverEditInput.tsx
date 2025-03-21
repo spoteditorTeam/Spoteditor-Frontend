@@ -23,9 +23,9 @@ interface CoverImageInputProps {
 
 const LogCoverEditInput = ({ name, control, setValue, trigger }: CoverImageInputProps) => {
   const { field } = useController({ name, control });
-  // const storedFile = field.value && 'storedFile' in field.value ? field.value.storedFile : ''; // Image일때만 있음
+  const storedFile = field.value && 'storedFile' in field.value ? field.value.storedFile : ''; // Image일때만 있음
   const { presignedUrlObj, imagePreview, handleFileChange, handleClearImage, isUploading } =
-    useImagePreview(field.value?.storedFile);
+    useImagePreview(storedFile);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /* 이미지 변경되면 변경된 필드에 저장 */
