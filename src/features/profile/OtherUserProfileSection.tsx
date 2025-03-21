@@ -1,6 +1,5 @@
 import { SubtractIcon } from '@/components/Icons';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import useOtherUser from '@/hooks/queries/user/useOtherUser';
 import useUser from '@/hooks/queries/user/useUser';
 import { Link } from 'react-router-dom';
 import LogFollowingButton from '../follow/LogFollowingButton';
