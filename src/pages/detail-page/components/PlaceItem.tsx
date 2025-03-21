@@ -5,6 +5,7 @@ import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
 import { Image } from '@/services/apis/types/registerAPI.type';
+import { useLoginMoalStore } from '@/store/loginStore';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { Bookmark, Clock, MapPin } from 'lucide-react';
 import { useParams } from 'react-router-dom';
@@ -19,13 +20,20 @@ const PlaceItem = ({ place, idx, isBookMark }: PlaceItemProps) => {
   const { placeLogId } = useParams();
   const { name, description, address, images, placeId } = place;
   const { isMobile } = useResponsive();
-  const { mutate } = usePlaceBookMarkMutation({
+  const { mutate: placeBookmarkMutation } = usePlaceBookMarkMutation({
     isBookMark,
     placeId,
     placeLogId: Number(placeLogId),
   });
+  const { openLoginModal } = useLoginMoalStore();
+  const onClickPlaceBookMark = () => {
+    if (!isBookMark) {
+      openLoginModal();
+      return;
+    }
 
-  const onClickPlaceBookMark = () => mutate();
+    placeBookmarkMutation();
+  };
 
   return (
     <div className="border-t border-primary-100 pt-[15px] pb-10 web:grid web:grid-cols-[1fr_3fr] web:gap-[15px] web:py-5">

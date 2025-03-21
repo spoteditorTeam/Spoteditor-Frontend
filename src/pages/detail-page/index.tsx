@@ -21,6 +21,7 @@ import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import PlaceItem from '@/pages/detail-page/components/PlaceItem';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
+import { useLoginMoalStore } from '@/store/loginStore';
 import { copyUrlToClipboard } from '@/utils/copyUrlToClipboard';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { ArrowLeft, Bookmark, PencilLine, Share2 } from 'lucide-react';
@@ -37,6 +38,7 @@ const DetailPage = () => {
   const { data: LogBookmark } = useLogBookMark(numericPlaceLogId);
   const { data: placeBookmark } = usePlaceBookMark(numericPlaceLogId);
   const { data: user } = useAuth();
+  const { openLoginModal } = useLoginMoalStore();
 
   /* state */
   // const isDataReady = isLogPending || isPlaceBookmarkPending || isLogBookmarkPending;
@@ -49,13 +51,19 @@ const DetailPage = () => {
   const isOwner = user?.userId === logData?.userId;
 
   /* mutatation */
-  const { mutate } = useLogBookmarkMutation({
+  const { mutate: logBookmarkMutation } = useLogBookmarkMutation({
     isBookMark: placebookmark,
     placeLogId: numericPlaceLogId,
   });
 
   /* handlers */
-  const onClickLogBookmark = async () => mutate();
+  const onClickLogBookmark = () => {
+    if (!LogBookmark) {
+      openLoginModal();
+      return;
+    }
+    logBookmarkMutation();
+  };
   const onClickBack = () => navi(-1);
   const onClickShare = () => copyUrlToClipboard();
   const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
@@ -147,7 +155,7 @@ const DetailPage = () => {
       </div>
 
       <div className="fixed bottom-12 right-2.5 web:right-5 flex flex-col gap-2 web:gap-[15px]">
-        {/* 북마크 버튼 */}
+        {/* 로그 북마크 버튼 */}
         <Button
           variant={'outline'}
           className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"

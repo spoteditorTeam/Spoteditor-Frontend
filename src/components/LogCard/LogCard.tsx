@@ -26,15 +26,13 @@ const LogCard = memo(({ isLarge, vertical, log }: LogCardProps) => {
   });
 
   const { isMobile } = useResponsive();
-  const { openLoginModal } = useLoginMoalStore(); // 전역 상태 사용
+  const { openLoginModal } = useLoginMoalStore();
 
   const handleCardClick = () => navi(`/log/${log?.placeLogId}`);
 
   const handleBookmarkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-
-    // 사용자가 로그인하지 않은 경우
-    if (!data || data?.isBookmarked === undefined) {
+    if (!data?.isBookmarked) {
       openLoginModal();
       return;
     }
