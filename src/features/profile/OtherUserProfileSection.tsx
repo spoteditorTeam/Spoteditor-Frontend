@@ -12,8 +12,7 @@ interface OtherUserProfileSectionProps {
 export default function OtherUserProfileSection({ userId }: OtherUserProfileSectionProps) {
   const { user: userData } = useUser();
   const isMe = userData?.userId === userId;
-
-  const { data: otherUserData } = useOtherUser(userId, { enabled: !isMe });
+  const { data: otherUserData } = useOtherUser(userId, { enabled: !!userId && !isMe });
 
   const data = isMe ? userData : otherUserData;
   return (
