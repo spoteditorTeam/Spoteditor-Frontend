@@ -11,6 +11,7 @@ export default function useLogout() {
     mutationFn: logoutAuth,
     onSuccess() {
       queryClient.removeQueries({ queryKey: userKeys.me() });
+      queryClient.removeQueries({ queryKey: userKeys.auth() });
       nav('/', { replace: true });
     },
     onError(err) {

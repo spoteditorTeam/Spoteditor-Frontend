@@ -18,7 +18,7 @@ const useCreateLogMutation = () => {
 
       queryClient.invalidateQueries({ queryKey: logKeys.detail(result.data.placeLogId) });
       queryClient.invalidateQueries({ queryKey: logKeys.list() });
-
+      
       queryClient.refetchQueries({ queryKey: logKeys.detail(result.data.placeLogId) });
       queryClient.refetchQueries({ queryKey: logKeys.list() });
     },

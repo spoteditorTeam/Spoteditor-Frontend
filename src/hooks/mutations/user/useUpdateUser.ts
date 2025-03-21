@@ -9,8 +9,10 @@ export default function useUpdateUser() {
   return useMutation({
     mutationFn: (data: IUpdateUser) => api.user.patchUser(data),
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: userKeys.all });
-      queryClient.refetchQueries({ queryKey: userKeys.all });
+      queryClient.invalidateQueries({ queryKey: userKeys.me() });
+      queryClient.invalidateQueries({ queryKey: userKeys.auth() });
+      queryClient.refetchQueries({ queryKey: userKeys.me() });
+      queryClient.refetchQueries({ queryKey: userKeys.auth() });
     },
     onError(err) {
       console.error('프로필 업데이트 실패:', err);
