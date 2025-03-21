@@ -1,13 +1,13 @@
 import { IUpdateUser } from '@/services/apis/types/userAPI';
-import { authUserApi } from '@/services/apis/userApi';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { userKeys } from '@/hooks/queries/user/userQueryKeys';
+import api from '@/services/apis/api';
 
 export default function useUpdateUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: IUpdateUser) => authUserApi.patchUser(data),
+    mutationFn: (data: IUpdateUser) => api.user.patchUser(data),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: userKeys.all });
       queryClient.refetchQueries({ queryKey: userKeys.all });

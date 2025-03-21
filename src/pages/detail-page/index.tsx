@@ -128,12 +128,7 @@ const DetailPage = () => {
       <div className="flex flex-col px-4 py-2.5 gap-[15px] web:px-[50px] web:py-5">
         <div className="web:grid web:grid-cols-[1fr_3fr] gap-5">
           {/* 프로필  */}
-          <OtherUserProfileSection
-            userId={Number(logData?.userId)}
-            userName={String(logData?.userName)}
-            userImage={String(logData?.userImage)}
-            isFollowing={Boolean(logData?.isFollowing)}
-          />
+          <OtherUserProfileSection userId={Number(logData?.userId)} />
 
           {/* 설명 */}
           {isDataReady ? (
