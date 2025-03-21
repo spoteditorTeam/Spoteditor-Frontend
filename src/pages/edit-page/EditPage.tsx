@@ -104,18 +104,21 @@ const EditPage = () => {
         return acc;
       }, {} as { [placeName: string]: PlaceItem });
 
-      const updatedPlaces = Object.values(changedPlaces).map((place) => ({
-        id: place.placeId, // 해당 장소의 ID
-        description: place.placeDescription, // 장소 설명
-        deleteImageIds: place.deleteImageIds || [], // 삭제된 이미지 아이디들 (있다면)
-        // originalFiles: place.newFiles || [], // 새로운 파일들
-        // uuids: place.presignedUrls || [], // presigned URL들
-      }));
+      const updatedPlaces = Object.values(changedPlaces).map((place) => {
+        console.log(place);
+        return {
+          id: place.placeId, // 해당 장소의 ID
+          description: place.placeDescription, // 장소 설명
+          deleteImageIds: place.deleteImageIds || [], // 삭제된 이미지 아이디들 (있다면)
+          originalFiles: place.newPhotos?.map((file) => file.originalFile) || [], // 새로운 파일들 (파일명만 저장)
+          uuids: place.newPhotos?.map((file) => file.uuid) || [], // presigned URL에 대응하는 UUID 목록
+        };
+      });
 
       if (updatedPlaces.length > 0) updateData.updatePlaces = updatedPlaces;
     }
 
-    console.log(updateData);
+    console.log('>>>>>', updateData);
 
     // updateData에 데이터가 있으면 한 번에 API 호출
     if (Object.keys(updateData).length > 0) {
