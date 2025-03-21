@@ -8,7 +8,12 @@ import throttle from 'lodash/throttle';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const MainCarousel = () => {
-  const { data, isPending, isError } = useLogList();
+  const { data, isPending, isError } = useLogList({
+    page: 1,
+    size: 12,
+    direction: 'ASC',
+  });
+
   const { content } = data ?? {};
   const isDataReady = isPending || !data || isError;
 
