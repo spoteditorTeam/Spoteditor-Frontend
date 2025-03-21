@@ -16,6 +16,7 @@ import { MapPage, NewPlacePage, SearchPage, SelectPage, WritePage } from '@/page
 import LogWritePage from '@/pages/register-page/LogWritePage';
 import Search from '@/pages/search';
 import { createBrowserRouter } from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -58,16 +59,21 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <RegisterLayout />,
-    errorElement: <NotFoundPage />,
+    element: <ProtectedRoute />,
     children: [
-      { path: '/register/select', element: <SelectPage /> },
-      { path: '/register/search', element: <SearchPage /> },
-      { path: '/register/details', element: <LogWritePage /> },
-      { path: '/register/maps', element: <MapPage /> },
-      { path: '/register/newPlace', element: <NewPlacePage /> },
-      { path: '/write', element: <WritePage /> },
-      { path: '/register/edit/:placeLogId', element: <EditPage /> },
+      {
+        element: <RegisterLayout />,
+        errorElement: <NotFoundPage />,
+        children: [
+          { path: '/register/select', element: <SelectPage /> },
+          { path: '/register/search', element: <SearchPage /> },
+          { path: '/register/details', element: <LogWritePage /> },
+          { path: '/register/maps', element: <MapPage /> },
+          { path: '/register/newPlace', element: <NewPlacePage /> },
+          { path: '/write', element: <WritePage /> },
+          { path: '/register/edit/:placeLogId', element: <EditPage /> },
+        ],
+      },
     ],
   },
   {
