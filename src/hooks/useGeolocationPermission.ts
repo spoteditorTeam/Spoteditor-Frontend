@@ -50,14 +50,10 @@ export default function useGeolocationPermission() {
   };
 
   useEffect(() => {
-    checkPermission();
-  }, []);
-
-  useEffect(() => {
     if (permission === 'granted') {
       getCurrentLocation();
     }
   }, [permission]);
 
-  return { permission, open, setOpen, position };
+  return { permission, open, setOpen, position, checkPermission };
 }

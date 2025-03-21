@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-class AuthClient {
+export class AuthClient {
   private instance: AxiosInstance;
   private refreshPromise: Promise<any> | null = null;
   private refreshFailed: boolean = false; // refresh 실패 시 추가 요청 방지
@@ -30,7 +30,7 @@ class AuthClient {
 
         // 이미 refresh 실패한 상태면 바로 거절
         if (this.refreshFailed) {
-          console.warn('🚨 RefreshToken이 만료되어 추가 요청 차단');
+          console.warn('RefreshToken이 만료되어 추가 요청 차단');
           return Promise.reject(error);
         }
 
@@ -41,7 +41,7 @@ class AuthClient {
           // refresh 요청이 진행 중이면 해당 Promise 재사용
           if (!this.refreshPromise) {
             this.refreshPromise = this.instance
-              .post('/auth/refresh')
+              .post('/api/auth/refresh')
               .then((res) => {
                 console.log('새로운 AccessToken 발급 성공');
                 return res.data;
@@ -77,7 +77,7 @@ class AuthClient {
   async logoutUser() {
     try {
       console.log('로그아웃 요청 시작');
-      const res = await this.instance.post('/auth/logout');
+      const res = await this.instance.post('/api/auth/logout');
       // 로그아웃 후 refresh 관련 상태 초기화
       this.refreshFailed = false;
       return res.data;
@@ -88,6 +88,6 @@ class AuthClient {
   }
 }
 
-export const authClient = new AuthClient(`${API_BASE_URL}/api`);
+export const authClient = new AuthClient(`${API_BASE_URL}`);
 export const currentAuth = authClient.getInstance();
 export const logoutAuth = () => authClient.logoutUser();

@@ -1,15 +1,15 @@
-import { authUserApi } from '@/services/apis/userApi';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userKeys } from '@/hooks/queries/user/userQueryKeys';
+import api from '@/services/apis/api';
 
 type UserState = 'userOnly' | 'nonUserOnly';
 
 export default function useUser(userState?: UserState) {
   const { data, error, isFetching } = useQuery({
     queryKey: userKeys.me(),
-    queryFn: () => authUserApi.getUser(),
+    queryFn: () => api.user.getUser(),
     staleTime: Infinity,
   });
 
