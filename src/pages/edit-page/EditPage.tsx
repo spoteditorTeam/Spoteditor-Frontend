@@ -61,23 +61,31 @@ const EditPage = () => {
   });
 
   useEffect(() => {
+    console.log('isLogPending:', isLogPending);
+    console.log('logData?.places:', logData?.places);
+
     if (!isLogPending && logData?.places) {
       setInitialPlaces(logData?.places);
-      form.setValue(
-        'places',
-        logData?.places.reduce((acc, item) => {
-          acc[item.name] = {
-            placeId: item.placeId,
-            placeDescription: item.description || '',
-            photos: item.images,
-            newPhotos: [],
-            deleteImageIds: [],
-          };
-          return acc;
-        }, {} as { [placeId: string]: PlaceItem })
-      );
+
+      const placesData = logData?.places.reduce((acc, item) => {
+        acc[item.name] = {
+          placeId: item.placeId,
+          placeDescription: item.description || '',
+          photos: item.images,
+          newPhotos: [],
+          deleteImageIds: [],
+        };
+        return acc;
+      }, {} as { [placeId: string]: PlaceItem });
+
+      form.reset({
+        title: logData?.name,
+        description: logData?.description,
+        coverImgSrc: logData?.image,
+        places: placesData,
+      });
     }
-  }, [logData?.places, setInitialPlaces, isLogPending, form]);
+  }, [isLogPending, logData?.places]);
 
   const onSubmit = async (values: FieldValues) => {
     const { dirtyFields } = form.formState;
@@ -118,8 +126,6 @@ const EditPage = () => {
 
       if (updatedPlaces.length > 0) updateData.updatePlaces = updatedPlaces;
     }
-
-    console.log('>>>>>', updateData);
 
     // updateData에 데이터가 있으면 한 번에 API 호출
     if (Object.keys(updateData).length > 0) {

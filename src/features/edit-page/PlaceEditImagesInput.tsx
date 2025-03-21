@@ -16,11 +16,15 @@ interface PlaceEditImagesInputProps {
 const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { field } = useController({ name: `places.${placeName}.photos` }); // 기존 이미지들 (Image)
-  const [photos, setPhotos] = useState(field.value || []);
+  const [photos, setPhotos] = useState(field.value);
 
   useEffect(() => {
-    if (field.value) setPhotos(field.value);
-  }, [field.value]);
+    // field.value가 변경될 때마다 photos 상태를 업데이트
+    console.log(field.value);
+    if (field.value && !isEqual(field.value, photos)) {
+      setPhotos(field.value);
+    }
+  }, [field.value, photos]);
 
   const {
     imagePreviews,
