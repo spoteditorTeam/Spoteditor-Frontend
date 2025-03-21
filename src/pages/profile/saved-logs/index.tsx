@@ -46,7 +46,7 @@ function SavedLogs() {
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.content.map((log) => (
-              <MotionCard key={log.placeLogId} className="relative">
+              <MotionCard key={log.placeLogId} className="relative group">
                 <Link to={`/log/${log.placeLogId}`}>
                   <PostCardImage
                     lable

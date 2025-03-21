@@ -44,7 +44,7 @@ function SavedSpaces() {
         <>
           <PostCardWrapper className="mb-[50px]">
             {data?.content.map((place) => (
-              <MotionCard key={place.placeId} className="relative">
+              <MotionCard key={place.placeId} className="relative group">
                 {/* 추후 주소가 나오면 링크 컴포넌트로 보내는 기능 추가 */}
                 <PostCardImage
                   lable

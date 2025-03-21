@@ -1,9 +1,5 @@
 import { cn } from '@/lib/utils';
 import VerifiedLabelIcon from '../../../components/Icons/VerifiedLabelIcon';
-import { Bookmark } from 'lucide-react';
-import useUser from '@/hooks/queries/user/useUser';
-import { useParams } from 'react-router-dom';
-
 interface PostCardImageProps {
   imageUrl?: string;
   lable?: boolean;
@@ -12,8 +8,6 @@ interface PostCardImageProps {
 }
 
 function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProps) {
-  const { userId } = useParams();
-  const { user } = useUser();
   return (
     <div
       className={cn(
@@ -37,7 +31,7 @@ function PostCardImage({ imageUrl, lable, author, className }: PostCardImageProp
           <VerifiedLabelIcon className="w-[10.474px] h-[10.378px] fill-white" />
         </div>
       )}
-      <div className="absolute inset-0 transition-colors hover:bg-black/25" />
+      <div className="absolute inset-0 transition-colors group-hover:bg-black/25" />
     </div>
   );
 }
