@@ -16,7 +16,7 @@ import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation
 import useLog from '@/hooks/queries/log/useLog';
 import useLogBookMark from '@/hooks/queries/log/useLogBookMark';
 import usePlaceBookMark from '@/hooks/queries/log/usePlaceBookMark';
-import useUser from '@/hooks/queries/user/useUser';
+import useAuth from '@/hooks/queries/user/useAuth';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import PlaceItem from '@/pages/detail-page/components/PlaceItem';
@@ -30,17 +30,17 @@ const DetailPage = () => {
   const navi = useNavigate();
   const { placeLogId } = useParams();
   const { isMobile } = useResponsive();
-  const NumericPlaceLogId = Number(placeLogId);
+
   /* query */
-  const { data: logData, isPending: isLogPending } = useLog(NumericPlaceLogId);
-  const { data: LogBookmark, isPending: isLogBookmarkPending } = useLogBookMark(NumericPlaceLogId);
-  const { data: placeBookmark, isPending: isPlaceBookmarkPending } =
-    usePlaceBookMark(NumericPlaceLogId);
-  const { user, isLoading } = useUser();
+  const numericPlaceLogId = Number(placeLogId);
+  const { data: logData, isPending: isLogPending } = useLog(numericPlaceLogId);
+  const { data: LogBookmark } = useLogBookMark(numericPlaceLogId);
+  const { data: placeBookmark } = usePlaceBookMark(numericPlaceLogId);
+  const { data: user } = useAuth();
 
   /* state */
-  const isDataReady =
-    isLogPending || isPlaceBookmarkPending || isLoading || isLogBookmarkPending || !user;
+  // const isDataReady = isLogPending || isPlaceBookmarkPending || isLogBookmarkPending;
+  const isDataReady = isLogPending;
 
   const name = logData?.name ?? '';
   const description = logData?.description ?? '';
@@ -51,7 +51,7 @@ const DetailPage = () => {
   /* mutatation */
   const { mutate } = useLogBookmarkMutation({
     isBookMark: placebookmark,
-    placeLogId: NumericPlaceLogId,
+    placeLogId: numericPlaceLogId,
   });
 
   /* handlers */
@@ -59,7 +59,6 @@ const DetailPage = () => {
   const onClickBack = () => navi(-1);
   const onClickShare = () => copyUrlToClipboard();
   const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
-  // const onClickDelete = () => deleteLog();
 
   return (
     <>
