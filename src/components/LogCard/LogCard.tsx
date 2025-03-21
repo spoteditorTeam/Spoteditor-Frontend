@@ -32,7 +32,7 @@ const LogCard = memo(({ isLarge, vertical, log }: LogCardProps) => {
 
   const handleBookmarkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!data?.isBookmarked) {
+    if (!data) {
       openLoginModal();
       return;
     }

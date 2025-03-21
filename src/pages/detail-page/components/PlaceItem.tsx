@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 interface PlaceItemProps {
   place: PlaceInLog;
   idx: number;
-  isBookMark: boolean;
+  isBookMark: boolean | undefined;
 }
 
 const PlaceItem = ({ place, idx, isBookMark }: PlaceItemProps) => {
@@ -21,17 +21,16 @@ const PlaceItem = ({ place, idx, isBookMark }: PlaceItemProps) => {
   const { name, description, address, images, placeId } = place;
   const { isMobile } = useResponsive();
   const { mutate: placeBookmarkMutation } = usePlaceBookMarkMutation({
-    isBookMark,
+    isBookMark: Boolean(isBookMark),
     placeId,
     placeLogId: Number(placeLogId),
   });
   const { openLoginModal } = useLoginMoalStore();
   const onClickPlaceBookMark = () => {
-    if (!isBookMark) {
+    if (isBookMark === undefined) {
       openLoginModal();
       return;
     }
-
     placeBookmarkMutation();
   };
 

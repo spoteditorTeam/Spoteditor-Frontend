@@ -58,7 +58,7 @@ const DetailPage = () => {
 
   /* handlers */
   const onClickLogBookmark = () => {
-    if (!LogBookmark) {
+    if (LogBookmark === undefined) {
       openLoginModal();
       return;
     }
@@ -149,7 +149,7 @@ const DetailPage = () => {
                 place={place}
                 key={place.placeId}
                 idx={idx + 1}
-                isBookMark={placeBookmark?.[idx]?.isBookmarked ?? false}
+                isBookMark={placeBookmark?.[idx]?.isBookmarked ?? undefined}
               />
             ))}
       </div>
@@ -193,7 +193,7 @@ const DetailPage = () => {
                   <ModalLogCard
                     key={place.placeId}
                     place={place}
-                    isPlaceBookMark={placeBookmark?.[idx]?.isBookmarked as boolean}
+                    isPlaceBookMark={placeBookmark?.[idx]?.isBookmarked ?? undefined}
                     placeLogId={Number(logData?.placeLogId)}
                   />
                 ))}

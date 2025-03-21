@@ -8,7 +8,7 @@ import { Bookmark } from 'lucide-react';
 import React, { memo } from 'react';
 type ModalLogCard = {
   place?: PlaceInLog;
-  isPlaceBookMark?: boolean;
+  isPlaceBookMark?: boolean | undefined;
   placeLogId: number;
 };
 
@@ -23,7 +23,7 @@ const ModalLogCard = memo(({ place, isPlaceBookMark, placeLogId }: ModalLogCard)
   const { openLoginModal } = useLoginMoalStore();
   const handleBookmarkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!isPlaceBookMark) {
+    if (isPlaceBookMark === undefined) {
       openLoginModal();
       return;
     }
