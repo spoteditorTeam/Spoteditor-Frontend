@@ -12,12 +12,41 @@ import { Input } from '@/components/ui/input';
 import useLocationToAddress from '@/hooks/useLocationToAddress';
 import { useNavigate } from 'react-router-dom';
 import { useCitySearchStore } from '@/store/searchStore';
+import { AnimatePresence, motion, useMotionTemplate, Variants } from 'motion/react';
 
+const dropboxVar: Variants = {
+  start: {
+    opacity: 0,
+    scale: 0,
+    transition: {
+      duration: 0.2,
+    },
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.25,
+      ease: 'easeOut',
+    },
+  },
+  end: {
+    opacity: 0,
+    scale: 0,
+    transition: {
+      duration: 0.2,
+      ease: 'easeIn',
+    },
+  },
+};
 function CitySearchForm() {
   const nav = useNavigate();
   const { permission, position, setOpen, checkPermission } = useGeolocationPermission();
   const { address } = useLocationToAddress(position?.latitude ?? null, position?.longitude ?? null);
-  const { isDropBox, sido, bname, openDropBox, closeDropBox } = useCitySearchStore();
+  const { isDropBox, sido, bname, openDropBox } = useCitySearchStore();
+
+  /* 드롭박스 마운트, 언마운트 시 transformOrigin 값 변경 */
+  const transformOrigin = useMotionTemplate`top ${isDropBox ? 'left' : 'right'} `;
 
   const defaultValues = useMemo(
     () => ({
@@ -58,9 +87,6 @@ function CitySearchForm() {
     openDropBox();
   };
 
-  useEffect(() => {
-    closeDropBox();
-  }, []);
   return (
     <>
       <Form {...form}>
@@ -115,7 +141,23 @@ function CitySearchForm() {
           >
             검색
           </Button>
-          {isDropBox ? <CitySearchDropbox /> : null}
+          <AnimatePresence>
+            {isDropBox ? (
+              <motion.section
+                className="z-[1111] web:z-10 mobile:fixed mobile:top-0 mobile:left-0 web:absolute web:top-[93px] bg-white w-screen h-screen web:h-auto web:max-w-[calc(100%)] px-4 web:py-5 web:pl-[30px] web:pr-5 flex flex-col gap-[18px] web:gap-2.5"
+                key="dropbox"
+                variants={dropboxVar}
+                initial="start"
+                animate="visible"
+                exit="end"
+                style={{
+                  transformOrigin,
+                }}
+              >
+                <CitySearchDropbox />
+              </motion.section>
+            ) : null}
+          </AnimatePresence>
         </form>
       </Form>
       <GeoConsentModal />
