@@ -26,7 +26,7 @@ export default function CitySearchDropbox() {
           </h4>
         </div>
         <div>
-          <button onClick={closeDropBox}>
+          <button type="button" onClick={closeDropBox}>
             <XIcon className="w-[34px] h-[34px]" />
           </button>
         </div>
