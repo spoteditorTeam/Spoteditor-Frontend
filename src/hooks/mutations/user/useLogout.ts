@@ -1,6 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { logKeys } from '@/hooks/queries/log/logQueryKeys';
 import { userKeys } from '@/hooks/queries/user/userQueryKeys';
 import { logoutAuth } from '@/services/apis/authApi';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 export default function useLogout() {
@@ -11,6 +12,8 @@ export default function useLogout() {
     mutationFn: logoutAuth,
     onSuccess() {
       queryClient.removeQueries({ queryKey: userKeys.me() });
+      queryClient.removeQueries({ queryKey: userKeys.auth() });
+      queryClient.removeQueries({ queryKey: logKeys.all });
       nav('/', { replace: true });
     },
     onError(err) {
