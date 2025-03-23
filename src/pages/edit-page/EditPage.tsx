@@ -1,6 +1,5 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import ModifyDrawer from '@/components/Drawer/ModifyDrawer';
-import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -39,6 +38,7 @@ const EditPage = () => {
   const { data: logData, isPending: isLogPending } = useLog(Number(placeLogId));
   const places = useEditLogStore((state) => state.places); // 장소 클라이언트로 관리하기 위해
   const setInitialPlaces = useEditLogStore((state) => state.setInitialPlaces);
+  const deletePlaceIds = useEditLogStore((state) => state.deletePlaceIds);
   const { mutate } = useUpdateLogMutation();
 
   const form = useForm<LogEditFormData>({
@@ -61,9 +61,6 @@ const EditPage = () => {
   });
 
   useEffect(() => {
-    console.log('isLogPending:', isLogPending);
-    console.log('logData?.places:', logData?.places);
-
     if (!isLogPending && logData?.places) {
       setInitialPlaces(logData?.places);
 
@@ -90,7 +87,6 @@ const EditPage = () => {
   const onSubmit = async (values: FieldValues) => {
     const { dirtyFields } = form.formState;
     const numbericPlaceLogId = Number(placeLogId);
-
     const updateData: UpdateRequest = {};
 
     if (dirtyFields.title) {
@@ -123,9 +119,9 @@ const EditPage = () => {
           uuids: place.newPhotos?.map((file) => file.uuid) || [], // presigned URL에 대응하는 UUID 목록
         };
       });
-
       if (updatedPlaces.length > 0) updateData.updatePlaces = updatedPlaces;
     }
+    if (deletePlaceIds.length > 0) updateData.deletePlaceIds = deletePlaceIds;
 
     // updateData에 데이터가 있으면 한 번에 API 호출
     if (Object.keys(updateData).length > 0) {
@@ -207,7 +203,7 @@ const EditPage = () => {
         </form>
       </Form>
 
-      <Button
+      {/* <Button
         onClick={() => {
           console.log(form.watch());
           console.log(form.formState.errors);
@@ -218,7 +214,7 @@ const EditPage = () => {
         }}
       >
         체크
-      </Button>
+      </Button> */}
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">
@@ -229,7 +225,7 @@ const EditPage = () => {
           checkboxLabel="비공개"
           onConfirm={form.handleSubmit(onSubmit)}
           disabled={
-            !Object.keys(form.formState.dirtyFields).length ||
+            (!Object.keys(form.formState.dirtyFields).length && deletePlaceIds.length === 0) ||
             !!Object.keys(form.formState.errors).length
           }
         />
