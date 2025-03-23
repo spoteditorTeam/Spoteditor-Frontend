@@ -45,18 +45,10 @@ const EditPage = () => {
     resolver: zodResolver(LogEditFormSchema),
     mode: 'onBlur',
     defaultValues: {
-      title: logData?.name || '',
-      description: logData?.description || '',
-      coverImgSrc: logData?.image || null,
-      places: {
-        placeName: {
-          placeId: 0,
-          placeDescription: '',
-          photos: [],
-          newPhotos: [],
-          deleteImageIds: [],
-        },
-      },
+      title: '',
+      description: '',
+      coverImgSrc: null,
+      places: {},
     },
   });
 
@@ -81,6 +73,16 @@ const EditPage = () => {
         coverImgSrc: logData?.image,
         places: placesData,
       });
+
+      return () => {
+        form.reset({
+          title: '',
+          description: '',
+          coverImgSrc: null,
+          places: {},
+        });
+        setInitialPlaces([]);
+      };
     }
   }, [isLogPending, logData?.places]);
 
