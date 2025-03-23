@@ -36,7 +36,8 @@ export interface IOhterUser extends IUser {
 
 export interface IUpdateUser {
   name: string;
-  imageUrl: string;
+  originalFile: string;
+  uuid: string;
   description: string;
   instagramId: string;
 }
