@@ -1,4 +1,5 @@
 import { IOhterUser, IUpdateUser, IUser } from '@/services/apis/types/userAPI';
+import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { AxiosInstance } from 'axios';
 
 export class UserAPI {
@@ -10,7 +11,18 @@ export class UserAPI {
   /* 로그인된 사용자 정보 가져오기 */
   async getUser(): Promise<IUser> {
     const response = await this.axios.get('/api/users');
-    return response.data;
+    const data = response.data;
+
+    return {
+      ...data,
+      profileImage: {
+        ...data.profileImage,
+        imageUrl:
+          data.profileImage.imageId === null
+            ? data.profileImage.imageUrl
+            : getImgFromCloudFront(data.profileImage.imageUrl),
+      },
+    };
   }
 
   async deleteUser() {
@@ -32,6 +44,17 @@ export class OtherUserAPI {
 
   async getOtherUser(userId: number): Promise<IOhterUser> {
     const response = await this.axios.get(`/api/users/${userId}`);
-    return response.data;
+    const data = response.data;
+
+    return {
+      ...data,
+      profileImage: {
+        ...data.profileImage,
+        imageUrl:
+          data.profileImage.imageId === null
+            ? data.profileImage.imageUrl
+            : getImgFromCloudFront(data.profileImage.imageUrl),
+      },
+    };
   }
 }

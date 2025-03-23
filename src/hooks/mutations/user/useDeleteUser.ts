@@ -8,7 +8,8 @@ export function useDeleteUser() {
   return useMutation({
     mutationFn: () => api.user.deleteUser(),
     onSuccess() {
-      queryClient.removeQueries({ queryKey: userKeys.all });
+      queryClient.removeQueries({ queryKey: userKeys.me() });
+      queryClient.removeQueries({ queryKey: userKeys.auth() });
     },
     onError(err) {
       console.error('유저 정보 삭제 실패:', err);
