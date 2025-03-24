@@ -65,20 +65,18 @@ const LogCard = memo(({ isLarge, vertical, log }: LogCardProps) => {
         </span>
 
         {/* 북마크 */}
-        {userData && userData.name !== log?.author && (
-          <div
-            onClick={handleBookmarkClick}
-            className="bg-white absolute top-4 right-4 p-[11px] opacity-0 group-hover:opacity-100 group/bookmark"
-          >
-            <Bookmark
-              className={cn(
-                'group-hover/bookmark:text-primary-400',
-                isBookmarked && 'fill-black stroke-black'
-              )}
-              size={20}
-            />
-          </div>
-        )}
+        <div
+          onClick={handleBookmarkClick}
+          className="bg-white absolute top-4 right-4 p-[11px] opacity-0 group-hover:opacity-100 group/bookmark"
+        >
+          <Bookmark
+            className={cn(
+              'group-hover/bookmark:text-primary-400',
+              isBookmarked && 'fill-black stroke-black'
+            )}
+            size={20}
+          />
+        </div>
       </div>
 
       {/* 설명 */}
