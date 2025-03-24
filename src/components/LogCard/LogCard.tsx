@@ -1,5 +1,6 @@
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLogBookMark from '@/hooks/queries/log/useLogBookMark';
+import useAuth from '@/hooks/queries/user/useAuth';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import { LogContent } from '@/services/apis/types/logAPI.type';
@@ -17,6 +18,7 @@ type LogCardProps = {
 };
 
 const LogCard = memo(({ isLarge, vertical, log }: LogCardProps) => {
+  const { data: userData } = useAuth();
   const navi = useNavigate();
   const { data } = useLogBookMark(Number(log?.placeLogId));
   const isBookmarked = data?.isBookmarked;
@@ -57,30 +59,32 @@ const LogCard = memo(({ isLarge, vertical, log }: LogCardProps) => {
           )}
         />
         <div className="absolute inset-0 card-id-gradient" />
-        <div className="absolute inset-0 group-hover:bg-black/25 transition-colors" />
+        <div className="absolute inset-0 transition-colors group-hover:bg-black/25" />
         <span className="flex items-center gap-1 p-2.5 text-white text-text-2xs font-semibold absolute bottom-0">
           {log?.author}
         </span>
 
         {/* 북마크 */}
-        <div
-          onClick={handleBookmarkClick}
-          className="bg-white absolute top-4 right-4 p-[11px] opacity-0 group-hover:opacity-100 group/bookmark"
-        >
-          <Bookmark
-            className={cn(
-              'group-hover/bookmark:text-primary-400',
-              isBookmarked && 'fill-black stroke-black'
-            )}
-            size={20}
-          />
-        </div>
+        {userData && userData.name !== log?.author && (
+          <div
+            onClick={handleBookmarkClick}
+            className="bg-white absolute top-4 right-4 p-[11px] opacity-0 group-hover:opacity-100 group/bookmark"
+          >
+            <Bookmark
+              className={cn(
+                'group-hover/bookmark:text-primary-400',
+                isBookmarked && 'fill-black stroke-black'
+              )}
+              size={20}
+            />
+          </div>
+        )}
       </div>
 
       {/* 설명 */}
       <div className="text-text-sm web:text-text-md">
         <h5 className="font-bold">{log?.name} </h5>
-        <h6 className="text-primary-300 font-normal">
+        <h6 className="font-normal text-primary-300">
           {log && `${log.address.sido} | ${log.address.sigungu}`}
         </h6>
       </div>
