@@ -1,14 +1,16 @@
+import CustomPagination from '@/components/CustomPagination';
 import LogCard from '@/components/LogCard/LogCard';
-import MainPagination from '@/components/Pagination/MainPagination';
 import { Skeleton } from '@/components/ui/skeleton';
 import useLogList from '@/hooks/queries/log/useLogList';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const MainPageLogCardList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isPending, isError } = useLogList({ page: currentPage });
-  const { content, totalPages } = data ?? {};
+  const [searchParams] = useSearchParams();
+  const pageNumber = searchParams.get('pageNumber');
+
+  const { data, isPending, isError } = useLogList({ page: Number(pageNumber) || 1 });
+  const { content } = data ?? {};
 
   const isDataReady = isPending || isError || !content;
   const gridRows = content?.length ? Math.min(Math.floor(content.length / 4), 4) : 0;
@@ -33,11 +35,9 @@ const MainPageLogCardList = () => {
               );
             })}
       </div>
-
-      <MainPagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={(page) => setCurrentPage(page)}
+      <CustomPagination
+        currentPage={Number(data?.pageNumber)}
+        totalPages={Number(data?.totalPages)}
       />
     </div>
   );

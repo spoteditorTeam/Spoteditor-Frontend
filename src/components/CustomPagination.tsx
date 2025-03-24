@@ -20,7 +20,7 @@ export default function CustomPagination({ currentPage, totalPages }: CustomPagi
   if (totalPages === 1) return null;
 
   const handlePageChange = (page: number) => {
-    setSearchParams({ pageNumber: page.toString(), totalPages: totalPages.toString() });
+    setSearchParams({ pageNumber: page.toString() });
   };
 
   const shouldShowLeftArrow = currentPage >= 3;
