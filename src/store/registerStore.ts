@@ -2,8 +2,8 @@ import { create } from 'zustand';
 
 type RegisterStoreState = {
   experience: {
-    selectedCompanions: string[];
-    selectedFeelings: string[];
+    selectedWhom: string[];
+    selectedMoods: string[];
   };
 
   selectedPlaces: kakao.maps.services.PlacesSearchResult; // 선택한 장소
@@ -26,8 +26,8 @@ type RegisterStore = RegisterStoreState & RegisterStoreActions;
 export const useRegisterStore = create<RegisterStore>()((set) => ({
   // States
   experience: {
-    selectedCompanions: [],
-    selectedFeelings: [],
+    selectedWhom: [],
+    selectedMoods: [],
   },
   selectedPlaces: [],
   recentSearchPlaces: [],
@@ -37,9 +37,9 @@ export const useRegisterStore = create<RegisterStore>()((set) => ({
     set((state) => ({
       experience: {
         ...state.experience,
-        selectedCompanions: state.experience.selectedCompanions.includes(whom)
-          ? state.experience.selectedCompanions.filter((item) => item !== whom)
-          : [...state.experience.selectedCompanions, whom],
+        selectedWhom: state.experience.selectedWhom.includes(whom)
+          ? state.experience.selectedWhom.filter((item) => item !== whom)
+          : [...state.experience.selectedWhom, whom],
       },
     })),
 
@@ -47,9 +47,9 @@ export const useRegisterStore = create<RegisterStore>()((set) => ({
     set((state) => ({
       experience: {
         ...state.experience,
-        selectedFeelings: state.experience.selectedFeelings.includes(feeling)
-          ? state.experience.selectedFeelings.filter((item) => item !== feeling)
-          : [...state.experience.selectedFeelings, feeling],
+        selectedMoods: state.experience.selectedMoods.includes(feeling)
+          ? state.experience.selectedMoods.filter((item) => item !== feeling)
+          : [...state.experience.selectedMoods, feeling],
       },
     })),
 

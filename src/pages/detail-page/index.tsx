@@ -21,6 +21,7 @@ import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import PlaceItem from '@/pages/detail-page/components/PlaceItem';
 import { PlaceInLog } from '@/services/apis/types/logAPI.type';
+import { Tag } from '@/services/apis/types/registerAPI.type';
 import { useLoginMoalStore } from '@/store/loginStore';
 import { copyUrlToClipboard } from '@/utils/copyUrlToClipboard';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
@@ -48,6 +49,7 @@ const DetailPage = () => {
   const description = logData?.description ?? '';
   const places = logData?.places ?? [];
   const placebookmark = LogBookmark?.isBookmarked ?? false;
+  const tags = logData?.tags;
   const isOwner = user?.userId === logData?.userId;
 
   /* mutatation */
@@ -112,14 +114,22 @@ const DetailPage = () => {
             </div>
 
             <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient"></div>
-            <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8">
+            <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8 ">
               <h3 className="text-lg web:text-2xl font-bold text-white">{name}</h3>
-
-              <div className="flex items-center gap-1 text-text-xs web:text-text-sm ">
-                <span className="text-white bg-white/30 px-4 py-1.5 rounded-full gap-1 flex items-center">
-                  <SpotIcon className="stroke-white" />
-                  <span>{places.length}</span>
-                </span>
+              <div className="flex gap-1">
+                {tags?.map((item: Tag) => (
+                  <div className="flex items-center gap-1 text-text-xs web:text-text-sm ">
+                    <span className="text-white bg-white/30 px-4 py-1.5 rounded-full gap-1 flex items-center">
+                      <span>{item.name}</span>
+                    </span>
+                  </div>
+                ))}
+                <div className="flex items-center gap-1 text-text-xs web:text-text-sm ">
+                  <span className="text-white bg-white/30 px-4 py-1.5 rounded-full gap-1 flex items-center">
+                    <SpotIcon className="stroke-white" />
+                    <span>{places.length}</span>
+                  </span>
+                </div>
               </div>
             </div>
           </>

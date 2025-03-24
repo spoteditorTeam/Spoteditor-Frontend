@@ -4,8 +4,8 @@ import RegisterBar from '@/features/register-page/RegisterBar';
 import { useRegisterStore } from '@/store/registerStore';
 import { Link, useNavigate } from 'react-router-dom';
 
-const WHO = ['혼자', '친구랑', '연인과', '가족과', '동료와', '반려동물과'];
-const WHERE = [
+const WITH_WHOM = ['혼자', '친구랑', '연인과', '가족과', '동료와', '반려동물과'];
+const MOOD = [
   'SNS 핫플레이스',
   '체험 · 액티비티',
   '자연과 함께',
@@ -26,8 +26,8 @@ const WHERE = [
 
 const SelectPage = () => {
   const navi = useNavigate();
-  const companions = useRegisterStore((state) => state.experience.selectedCompanions);
-  const feelings = useRegisterStore((state) => state.experience.selectedFeelings);
+  const companions = useRegisterStore((state) => state.experience.selectedWhom);
+  const feelings = useRegisterStore((state) => state.experience.selectedMoods);
 
   const setCompanions = useRegisterStore((state) => state.setCompanions);
   const setFeelings = useRegisterStore((state) => state.setFeelings);
@@ -50,7 +50,7 @@ const SelectPage = () => {
           <div className="w-full">
             <h5 className="text-text-sm font-bold py-2.5">누구와</h5>
             <div className="flex gap-2 flex-wrap">
-              {WHO.map((who, idx) => (
+              {WITH_WHOM.map((who, idx) => (
                 <Button
                   key={idx}
                   variant={companions.includes(who) ? 'default' : 'muted'}
@@ -68,7 +68,7 @@ const SelectPage = () => {
           <div className="w-full">
             <h5 className="text-text-sm font-bold py-2.5">어떤 느낌으로</h5>
             <div className="flex gap-2 flex-wrap">
-              {WHERE.map((who, idx) => (
+              {MOOD.map((who, idx) => (
                 <Button
                   key={idx}
                   variant={feelings.includes(who) ? 'default' : 'muted'}

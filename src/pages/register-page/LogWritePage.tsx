@@ -1,5 +1,6 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import ModifyDrawer from '@/components/Drawer/ModifyDrawer';
+import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -39,6 +40,9 @@ const LogWritePage = () => {
   /* states */
   const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
   const resetSelectedPlaces = useRegisterStore((state) => state.resetSelectedPlaces);
+  const selectedWhom = useRegisterStore((state) => state.experience.selectedWhom);
+  const selectedMoods = useRegisterStore((state) => state.experience.selectedMoods);
+
   const [sido = '', , bname = ''] = selectedPlaces[0]?.address_name?.split(' ') || [];
 
   /* handlers */
@@ -49,7 +53,10 @@ const LogWritePage = () => {
       originalFile: coverImgSrc?.originalFile || '',
       uuid: coverImgSrc?.uuid || '',
       status: 'public',
-      tags: [],
+      tags: [
+        ...selectedWhom.map((whom) => ({ name: whom, category: 'WITH_WHOM' as const })),
+        ...selectedMoods.map((mood) => ({ name: mood, category: 'MOOD' as const })),
+      ],
       places: places.map((place, idx) => {
         return {
           name: selectedPlaces[idx].place_name,
@@ -66,6 +73,7 @@ const LogWritePage = () => {
   const onSubmit = async (values: LogWriteFormData) => {
     const formatedLog = formatLog(values);
     if (!formatedLog) return;
+    console.log(formatedLog);
     const { status } = await logCreateMuatation(formatedLog);
     if (status === 201) resetSelectedPlaces();
   };
@@ -143,6 +151,8 @@ const LogWritePage = () => {
           </div>
         </form>
       </Form>
+
+      <Button onClick={() => console.log(form.formState.errors)}>확인</Button>
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">
