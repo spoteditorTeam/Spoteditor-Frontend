@@ -63,7 +63,7 @@ const EditPage = () => {
 
   const form = useForm<LogEditFormData>({
     resolver: zodResolver(LogEditFormSchema),
-    mode: 'onSubmit',
+    mode: 'onBlur',
     defaultValues: {
       title: '',
       description: '',
@@ -205,12 +205,7 @@ const EditPage = () => {
             )}
           />
           {/* 커버 이미지 */}
-          <LogCoverEditInput
-            name="coverImgSrc"
-            control={form.control}
-            setValue={form.setValue}
-            trigger={form.trigger}
-          />
+          <LogCoverEditInput name="coverImgSrc" control={form.control} form={form} />
           {/* 로그 설명 */}
           <FormField
             name="description"
@@ -237,12 +232,24 @@ const EditPage = () => {
           </div>
 
           {/* 태그 */}
-          <div className="flex flex-col gap-5 grow px-4 py-5">
+          <div className="flex flex-col gap-5 grow px-4">
             <OptionSection title="누구와" storeKey="selectedWhom" form={form} />
             <OptionSection title="하루 스타일" storeKey="selectedMoods" form={form} />
           </div>
         </form>
       </Form>
+
+      <Button
+        onClick={() => {
+          console.log(form.watch());
+          console.log(form.formState.errors);
+          console.log('error', Object.values(form.formState.errors).length > 0); //
+          console.log(!form.formState.isDirty && deletePlaceIds.length === 0); // 폼이 변경되지 않았음
+          // console.log(form.formState.dirtyFields);
+        }}
+      >
+        체크
+      </Button>
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">
@@ -258,8 +265,8 @@ const EditPage = () => {
             checkboxLabel="비공개"
             onConfirm={form.handleSubmit(onSubmit)}
             disabled={
-              (!form.formState.isDirty && deletePlaceIds.length === 0) ||
-              !!Object.values(form.formState.errors).length
+              Object.values(form.formState.errors).length > 0 || // 에러가 있을때
+              (!form.formState.isDirty && deletePlaceIds.length === 0) // 폼이 변경되지 않았고 삭제된 것이 없을 때
             }
           />
         </div>
