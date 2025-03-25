@@ -15,9 +15,9 @@ interface CustomPaginationProps {
 }
 
 export default function CustomPagination({ currentPage, totalPages }: CustomPaginationProps) {
-  const [_, setSearchParams] = useSearchParams();
+  if (totalPages <= 1 || !currentPage) return null;
 
-  if (totalPages === 1) return null;
+  const [_, setSearchParams] = useSearchParams();
 
   const handlePageChange = (page: number) => {
     setSearchParams({ pageNumber: page.toString() });
