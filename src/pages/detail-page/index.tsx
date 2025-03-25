@@ -176,7 +176,6 @@ const DetailPage = () => {
           <Bookmark className={cn('!size-6 web:!size-8', placebookmark && 'fill-black')} />
         </Button>
         {/* 장소 모아 보기 버튼 */}
-
         {isMobile ? (
           <Button
             variant={'outline'}
