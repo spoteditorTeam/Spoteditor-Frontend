@@ -115,9 +115,9 @@ const DetailPage = () => {
             </div>
 
             <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient"></div>
-            <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8 ">
+            <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8">
               <h3 className="text-lg web:text-2xl font-bold text-white">{name}</h3>
-              <div className="flex gap-1">
+              <div className="flex gap-1 flex-wrap">
                 {tags?.map((item: Tag) => (
                   <div className="flex items-center gap-1 text-text-xs web:text-text-sm ">
                     <span className="text-white bg-white/30 px-4 py-1.5 rounded-full gap-1 flex items-center">
