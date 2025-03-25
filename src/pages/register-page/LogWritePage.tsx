@@ -1,6 +1,5 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import ModifyDrawer from '@/components/Drawer/ModifyDrawer';
-import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -73,7 +72,6 @@ const LogWritePage = () => {
   const onSubmit = async (values: LogWriteFormData) => {
     const formatedLog = formatLog(values);
     if (!formatedLog) return;
-    console.log(formatedLog);
     const { status } = await logCreateMuatation(formatedLog);
     if (status === 201) resetSelectedPlaces();
   };
@@ -152,7 +150,7 @@ const LogWritePage = () => {
         </form>
       </Form>
 
-      <Button onClick={() => console.log(form.formState.errors)}>확인</Button>
+      {/* <Button onClick={() => console.log(form.formState.errors)}>확인</Button> */}
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">

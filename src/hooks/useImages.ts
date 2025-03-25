@@ -57,7 +57,6 @@ const imageReducer = (state: ImageState, action: ImageAction): ImageState => {
     }
     case 'REMOVE_IMAGE': {
       const { index, isNew } = action.payload;
-      console.log(index, isNew);
       if (isNew) {
         // 신규 이미지 삭제
         return {

@@ -27,13 +27,11 @@ const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) =>
   const handleRemove = (previewIdx: number, isNew: boolean) => handleRemoveImage(previewIdx, isNew);
 
   useEffect(() => {
-    console.log('새 이미지 추가');
     form.setValue(`places.${placeName}.newPhotos`, presignedUrlObjs, { shouldDirty: true });
     form.trigger(`places.${placeName}.newPhotos`);
   }, [presignedUrlObjs, form, placeName]);
 
   useEffect(() => {
-    console.log('이미지 삭제');
     const currentValue = form.getValues(`places.${placeName}.deleteImageIds`);
     if (!isEqual(currentValue, removedImageIds)) {
       form.setValue(`places.${placeName}.deleteImageIds`, removedImageIds, { shouldDirty: true });

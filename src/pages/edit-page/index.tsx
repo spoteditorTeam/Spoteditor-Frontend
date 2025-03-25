@@ -239,17 +239,17 @@ const EditPage = () => {
         </form>
       </Form>
 
-      <Button
+      {/* <Button
         onClick={() => {
           console.log(form.watch());
           console.log(form.formState.errors);
           console.log('error', Object.values(form.formState.errors).length > 0); //
           console.log(!form.formState.isDirty && deletePlaceIds.length === 0); // 폼이 변경되지 않았음
-          // console.log(form.formState.dirtyFields);
+          console.log(form.formState.dirtyFields);
         }}
       >
         체크
-      </Button>
+      </Button> */}
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">
