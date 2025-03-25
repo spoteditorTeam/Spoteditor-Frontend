@@ -12,13 +12,13 @@ const MainPageLogCardList = () => {
   const { data, isPending, isError } = useLogList({ page: Number(pageNumber) || 1 });
   const { content } = data ?? {};
 
-  const isDataReady = isPending || isError || !content;
+  const isDataReady = isPending || isError;
   const gridRows = content?.length ? Math.min(Math.floor(content.length / 4), 4) : 0;
 
   return (
     <div className="flex flex-col mb-[100px] web:mb-[140px]">
       <div
-        className={`web:grid web:grid-cols-4 web:grid-rows-${gridRows} web:gap-x-[15px] web:gap-y-10 web:mb-[50px]`}
+        className={`web:grid web:grid-cols-4 web:grid-rows-${gridRows} web:gap-x-[15px] web:gap-y-10 web:mb-[50px] space-y-[34px] web:space-y-0`}
       >
         {isDataReady
           ? [...Array(9)].map((_, idx) => (
@@ -35,6 +35,7 @@ const MainPageLogCardList = () => {
               );
             })}
       </div>
+
       <CustomPagination
         currentPage={Number(data?.pageNumber)}
         totalPages={Number(data?.totalPages)}
