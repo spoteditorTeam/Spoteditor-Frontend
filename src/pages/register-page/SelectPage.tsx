@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { HOME, REGISTER_SEARCH } from '@/constants/pathname';
-import OptionSection from '@/features/register-page/OptionSection';
+import OptionSelection from '@/features/register-page/OptionSelection';
 import RegisterBar from '@/features/register-page/RegisterBar';
 import { useRegisterStore } from '@/store/registerStore';
 import { Link, useNavigate } from 'react-router-dom';
@@ -23,8 +23,8 @@ const SelectPage = () => {
 
         {/* 선택지 */}
         <div className="flex flex-col gap-5 grow">
-          <OptionSection title="누구와" storeKey="selectedWhom" />
-          <OptionSection title="어떤 느낌으로" storeKey="selectedMoods" />
+          <OptionSelection title="누구와" storeKey="selectedWhom" />
+          <OptionSelection title="어떤 느낌으로" storeKey="selectedMoods" />
         </div>
       </main>
 
