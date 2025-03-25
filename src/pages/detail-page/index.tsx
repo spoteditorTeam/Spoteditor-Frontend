@@ -86,6 +86,7 @@ const DetailPage = () => {
               />
             )}
 
+            {/* 배너에 있는 버튼 */}
             <div>
               <div className="absolute flex flex-col top-4 left-4 space-y-2">
                 <div
@@ -145,7 +146,7 @@ const DetailPage = () => {
           {isDataReady ? (
             <Skeleton className="h-5 w-[400px]" />
           ) : (
-            <p className="text-primary-400 text-text-sm web:grow web:text-text-lg web:py-1.5">
+            <p className="text-light-400 text-text-sm web:grow web:text-text-lg web:py-1.5">
               {description}
             </p>
           )}
