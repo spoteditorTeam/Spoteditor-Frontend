@@ -13,9 +13,9 @@ import useUserBookmarkLogs from '@/hooks/queries/userLog/useUserBookmarkLogs';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import NotProfileData from '../NotProfileData';
 import SaveLogBookMarkButton from '@/features/profile/profileBookMark/SaveLogBookMarkButton';
 import { useLayoutEffect } from 'react';
+import ProfileFallbackMessage from '@/features/profile/fallback/ProfileFallbackMessage';
 
 function SavedLogs() {
   const { user } = useUser();
@@ -85,7 +85,7 @@ function SavedLogs() {
           </section>
         </>
       ) : (
-        <NotProfileData />
+        <ProfileFallbackMessage resourceName="로그" />
       )}
     </>
   );
