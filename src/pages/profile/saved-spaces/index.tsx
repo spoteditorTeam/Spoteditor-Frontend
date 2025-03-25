@@ -14,6 +14,7 @@ import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { useParams, useSearchParams } from 'react-router-dom';
 import NotProfileData from '../NotProfileData';
 import SavePlaceBookMarkButton from '@/features/profile/profileBookMark/SavePlaceBookMarkButton';
+import { useLayoutEffect } from 'react';
 
 function SavedSpaces() {
   const { user } = useUser();
@@ -24,11 +25,16 @@ function SavedSpaces() {
 
   const isMySaveSpaces = user?.userId === Number(userId);
 
-  const { data: myPlaceData, isPending: myPlacePending } = useUserBookmarkPlaces(
-    { page: Number(pageNumber) },
-    { enabled: isMySaveSpaces }
-  );
-  const { data: otherPlaceData, isPending: otherPlacePending } = useOtherUserBookmarkPlaces(
+  const {
+    data: myPlaceData,
+    isPending: myPlacePending,
+    refetch: myPlacesRefetch,
+  } = useUserBookmarkPlaces({ page: Number(pageNumber) }, { enabled: isMySaveSpaces });
+  const {
+    data: otherPlaceData,
+    isPending: otherPlacePending,
+    refetch: otherPlacesRefetch,
+  } = useOtherUserBookmarkPlaces(
     Number(userId),
     { page: Number(pageNumber) },
     { enabled: !isMySaveSpaces }
@@ -36,6 +42,13 @@ function SavedSpaces() {
 
   const data = isMySaveSpaces ? myPlaceData : otherPlaceData;
   const isPending = isMySaveSpaces ? myPlacePending : otherPlacePending;
+  const refetch = isMySaveSpaces ? myPlacesRefetch : otherPlacesRefetch;
+
+  useLayoutEffect(() => {
+    if (data) {
+      refetch();
+    }
+  }, [data, refetch]);
   return (
     <>
       {isPending ? (

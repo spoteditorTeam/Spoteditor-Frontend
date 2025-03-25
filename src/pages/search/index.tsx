@@ -70,17 +70,3 @@ function Search() {
 }
 
 export default Search;
-{
-  /* <div className="flex flex-col web:grid web:grid-cols-4 web:grid-rows-4 web:gap-x-[15px] web:gap-y-10">
-{content?.map((log: LogContent, idx: number) => {
-  const isLarge = idx === 2;
-
-  return (
-    <div key={idx} className={cn(isLarge && 'col-span-2 row-span-2')}>
-      <LogCard log={log} isLarge={isLarge} />
-    </div>
-  );
-})}
-</div>
-<MainPagination totalPages={totalPages} /> */
-}

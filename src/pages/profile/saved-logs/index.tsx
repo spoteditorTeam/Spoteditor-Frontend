@@ -15,6 +15,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import NotProfileData from '../NotProfileData';
 import SaveLogBookMarkButton from '@/features/profile/profileBookMark/SaveLogBookMarkButton';
+import { useLayoutEffect } from 'react';
 
 function SavedLogs() {
   const { user } = useUser();
@@ -25,18 +26,30 @@ function SavedLogs() {
 
   const isMySaveLogs = user?.userId === Number(userId);
 
-  const { data: mySaveLogsData, isPending: isMySaveLogsPending } = useUserBookmarkLogs(
-    { page: Number(pageNumber) },
-    { enabled: isMySaveLogs }
-  );
-  const { data: otherSaveLogsData, isPending: isOtherSaveLogsPending } = useOtherUserBookmarkLogs(
+  const {
+    data: mySaveLogsData,
+    isPending: isMySaveLogsPending,
+    refetch: myLogsRefetch,
+  } = useUserBookmarkLogs({ page: Number(pageNumber) }, { enabled: isMySaveLogs });
+  const {
+    data: otherSaveLogsData,
+    isPending: isOtherSaveLogsPending,
+    refetch: otherLogsRefetch,
+  } = useOtherUserBookmarkLogs(
     Number(userId),
     { page: Number(pageNumber) },
-    { enabled: !isMySaveLogs }
+    { enabled: !isMySaveLogs, staleTime: 0 }
   );
 
   const data = isMySaveLogs ? mySaveLogsData : otherSaveLogsData;
   const isPending = isMySaveLogs ? isMySaveLogsPending : isOtherSaveLogsPending;
+  const refetch = isMySaveLogs ? myLogsRefetch : otherLogsRefetch;
+
+  useLayoutEffect(() => {
+    if (data) {
+      refetch();
+    }
+  }, [data, refetch]);
 
   return (
     <>

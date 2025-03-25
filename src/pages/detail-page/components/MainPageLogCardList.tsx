@@ -3,10 +3,14 @@ import LogCard from '@/components/LogCard/LogCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import useLogList from '@/hooks/queries/log/useLogList';
 import { cn } from '@/lib/utils';
+import { useSearchParams } from 'react-router-dom';
 
 const MainPageLogCardList = () => {
-  const { data, isPending, isError } = useLogList();
-  const content = data?.content ?? [];
+  const [searchParams] = useSearchParams();
+  const pageNumber = searchParams.get('pageNumber');
+
+  const { data, isPending, isError } = useLogList({ page: Number(pageNumber) || 1 });
+  const { content } = data ?? {};
 
   const isDataReady = isPending || isError;
   const gridRows = content?.length ? Math.min(Math.floor(content.length / 4), 4) : 0;
@@ -32,7 +36,10 @@ const MainPageLogCardList = () => {
             })}
       </div>
 
-      <CustomPagination currentPage={data?.pageNumber ?? 1} totalPages={data?.totalPages ?? 1} />
+      <CustomPagination
+        currentPage={Number(data?.pageNumber)}
+        totalPages={Number(data?.totalPages)}
+      />
     </div>
   );
 };
