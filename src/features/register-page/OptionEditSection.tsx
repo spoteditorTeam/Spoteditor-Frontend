@@ -6,13 +6,13 @@ import { useRegisterStore } from '@/store/registerStore';
 import { useCallback } from 'react';
 import { useController, UseFormReturn } from 'react-hook-form';
 
-interface OptionSectionProps {
+interface OptionEditSectionProps {
   title: string;
   storeKey: 'selectedWhom' | 'selectedMoods';
-  form?: UseFormReturn<LogEditFormData>;
+  form: UseFormReturn<LogEditFormData>;
 }
 
-const OptionSection = ({ title, storeKey, form }: OptionSectionProps) => {
+const OptionEditSection = ({ title, storeKey, form }: OptionEditSectionProps) => {
   const { field } = useController({ name: 'tags' });
   const selectedTargetOptions = useRegisterStore((state) => state.experience[storeKey]);
   const setStoreTarget = useRegisterStore((state) =>
@@ -68,4 +68,4 @@ const OptionSection = ({ title, storeKey, form }: OptionSectionProps) => {
   );
 };
 
-export default OptionSection;
+export default OptionEditSection;

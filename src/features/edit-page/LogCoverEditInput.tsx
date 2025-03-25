@@ -36,15 +36,15 @@ const LogCoverEditInput = ({ name, control, form }: CoverImageInputProps) => {
         return (
           <>
             {/* 커버 이미지 */}
-            <div className="relative mb-3">
+            <div className="relative mb-3 w-full max-h-[300px]">
               {isUploading ? (
                 <Loading className="h-[300px]" />
               ) : (
                 imagePreview && (
                   <img
-                    src={imagePreview}
+                    src={imagePreview as string}
                     alt="커버 이미지"
-                    className="w-full aspect-[2/1] object-cover"
+                    className="w-full h-full object-cover"
                   />
                 )
               )}

@@ -1,6 +1,7 @@
 import api from '@/services/apis/api';
 import { Image, PresignUrlResponse } from '@/services/apis/types/registerAPI.type';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
+import { resizeImageToWebp } from '@/utils/resizeImageToWebp';
 import { useCallback, useReducer, useState } from 'react';
 
 interface ImagePreview {
@@ -122,12 +123,22 @@ function useImages(initialImages: Image[] = []) {
 
       try {
         setIsUploading(true);
-        const presignedUrls = await getPresignedUrls(newFiles); // presigned url 요청하고
+        // 이미지 리사이징
+        const resizedImages: File[] = await Promise.all(
+          newFiles.map(async (file) => {
+            const resizedFile = await resizeImageToWebp(file, null, null, 80, 'file');
+            if (resizedFile instanceof File) return resizedFile; // File 타입 보장
+            throw new Error('리사이즈된 파일이 File 타입이 아닙니다.');
+          })
+        );
 
+        // 리사이즈된 이미지 파일로 url 얻기
+        const presignedUrls = await getPresignedUrls(resizedImages); // presigned url 요청하고
+
+        // url로 이미지 등록하기
         await Promise.all(
-          // url로 이미지 등록하기
-          newFiles.map((img, idx) =>
-            api.register.uploadImageWithPresignUrl(presignedUrls[idx].preSignedUrl, img)
+          resizedImages.map((resizedFile, idx) =>
+            api.register.uploadImageWithPresignUrl(presignedUrls[idx].preSignedUrl, resizedFile)
           )
         );
 

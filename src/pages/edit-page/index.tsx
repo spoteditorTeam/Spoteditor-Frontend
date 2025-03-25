@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import LogCoverEditInput from '@/features/edit-page/LogCoverEditInput';
 import LogEditBar from '@/features/edit-page/LogEditBar';
 import PlaceEditFormItem from '@/features/edit-page/PlacEditFormItem';
-import OptionSection from '@/features/register-page/OptionSection';
+import OptionEditSection from '@/features/register-page/OptionEditSection';
 import useUpdateLogMutation from '@/hooks/mutations/log/useUpdateLogMutation';
 import useLog from '@/hooks/queries/log/useLog';
 import { cn } from '@/lib/utils';
@@ -233,8 +233,8 @@ const EditPage = () => {
 
           {/* 태그 */}
           <div className="flex flex-col gap-5 grow px-4">
-            <OptionSection title="누구와" storeKey="selectedWhom" form={form} />
-            <OptionSection title="하루 스타일" storeKey="selectedMoods" form={form} />
+            <OptionEditSection title="누구와" storeKey="selectedWhom" form={form} />
+            <OptionEditSection title="하루 스타일" storeKey="selectedMoods" form={form} />
           </div>
         </form>
       </Form>
