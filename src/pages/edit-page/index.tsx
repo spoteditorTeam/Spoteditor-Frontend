@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { MAPS } from '@/constants/pathname';
 import LogCoverEditInput from '@/features/edit-page/LogCoverEditInput';
 import LogEditBar from '@/features/edit-page/LogEditBar';
 import PlaceEditFormItem from '@/features/edit-page/PlacEditFormItem';
@@ -22,10 +21,10 @@ import { LogEditFormSchema } from '@/services/schemas/logSchema';
 import { useEditLogStore } from '@/store/editLogStore';
 import { useRegisterStore } from '@/store/registerStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CircleX, Plus } from 'lucide-react';
+import { CircleX } from 'lucide-react';
 import { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export interface LogEditFormData {
   title: string;
@@ -238,31 +237,12 @@ const EditPage = () => {
           </div>
 
           {/* 태그 */}
-          <div className="flex flex-col gap-5 grow px-4">
+          <div className="flex flex-col gap-5 grow px-4 py-5">
             <OptionSection title="누구와" storeKey="selectedWhom" form={form} />
             <OptionSection title="하루 스타일" storeKey="selectedMoods" form={form} />
           </div>
-
-          <div className="w-full px-4 py-5">
-            <Button variant={'outline'} className="w-full" type="button" asChild>
-              <Link to={MAPS}>
-                <Plus />
-                장소 추가
-              </Link>
-            </Button>
-          </div>
         </form>
       </Form>
-
-      <Button
-        onClick={() => {
-          console.log(form.watch());
-          console.log(form.formState.errors);
-          console.log(form.formState.dirtyFields);
-        }}
-      >
-        체크
-      </Button>
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">
