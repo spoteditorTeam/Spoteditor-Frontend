@@ -26,7 +26,7 @@ import { useLoginMoalStore } from '@/store/loginStore';
 import { copyUrlToClipboard } from '@/utils/copyUrlToClipboard';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { ArrowLeft, Bookmark, PencilLine, Share2 } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 const DetailPage = () => {
   /* hooks */
   const navi = useNavigate();
@@ -36,14 +36,14 @@ const DetailPage = () => {
   /* query */
   const numericPlaceLogId = Number(placeLogId);
   const { data: logData, isPending: isLogPending } = useLog(numericPlaceLogId);
-  const { data: LogBookmark } = useLogBookMark(numericPlaceLogId);
-  const { data: placeBookmark } = usePlaceBookMark(numericPlaceLogId);
+  const { data: LogBookmark, isPending: isLogBookmarkPending } = useLogBookMark(numericPlaceLogId);
+  const { data: placeBookmark, isPending: isPlaceBookmarkPending } =
+    usePlaceBookMark(numericPlaceLogId);
   const { data: user } = useAuth();
   const { openLoginModal } = useLoginMoalStore();
 
   /* state */
-  // const isDataReady = isLogPending || isPlaceBookmarkPending || isLogBookmarkPending;
-  const isDataReady = isLogPending;
+  const isDataReady = isLogPending || isPlaceBookmarkPending || isLogBookmarkPending;
 
   const name = logData?.name ?? '';
   const description = logData?.description ?? '';
@@ -88,7 +88,7 @@ const DetailPage = () => {
 
             {/* 배너에 있는 버튼 */}
             <div>
-              <div className="absolute flex flex-col top-4 left-4 space-y-2">
+              <div className="absolute flex flex-col top-4 left-2.5 web:left-4 space-y-2">
                 <div
                   className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-0 left-2.5 cursor-pointer z-10 hover:bg-white"
                   onClick={onClickBack}
@@ -96,7 +96,7 @@ const DetailPage = () => {
                   <ArrowLeft />
                 </div>
               </div>
-              <div className="absolute flex flex-col top-4 right-4 space-y-2">
+              <div className="absolute flex flex-col top-4 right-2.5 web:right-4 space-y-2">
                 <div
                   className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
                   onClick={onClickShare}
@@ -169,6 +169,7 @@ const DetailPage = () => {
         {/* 로그 북마크 버튼 */}
         <Button
           variant={'outline'}
+          fullRounded
           className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"
           onClick={onClickLogBookmark}
         >
@@ -180,9 +181,11 @@ const DetailPage = () => {
           <Button
             variant={'outline'}
             className="w-[45px] h-[45px] web:w-[60px] web:h-[60px] border-gray-200 rounded-full"
-            onClick={() => navi(`/log/${placeLogId}/placesCollection`)}
+            asChild
           >
-            <TableIcon className="!size-5 web:!size-7" />
+            <Link to={`/log/${placeLogId}/placesCollection`}>
+              <TableIcon className="!size-5 web:!size-7" />
+            </Link>
           </Button>
         ) : (
           <Dialog>
@@ -204,7 +207,7 @@ const DetailPage = () => {
                   <ModalLogCard
                     key={place.placeId}
                     place={place}
-                    isPlaceBookMark={placeBookmark?.[idx]?.isBookmarked ?? undefined}
+                    isPlaceBookMark={placeBookmark?.[idx]?.isBookmarked}
                     placeLogId={Number(logData?.placeLogId)}
                   />
                 ))}
