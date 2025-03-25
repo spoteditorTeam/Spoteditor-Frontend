@@ -14,7 +14,7 @@ const MainPageLogCardList = () => {
   return (
     <div className="flex flex-col mb-[100px] web:mb-[140px]">
       <div
-        className={`web:grid web:grid-cols-4 web:grid-rows-${gridRows} web:gap-x-[15px] web:gap-y-10 web:mb-[50px]`}
+        className={`web:grid web:grid-cols-4 web:grid-rows-${gridRows} web:gap-x-[15px] web:gap-y-10 web:mb-[50px] space-y-[34px] web:space-y-0`}
       >
         {isDataReady
           ? [...Array(9)].map((_, idx) => (
