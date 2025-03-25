@@ -37,13 +37,13 @@ export interface Log {
   originalFile: string; // "뉴첨성대"
   uuid: string; // "3d4c5aa1-07ce-45be-82d5-34005db77a6f"
   status: 'public' | 'private'; // "public"
-  tags: { name: string; category: 'WITH_WHOM' | 'MOOD' }[];
+  tags: Tag[];
   places: Place[]; // 여러 장소를 포함할 수 있음
 }
 
 export interface Tag {
   name: string;
-  category: 'WITH_WHOM';
+  category: 'WITH_WHOM' | 'MOOD';
 }
 
 // createLog response
@@ -65,7 +65,7 @@ export interface LogResponse {
   address: Address;
   status: 'public'; // 고정된 값
   views: number;
-  tags: [];
+  tags: Tag[];
   places: PlaceInLog[];
   userId: number;
 }
@@ -78,6 +78,8 @@ export type UpdateRequest = {
   uuid?: string;
   deletePlaceIds?: number[];
   addPlaces?: Place[];
+  addTags?: Tag[];
+  deleteTags?: Tag[];
   updatePlaces?: {
     id?: number;
     description?: string;

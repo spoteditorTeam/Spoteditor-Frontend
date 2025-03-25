@@ -3,7 +3,7 @@ import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useImagePreview from '@/hooks/useImagePreview';
-import { LogEditFormData } from '@/pages/edit-page/EditPage';
+import { LogEditFormData } from '@/pages/edit-page';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import {

@@ -1,39 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { HOME, REGISTER_SEARCH } from '@/constants/pathname';
+import OptionSection from '@/features/register-page/OptionSection';
 import RegisterBar from '@/features/register-page/RegisterBar';
 import { useRegisterStore } from '@/store/registerStore';
 import { Link, useNavigate } from 'react-router-dom';
-
-const WITH_WHOM = ['혼자', '친구랑', '연인과', '가족과', '동료와', '반려동물과'];
-const MOOD = [
-  'SNS 핫플레이스',
-  '체험 · 액티비티',
-  '자연과 함께',
-  '유명 관광지',
-  '여유롭게 힐링',
-  '미술관 · 갤러리',
-  '알차고 바쁘게!',
-  '역사가 물든',
-  '여행지',
-  '쇼핑',
-  '맛집투어',
-  '음악',
-  '페스티벌',
-  '독서하며 잔잔하게',
-  '모임 · 동호회 ',
-  '가성비 굿',
-];
 
 const SelectPage = () => {
   const navi = useNavigate();
   const companions = useRegisterStore((state) => state.experience.selectedWhom);
   const feelings = useRegisterStore((state) => state.experience.selectedMoods);
-
-  const setCompanions = useRegisterStore((state) => state.setCompanions);
-  const setFeelings = useRegisterStore((state) => state.setFeelings);
-
   const handleGoBack = () => navi(HOME);
-
   return (
     <div className="h-full flex flex-col px-4">
       <RegisterBar onClick={handleGoBack} />
@@ -47,40 +23,8 @@ const SelectPage = () => {
 
         {/* 선택지 */}
         <div className="flex flex-col gap-5 grow">
-          <div className="w-full">
-            <h5 className="text-text-sm font-bold py-2.5">누구와</h5>
-            <div className="flex gap-2 flex-wrap">
-              {WITH_WHOM.map((who, idx) => (
-                <Button
-                  key={idx}
-                  variant={companions.includes(who) ? 'default' : 'muted'}
-                  size={'m'}
-                  className="font-bold"
-                  onClick={() => setCompanions(who)}
-                >
-                  {who}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* 장소 */}
-          <div className="w-full">
-            <h5 className="text-text-sm font-bold py-2.5">어떤 느낌으로</h5>
-            <div className="flex gap-2 flex-wrap">
-              {MOOD.map((who, idx) => (
-                <Button
-                  key={idx}
-                  variant={feelings.includes(who) ? 'default' : 'muted'}
-                  size={'m'}
-                  className="font-bold"
-                  onClick={() => setFeelings(who)}
-                >
-                  {who}
-                </Button>
-              ))}
-            </div>
-          </div>
+          <OptionSection title="누구와" storeKey="selectedWhom" />
+          <OptionSection title="어떤 느낌으로" storeKey="selectedMoods" />
         </div>
       </main>
 

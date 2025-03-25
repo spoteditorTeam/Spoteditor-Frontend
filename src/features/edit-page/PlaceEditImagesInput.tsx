@@ -2,7 +2,7 @@ import { CameraIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useImages from '@/hooks/useImages';
-import { LogEditFormData } from '@/pages/edit-page/EditPage';
+import { LogEditFormData } from '@/pages/edit-page';
 import { isEqual } from 'lodash';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';

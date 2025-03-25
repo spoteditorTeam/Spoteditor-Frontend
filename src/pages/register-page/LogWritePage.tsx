@@ -39,7 +39,7 @@ const LogWritePage = () => {
 
   /* states */
   const selectedPlaces = useRegisterStore((state) => state.selectedPlaces);
-  const resetSelectedPlaces = useRegisterStore((state) => state.resetSelectedPlaces);
+  const resetSelectedPlaces = useRegisterStore((state) => state.clearAllSelections);
   const selectedWhom = useRegisterStore((state) => state.experience.selectedWhom);
   const selectedMoods = useRegisterStore((state) => state.experience.selectedMoods);
 

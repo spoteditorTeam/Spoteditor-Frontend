@@ -11,12 +11,12 @@ type RegisterStoreState = {
 };
 
 type RegisterStoreActions = {
-  setCompanions: (whom: string) => void;
-  setFeelings: (feeling: string) => void;
+  setWhom: (whom: string | string[]) => void;
+  setMood: (feeling: string | string[]) => void;
 
   addSelectedPlace: (place: kakao.maps.services.PlacesSearchResultItem) => void;
   removeSelectedPlace: (place: kakao.maps.services.PlacesSearchResultItem) => void;
-  resetSelectedPlaces: () => void;
+  clearAllSelections: () => void;
   moveUpSelectedPlace: (place: kakao.maps.services.PlacesSearchResultItem) => void;
   moveDownSelectedPlace: (place: kakao.maps.services.PlacesSearchResultItem) => void;
 };
@@ -33,25 +33,43 @@ export const useRegisterStore = create<RegisterStore>()((set) => ({
   recentSearchPlaces: [],
 
   // Actions
-  setCompanions: (whom) =>
-    set((state) => ({
-      experience: {
-        ...state.experience,
-        selectedWhom: state.experience.selectedWhom.includes(whom)
-          ? state.experience.selectedWhom.filter((item) => item !== whom)
-          : [...state.experience.selectedWhom, whom],
-      },
-    })),
+  setWhom: (whom: string | string[]) =>
+    set((state) => {
+      const updatedWhom = Array.isArray(whom) ? whom : [whom];
+      const newSelectedWhom = updatedWhom.reduce(
+        (acc, item) => {
+          if (acc.includes(item)) return acc.filter((i) => i !== item);
+          else return [...acc, item]; // 없으면 추가
+        },
+        [...state.experience.selectedWhom]
+      );
 
-  setFeelings: (feeling) =>
-    set((state) => ({
-      experience: {
-        ...state.experience,
-        selectedMoods: state.experience.selectedMoods.includes(feeling)
-          ? state.experience.selectedMoods.filter((item) => item !== feeling)
-          : [...state.experience.selectedMoods, feeling],
-      },
-    })),
+      return {
+        experience: {
+          ...state.experience,
+          selectedWhom: newSelectedWhom,
+        },
+      };
+    }),
+
+  setMood: (feeling: string | string[]) =>
+    set((state) => {
+      const updatedMoods = Array.isArray(feeling) ? feeling : [feeling];
+      const newSelectedMoods = updatedMoods.reduce(
+        (acc, item) => {
+          if (acc.includes(item)) return acc.filter((i) => i !== item);
+          else return [...acc, item];
+        },
+        [...state.experience.selectedMoods]
+      );
+
+      return {
+        experience: {
+          ...state.experience,
+          selectedMoods: newSelectedMoods,
+        },
+      };
+    }),
 
   addSelectedPlace: (place) =>
     set((state) => ({
@@ -66,7 +84,15 @@ export const useRegisterStore = create<RegisterStore>()((set) => ({
     set((state) => ({
       selectedPlaces: state.selectedPlaces.filter((item) => item.id !== place.id),
     })),
-  resetSelectedPlaces: () => set(() => ({ selectedPlaces: [] })),
+
+  clearAllSelections: () =>
+    set(() => ({
+      selectedPlaces: [],
+      experience: {
+        selectedWhom: [],
+        selectedMoods: [],
+      },
+    })),
 
   moveUpSelectedPlace: (place) =>
     set((state) => {
