@@ -62,8 +62,22 @@ function ProfileSetting() {
 
   const { mutate } = useUpdateUser();
 
-  /* 폼에 변경사항이 있을 때 페이지 이동이나 새로고침 시 경고창을 띄움 */
-  useUnsavedChangesWarning(form.formState.isDirty);
+  /* 폼 변경 여부를 비교하는 함수 */
+  const isChanged = useCallback(
+    (current: z.infer<typeof profileSettingSchema>) => {
+      return (
+        current.name !== user?.name ||
+        current.description !== user?.description ||
+        current.instagramId !== (user?.instagramId ?? '') ||
+        current.imageUrl !== (user?.profileImage.imageUrl ?? '') ||
+        !!file // 파일이 선택된 경우
+      );
+    },
+    [user, file]
+  );
+
+  /* 폼 변경 시 새로고침/페이지 이동 경고 띄우기 */
+  useUnsavedChangesWarning(form, isChanged);
 
   const onSubmit = async (data: z.infer<typeof profileSettingSchema>) => {
     const { name, description, imageUrl } = data;
