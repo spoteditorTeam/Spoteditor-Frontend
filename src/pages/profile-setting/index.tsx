@@ -48,7 +48,7 @@ const fetchPresignedUrl = async (file: File) => {
 function ProfileSetting() {
   const nav = useNavigate();
   const { user } = useUser('userOnly');
-  const { file } = useProfileStore();
+  const { file, clearFile } = useProfileStore();
 
   const form = useForm({
     resolver: zodResolver(profileSettingSchema),
@@ -112,6 +112,7 @@ function ProfileSetting() {
     }
     /* 저장 후 dirty 상태를 false로 변경하여 경고창이 뜨지 않도록 */
     form.reset(data);
+    clearFile();
   };
 
   const handleSaveClick = useCallback(() => {
