@@ -87,7 +87,7 @@ const router = createBrowserRouter([
       {
         element: <EditLayout />,
         errorElement: <NotFoundPage />,
-        children: [{ path: '/register/edit/:placeLogId', element: <EditPage /> }],
+        children: [{ path: '/edit/:placeLogId', element: <EditPage /> }],
       },
     ],
   },

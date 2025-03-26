@@ -51,6 +51,7 @@ const DetailPage = () => {
   const placebookmark = LogBookmark?.isBookmarked ?? false;
   const tags = logData?.tags;
   const isOwner = user?.userId === logData?.userId;
+  const isPrivate = logData?.status === 'private';
 
   /* mutatation */
   const { mutate: logBookmarkMutation } = useLogBookmarkMutation({
@@ -68,7 +69,7 @@ const DetailPage = () => {
   };
   const onClickBack = () => navi(-1);
   const onClickShare = () => copyUrlToClipboard();
-  const onClickPencil = () => navi(`/register/edit/${placeLogId}`);
+  const onClickPencil = () => navi(`/edit/${placeLogId}`);
 
   return (
     <>
@@ -116,6 +117,11 @@ const DetailPage = () => {
 
             <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient"></div>
             <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8">
+              {isPrivate && (
+                <span className="py-2 px-[14.5px] rounded-full bg-error-500 w-fit text-text-sm font-medium text-white my-1.5">
+                  비공개
+                </span>
+              )}
               <h3 className="text-lg web:text-2xl font-bold text-white">{name}</h3>
               <div className="flex gap-1 flex-wrap">
                 {tags?.map((item: Tag) => (

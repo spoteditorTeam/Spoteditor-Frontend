@@ -63,7 +63,7 @@ export interface LogResponse {
   description: string;
   image: Image;
   address: Address;
-  status: 'public'; // 고정된 값
+  status: 'public' | 'private'; // 고정된 값
   views: number;
   tags: Tag[];
   places: PlaceInLog[];
