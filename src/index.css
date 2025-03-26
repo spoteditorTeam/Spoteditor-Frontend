@@ -90,3 +90,15 @@ html {
   overflow-y: auto; /* 스크롤 가능하도록 설정 */
   padding-right: 4px; /* 콘텐츠와 스크롤바 사이의 간격 추가 */
 }
+
+/* 공지사항 상세페이지 마스킹 슬라이드 애니메이션 */
+.mask-slide {
+  -webkit-mask-image: linear-gradient(to right, black 50%, transparent 100%);
+  mask-image: linear-gradient(to right, black 50%, transparent 100%);
+  -webkit-mask-size: 200% 100%;
+  mask-size: 200% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0%;
+  mask-position: 100% 0%;
+}
