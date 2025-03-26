@@ -50,7 +50,7 @@ function Search() {
           <SearchNotFound />
         ) : (
           <>
-            <div className="flex flex-col gap-y-[34px] web:grid web:grid-cols-4 web:grid-rows-4 web:gap-x-[15px] web:gap-y-10 mt-6 web:mt-[50px]">
+            <div className="flex flex-col gap-y-[34px] web:grid web:grid-cols-4 web:gap-x-[15px] web:gap-y-10 mt-6 web:mt-[50px]">
               {data?.content?.map((log, idx: number) => {
                 const isLarge = idx === 2;
 

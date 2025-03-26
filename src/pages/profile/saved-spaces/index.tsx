@@ -12,9 +12,9 @@ import useOtherUserBookmarkPlaces from '@/hooks/queries/userLog/useOtherUserBook
 import useUserBookmarkPlaces from '@/hooks/queries/userLog/useUserBookmarkPlaces';
 import { getImgFromCloudFront } from '@/utils/getImgFromCloudFront';
 import { useParams, useSearchParams } from 'react-router-dom';
-import NotProfileData from '../NotProfileData';
 import SavePlaceBookMarkButton from '@/features/profile/profileBookMark/SavePlaceBookMarkButton';
 import { useLayoutEffect } from 'react';
+import ProfileFallbackMessage from '@/features/profile/fallback/ProfileFallbackMessage';
 
 function SavedSpaces() {
   const { user } = useUser();
@@ -82,7 +82,7 @@ function SavedSpaces() {
           </section>
         </>
       ) : (
-        <NotProfileData />
+        <ProfileFallbackMessage resourceName="장소" />
       )}
     </>
   );
