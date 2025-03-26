@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import { Notification } from '@/services/apis/types/notificationAPI';
 import { formatNotificationJSX } from '@/utils/notificationUtils';
 import { formatRelativeTime } from '@/utils/timeUtils';
-import { Link } from 'react-router-dom';
 
 interface NotificationItemProps extends Notification {
   readAsReadClick: () => void;
@@ -25,7 +24,6 @@ export default function NotificationItem({
     readAsReadClick();
   };
   console.log('userId', userId);
-
   return (
     <div
       key={id}
