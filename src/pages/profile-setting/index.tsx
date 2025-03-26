@@ -4,7 +4,6 @@ import AccountSettings from '@/features/profile-setting/AccountSettings';
 import ProfileSettingAvatar from '@/features/profile-setting/ProfileSettingAvatar';
 import ProfileSettingForm from '@/features/profile-setting/ProfileSettingForm/ProfileSettingForm';
 import SaveProfileButton from '@/features/profile-setting/SaveProfileButton';
-import useUnsavedChangesWarning from '@/hooks/form/useUnsavedChangesWarning';
 import useUpdateUser from '@/hooks/mutations/user/useUpdateUser';
 import useUser from '@/hooks/queries/user/useUser';
 import PageLayout from '@/layouts/PageLayout';
@@ -17,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import Resizer from 'react-image-file-resizer';
+import useUnsavedChangesWarning from '@/hooks/form/useUnsavedChangesWarning';
 
 export const resizeFile = (file: File): Promise<File> => {
   return new Promise((resolve) => {
@@ -61,7 +61,9 @@ function ProfileSetting() {
   });
 
   const { mutate } = useUpdateUser();
-  const { setIsFormDirty } = useUnsavedChangesWarning(form);
+
+  /* 폼에 변경사항이 있을 때 페이지 이동이나 새로고침 시 경고창을 띄움 */
+  useUnsavedChangesWarning(form.formState.isDirty);
 
   const onSubmit = async (data: z.infer<typeof profileSettingSchema>) => {
     const { name, description } = data;
@@ -84,7 +86,8 @@ function ProfileSetting() {
       originalFile: resizingFile.name,
       uuid: presignedUrl.uuid,
     });
-    setIsFormDirty(false);
+    /* 저장 후 dirty 상태를 false로 변경하여 경고창이 뜨지 않도록 */
+    form.reset(data);
   };
 
   const handleSaveClick = useCallback(() => {
