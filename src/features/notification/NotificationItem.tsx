@@ -27,8 +27,7 @@ export default function NotificationItem({
   console.log('userId', userId);
 
   return (
-    <Link
-      to={`/profile/${userId}`}
+    <div
       key={id}
       onClick={onReadClick}
       className={cn(
@@ -49,6 +48,6 @@ export default function NotificationItem({
           </time>
         </span>
       </figcaption>
-    </Link>
+    </div>
   );
 }
