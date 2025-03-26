@@ -66,26 +66,37 @@ function ProfileSetting() {
   useUnsavedChangesWarning(form.formState.isDirty);
 
   const onSubmit = async (data: z.infer<typeof profileSettingSchema>) => {
-    const { name, description } = data;
+    const { name, description, imageUrl } = data;
 
     const instagramId = data.instagramId.startsWith('@')
       ? data.instagramId
       : `@${data.instagramId}`;
 
-    if (!file) return;
-    const resizingFile = await resizeFile(file);
+    if (file) {
+      const resizingFile = await resizeFile(file);
 
-    const presignedUrl = await fetchPresignedUrl(resizingFile);
-    if (!presignedUrl) return;
-    await api.register.uploadImageWithPresignUrl(presignedUrl.preSignedUrl, resizingFile);
+      const presignedUrl = await fetchPresignedUrl(resizingFile);
+      if (!presignedUrl) {
+        console.log('프로필 이미지presignedUrl 실패');
+        return;
+      }
+      await api.register.uploadImageWithPresignUrl(presignedUrl.preSignedUrl, resizingFile);
 
-    mutate({
-      name,
-      description,
-      instagramId,
-      originalFile: resizingFile.name,
-      uuid: presignedUrl.uuid,
-    });
+      mutate({
+        name,
+        description,
+        instagramId,
+        originalFile: resizingFile.name ?? imageUrl,
+        uuid: presignedUrl.uuid,
+      });
+    } else {
+      mutate({
+        name,
+        description,
+        instagramId,
+      });
+    }
+
     /* 저장 후 dirty 상태를 false로 변경하여 경고창이 뜨지 않도록 */
     form.reset(data);
   };
