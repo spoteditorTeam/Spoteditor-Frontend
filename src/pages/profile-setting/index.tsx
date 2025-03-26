@@ -110,7 +110,6 @@ function ProfileSetting() {
         instagramId,
       });
     }
-
     /* 저장 후 dirty 상태를 false로 변경하여 경고창이 뜨지 않도록 */
     form.reset(data);
   };
@@ -121,19 +120,20 @@ function ProfileSetting() {
   }, [form, onSubmit]);
 
   const handleNavigation = () => {
-    nav(-1); // 이전 페이지로 이동
+    nav(`/profile/${user?.userId}/my-logs`);
   };
   return (
     <PageLayout>
       <div className="w-screen web:w-[661px] flex flex-col px-4 web:px-0">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full">
+          <form className="flex flex-col w-full">
             <ProfileSettingAvatar imageUrl={String(user?.profileImage.imageUrl)} />
             <p className="mt-8 mb-4 font-bold text-text-lg web:text-text-2xl">프로필 편집</p>
             <ProfileSettingForm />
             <AccountSettings />
             <section className="flex justify-between mt-[50px]">
               <Button
+                type="button"
                 onClick={handleNavigation}
                 variant="outline"
                 className="rounded-[6px] w-[120px] h-[42px]"
