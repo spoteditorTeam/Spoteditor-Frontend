@@ -60,7 +60,7 @@ export default function ProfileSettingAvatar({ imageUrl }: ProfileSettingAvatarP
         </button>
         <input
           type="file"
-          accept="image/*"
+          accept=".jpg,.jpeg,.png,.webp,.avif"
           id="imageUrl"
           ref={hiddenInputRef}
           onChange={handleFileChange}
