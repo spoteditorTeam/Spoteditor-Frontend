@@ -1,6 +1,5 @@
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLogBookMark from '@/hooks/queries/log/useLogBookMark';
-import useAuth from '@/hooks/queries/user/useAuth';
 import useResponsive from '@/hooks/useResponsive';
 import { cn } from '@/lib/utils';
 import { LogContent } from '@/services/apis/types/logAPI.type';
@@ -17,7 +16,6 @@ type LogCardProps = {
 };
 
 const LogCard = memo(({ isLarge, vertical, log }: LogCardProps) => {
-  const { data: userData } = useAuth();
   const navi = useNavigate();
   const { data } = useLogBookMark(Number(log?.placeLogId));
   const isBookmarked = data?.isBookmarked;

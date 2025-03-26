@@ -10,9 +10,8 @@ const MainPageLogCardList = () => {
   const pageNumber = searchParams.get('pageNumber');
 
   const { data, isPending, isError } = useLogList({ page: Number(pageNumber) || 1 });
-  const { content } = data ?? {};
-
   const isDataReady = isPending || isError;
+  const content = data?.content || [];
   const gridRows = content?.length ? Math.min(Math.floor(content.length / 4), 4) : 0;
 
   return (
