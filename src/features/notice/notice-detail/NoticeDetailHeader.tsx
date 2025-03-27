@@ -37,14 +37,14 @@ function NoticeDetailHeader({ title, time }: NoticeDetailHeaderProps) {
               exit={{ opacity: 0, maskPosition: '100% 0%' }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
             >
-              <h2 className="font-bold text-md">스팟에디터 ‘서비스 이용약관’ 변경에 대한 안내</h2>
+              <h2 className="font-bold text-md">{title}</h2>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
       <div className="w-full pt-[15px] px-4 flex flex-col justify-center items-start gap-1">
         <h2 className="font-bold text-md">{title}</h2>
-        <time className="text-text-xs text-primary-400">{time}</time>
+        <time className="text-text-xs text-primary-400 font-regular">{time}</time>
       </div>
     </>
   );
