@@ -19,6 +19,13 @@
 
 @font-face {
   font-family: 'Untitled Sans';
+  src: url('/fonts/untitled/test-untitled-sans-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Untitled Sans';
   src: url('/fonts/untitled/test-untitled-sans-light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
