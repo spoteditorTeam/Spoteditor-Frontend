@@ -46,7 +46,7 @@ function Search() {
           queryText="Popularity"
           className="pt-10 web:pt-[50px] gap-[3px] web:gap-[9px]"
         />
-        {data?.content.length === 0 ? (
+        {data?.content.length === 0 || !data ? (
           <SearchNotFound />
         ) : (
           <>
