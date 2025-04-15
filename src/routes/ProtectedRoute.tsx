@@ -1,11 +1,11 @@
 import { HOME } from '@/constants/pathname';
-import useAuth from '@/hooks/queries/user/useAuth';
+import useUser from '@/hooks/queries/user/useUser';
 import { useLoginMoalStore } from '@/store/loginStore';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = () => {
   const { openLoginModal } = useLoginMoalStore();
-  const { data: user } = useAuth();
+  const { data: user } = useUser();
 
   if (!user) {
     openLoginModal();

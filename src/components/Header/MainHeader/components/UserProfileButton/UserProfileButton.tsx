@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import MyProfileButton from './MyProfileButton';
 
 function UserProfileButton() {
-  const { user } = useUser();
+  const { data: user } = useUser();
   const textRef = useRef<HTMLSpanElement>(null);
   const [isTruncated, setIsTruncated] = useState(false);
 
