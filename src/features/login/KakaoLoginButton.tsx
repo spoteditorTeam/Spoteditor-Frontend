@@ -1,12 +1,17 @@
 import { Button } from '@/components/ui/button';
 import kakaoLoginButton from '@/assets/login/kakao-login-button.png';
 import { useNavigate } from 'react-router-dom';
+import api from '@/services/apis/api';
 
 export default function KakaoLoginButton() {
   const nav = useNavigate();
-  const handleLogin = () => {
+
+  const handleLogin = async () => {
     nav('/');
-    window.location.href = `${import.meta.env.VITE_KAKAO_LOGIN_URL}`;
+    const BASE_PATH =
+      window.location.hostname === 'localhost' ? 'https://localhost:5173' : window.location.origin;
+    window.location.href = `${import.meta.env.VITE_KAKAO_LOGIN_URL}?redirect=${BASE_PATH}`;
+    await api.user.getUser();
   };
   return (
     <Button variant={null} onClick={handleLogin} className="w-auto web:my-5 mobile:my-10">

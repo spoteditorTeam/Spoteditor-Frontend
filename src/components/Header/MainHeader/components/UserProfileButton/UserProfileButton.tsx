@@ -13,10 +13,13 @@ import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MyProfileButton from './MyProfileButton';
-import useUser from '@/hooks/queries/user/useUser';
+import { IUser } from '@/services/apis/types/userAPI';
 
-function UserProfileButton() {
-  const { user } = useUser();
+interface UserProfileButtonProps {
+  user: IUser;
+}
+
+function UserProfileButton({ user }: UserProfileButtonProps) {
   const textRef = useRef<HTMLSpanElement>(null);
   const [isTruncated, setIsTruncated] = useState(false);
 
