@@ -17,6 +17,7 @@ import MyProfileButton from './MyProfileButton';
 
 function UserProfileButton() {
   const { data: user } = useUser();
+
   const textRef = useRef<HTMLSpanElement>(null);
   const [isTruncated, setIsTruncated] = useState(false);
 

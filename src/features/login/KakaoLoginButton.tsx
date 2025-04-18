@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 export default function KakaoLoginButton() {
   const nav = useNavigate();
-  const handleLogin = () => {
+
+  const handleLogin = async () => {
     nav('/');
-    window.location.href = `${import.meta.env.VITE_KAKAO_LOGIN_URL}`;
+    const BASE_PATH = window.location.origin;
+    window.location.href = `${import.meta.env.VITE_KAKAO_LOGIN_URL}?redirect=${BASE_PATH}`;
   };
   return (
     <Button variant={null} onClick={handleLogin} className="w-auto web:my-5 mobile:my-10">
