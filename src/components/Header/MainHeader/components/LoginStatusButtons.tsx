@@ -10,7 +10,7 @@ function LoginStatusButtons() {
       {user ? (
         <>
           <NotificationButton />
-          <UserProfileButton user={user} />
+          <UserProfileButton />
         </>
       ) : (
         <LoginButton />
