@@ -9,17 +9,15 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import LogoutButton from '@/features/profile/LogoutButton';
+import useUser from '@/hooks/queries/user/useUser';
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MyProfileButton from './MyProfileButton';
-import { IUser } from '@/services/apis/types/userAPI';
 
-interface UserProfileButtonProps {
-  user: IUser;
-}
+function UserProfileButton() {
+  const { data: user } = useUser();
 
-function UserProfileButton({ user }: UserProfileButtonProps) {
   const textRef = useRef<HTMLSpanElement>(null);
   const [isTruncated, setIsTruncated] = useState(false);
 
@@ -60,9 +58,14 @@ function UserProfileButton({ user }: UserProfileButtonProps) {
             <SettingIcon />
             설정
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center justify-start gap-2 px-4 py-3 text-text-sm font-regular">
-            <HeadPhoneIcon />
-            문의하기
+          <DropdownMenuItem
+            asChild
+            className="flex items-center justify-start gap-2 px-4 py-3 text-text-sm"
+          >
+            <a href="https://tally.so/r/nrYJEo" target="_blank" rel="noopener noreferrer">
+              <HeadPhoneIcon />
+              문의하기
+            </a>
           </DropdownMenuItem>
         </div>
         <DropdownMenuSeparator />
