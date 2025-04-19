@@ -41,7 +41,7 @@ const dropboxVar: Variants = {
 };
 function CitySearchForm() {
   const nav = useNavigate();
-  const { position, checkPermission } = useGeolocationPermission();
+  const { permission, position, checkPermission } = useGeolocationPermission();
   const { address } = useLocationToAddress(position?.latitude ?? null, position?.longitude ?? null);
   const { isDropBox, sido, bname, openDropBox } = useCitySearchStore();
 
@@ -157,7 +157,7 @@ function CitySearchForm() {
           </AnimatePresence>
         </form>
       </Form>
-      <GeoConsentModal />
+      {permission !== 'granted' && <GeoConsentModal />}
     </>
   );
 }
