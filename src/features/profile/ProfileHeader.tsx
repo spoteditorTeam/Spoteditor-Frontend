@@ -9,6 +9,7 @@ import { Link, useParams } from 'react-router-dom';
 import FollowerListButton from '../follow/FollowerListButton';
 import FollowingListButton from '../follow/FollowingListButton';
 import ProfileFollowingButton from '../follow/ProfileFollowingButton';
+import userDefaultAvatar from '@/assets/profile/user-default-avatar.png';
 
 function ProfileHeader() {
   const { userId } = useParams();
@@ -31,7 +32,7 @@ function ProfileHeader() {
           <section>
             <Avatar className="w-[60px] h-[60px]">
               <AvatarImage
-                src={data?.profileImage.imageUrl}
+                src={data?.profileImage.imageUrl || userDefaultAvatar}
                 alt={`${data?.name}님의 프로필`}
                 className="object-cover object-center"
               />

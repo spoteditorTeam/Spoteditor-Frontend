@@ -20,7 +20,7 @@ const MainHero = () => {
   const { isWeb } = useResponsive();
   return (
     <>
-      <div className="web:z-20 bg-black px-4 py-[30px] gap-9 flex flex-col web:grid web:grid-cols-2 web:gap-[30px] web:px-[50px] web:py-10 relative">
+      <div className="web:z-20 bg-black px-4 py-[30px] gap-9 flex flex-col web:grid web:grid-cols-2 web:gap-[30px] web:px-[50px] web:py-10 relative box-content">
         <div className="flex flex-col justify-between web:justify-around ">
           <div className="text-white text-md font-medium web:text-xl pb-[25px]">
             반가워요! <br />
