@@ -46,6 +46,7 @@ module.exports = {
         primarySlate: '#ABAFB5',
 
         light: {
+          50: '#F5F5F6',
           100: '#E5E6E8',
           300: '#ABAFB5',
           400: '#81858F',

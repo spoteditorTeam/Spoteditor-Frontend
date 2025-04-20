@@ -1,7 +1,7 @@
 import { CameraIcon } from '@/components/Icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import useImages from '@/hooks/useImages';
+import useImagesUpload from '@/hooks/useImagesUpload';
 import { LogEditFormData } from '@/pages/edit-page';
 import { isEqual } from 'lodash';
 import { CircleX } from 'lucide-react';
@@ -23,7 +23,7 @@ const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) =>
     isUploading,
     presignedUrlObjs,
     removedImageIds, // 삭제된 기존 이미지 ID 리스트
-  } = useImages(field.value);
+  } = useImagesUpload(field.value);
   const handleRemove = (previewIdx: number, isNew: boolean) => handleRemoveImage(previewIdx, isNew);
 
   useEffect(() => {

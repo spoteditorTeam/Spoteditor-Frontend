@@ -2,7 +2,7 @@ import { CameraIcon } from '@/components/Icons';
 import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import useImagePreview from '@/hooks/useImagePreview';
+import useImageUpload from '@/hooks/useImageUpload';
 import { LogEditFormData } from '@/pages/edit-page';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
@@ -18,7 +18,7 @@ const LogCoverEditInput = ({ name, control, form }: CoverImageInputProps) => {
   const { field } = useController({ name, control });
   const storedFile = field.value && 'storedFile' in field.value ? field.value.storedFile : ''; // Image일때만 있음
   const { presignedUrlObj, imagePreview, handleFileChange, handleClearImage, isUploading } =
-    useImagePreview(storedFile);
+    useImageUpload(storedFile);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /* 이미지 변경되면 변경된 필드에 저장 */
