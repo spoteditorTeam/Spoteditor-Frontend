@@ -1,4 +1,3 @@
-import { SubtractIcon } from '@/components/Icons';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import useOtherUser from '@/hooks/queries/user/useOtherUser';
 import useUser from '@/hooks/queries/user/useUser';
@@ -25,7 +24,7 @@ export default function OtherUserProfileSection({ userId }: OtherUserProfileSect
           </Avatar>
           <div className="flex items-center gap-2">
             <p className="font-semibold text-text-sm">{data?.name}</p>
-            <SubtractIcon />
+            {/* <SubtractIcon /> */}
           </div>
         </Link>
         {userData && userData?.userId && !isMe && (
