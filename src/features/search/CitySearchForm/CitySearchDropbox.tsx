@@ -50,6 +50,10 @@ export default function CitySearchDropbox() {
 
           {isBnameDropBox && <BnameButtonList sido={sido} onSigunguClick={onBnameClick} />}
         </section>
+        <div
+          onClick={() => closeDropBox()}
+          className="fixed top-0 left-0 w-screen h-screen -z-10"
+        />
       </div>
     </>
   );
