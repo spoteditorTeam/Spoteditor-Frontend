@@ -85,7 +85,7 @@ const LogWritePage = () => {
             name="description"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="px-4 w-full">
+              <FormItem className="w-full">
                 <FormControl>
                   <Textarea
                     {...field}

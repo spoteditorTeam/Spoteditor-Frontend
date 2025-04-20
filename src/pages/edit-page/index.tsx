@@ -44,8 +44,6 @@ export interface PlaceItem {
   placeId: number;
   placeDescription?: string;
   photos?: Image[]; // 이미지 관련 정보를 객체로 관리
-  newPhotos?: PresignUrlResponse[];
-  deleteImageIds?: number[];
 }
 
 const EditPage = () => {
@@ -86,8 +84,6 @@ const EditPage = () => {
           placeId: item.placeId,
           placeDescription: item.description || '',
           photos: item.images,
-          newPhotos: [],
-          deleteImageIds: [],
         };
         return acc;
       }, {} as { [placeId: string]: PlaceItem });
@@ -143,9 +139,6 @@ const EditPage = () => {
         return {
           id: place.placeId, // 해당 장소의 ID
           description: place.placeDescription, // 장소 설명
-          deleteImageIds: place.deleteImageIds || [], // 삭제된 이미지 아이디들 (있다면)
-          originalFiles: place.newPhotos?.map((file) => file.originalFile) || [], // 새로운 파일들 (파일명만 저장)
-          uuids: place.newPhotos?.map((file) => file.uuid) || [], // presigned URL에 대응하는 UUID 목록
         };
       });
       if (updatedPlaces.length > 0) updateData.updatePlaces = updatedPlaces;
@@ -210,7 +203,7 @@ const EditPage = () => {
             name="description"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="px-4 w-full">
+              <FormItem className="w-full">
                 <FormControl>
                   <Textarea
                     {...field}
