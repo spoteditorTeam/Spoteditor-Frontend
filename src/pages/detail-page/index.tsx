@@ -207,7 +207,7 @@ const DetailPage = () => {
                 <DialogTitle className="text-text-2xl">소개된 장소</DialogTitle>
               </DialogHeader>
 
-              <div className="grid grid-cols-3 gap-x-[5px] gap-y-5 w-full h-[680px] overflow-y-auto scrollbar-hide py-[18px]">
+              <div className="grid grid-cols-3 gap-x-[5px] gap-y-5 w-full max-h-[calc(90vh-100px)] overflow-y-auto scrollbar-hide py-[18px] aspect-[1/1.5]">
                 {places.map((place: PlaceInLog, idx) => (
                   <ModalLogCard
                     key={place.placeId}
