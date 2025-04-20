@@ -1,6 +1,5 @@
 import { ConfirmDialog } from '@/components/Dialog/ConfirmDialog';
 import ModifyDrawer from '@/components/Drawer/ModifyDrawer';
-import { Button } from '@/components/ui/button';
 import { FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -113,9 +112,8 @@ const LogWritePage = () => {
             </div>
           </div>
         </form>
-
-        <Button onClick={() => console.log(form.formState.errors)}>확인</Button>
       </FormProvider>
+      {/* <Button onClick={() => console.log(form.formState.errors)}>확인</Button> */}
 
       {/* 버튼 */}
       <div className="pt-2 pb-3 px-4 ">

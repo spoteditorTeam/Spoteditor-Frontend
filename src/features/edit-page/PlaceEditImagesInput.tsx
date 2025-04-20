@@ -6,14 +6,14 @@ import { LogEditFormData } from '@/pages/edit-page';
 import { isEqual } from 'lodash';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { Controller, Path, useController, UseFormReturn } from 'react-hook-form';
+import { Controller, Path, useController, useFormContext } from 'react-hook-form';
 
 interface PlaceEditImagesInputProps {
-  form: UseFormReturn<LogEditFormData>;
   placeName: string;
 }
 
-const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) => {
+const PlaceEditImagesInput = ({ placeName }: PlaceEditImagesInputProps) => {
+  const { control, setValue, getValues } = useFormContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { field } = useController({ name: `places.${placeName}.photos` }); // 기존 이미지들 (Image)
   const {
@@ -27,17 +27,15 @@ const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) =>
   const handleRemove = (previewIdx: number, isNew: boolean) => handleRemoveImage(previewIdx, isNew);
 
   useEffect(() => {
-    form.setValue(`places.${placeName}.newPhotos`, presignedUrlObjs, { shouldDirty: true });
-    form.trigger(`places.${placeName}.newPhotos`);
-  }, [presignedUrlObjs, form, placeName]);
+    setValue(`places.${placeName}.newPhotos`, presignedUrlObjs, { shouldValidate: true });
+  }, [presignedUrlObjs, placeName]);
 
   useEffect(() => {
-    const currentValue = form.getValues(`places.${placeName}.deleteImageIds`);
+    const currentValue = getValues(`places.${placeName}.deleteImageIds`);
     if (!isEqual(currentValue, removedImageIds)) {
-      form.setValue(`places.${placeName}.deleteImageIds`, removedImageIds, { shouldDirty: true });
+      setValue(`places.${placeName}.deleteImageIds`, removedImageIds, { shouldValidate: true });
     }
-    form.trigger(`places.${placeName}.deleteImageIds`);
-  }, [removedImageIds, form, placeName]);
+  }, [removedImageIds, placeName]);
 
   return (
     <>
@@ -56,7 +54,7 @@ const PlaceEditImagesInput = ({ form, placeName }: PlaceEditImagesInputProps) =>
 
       <Controller
         name={`places.${placeName}.photos` as Path<LogEditFormData>}
-        control={form.control}
+        control={control}
         render={() => (
           <div className="flex overflow-x-auto mb-2.5">
             {/* 기존 이미지 */}

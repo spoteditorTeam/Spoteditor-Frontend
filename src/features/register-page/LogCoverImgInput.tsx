@@ -4,15 +4,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import useImageUpload from '@/hooks/useImageUpload';
 import { cn } from '@/lib/utils';
+import { LogEditFormData } from '@/pages/edit-page';
 import { LogWriteFormData } from '@/pages/register-page/LogWritePage';
 import { CircleX } from 'lucide-react';
 import { useEffect, useRef } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useController, useFormContext } from 'react-hook-form';
+interface LogCoverImgInputprops {
+  isEditMode?: boolean;
+}
+const LogCoverImgInput = ({ isEditMode }: LogCoverImgInputprops) => {
+  const { control, setValue, formState } = useFormContext<LogWriteFormData | LogEditFormData>();
+  const { field } = useController({ name: 'coverImgSrc', control });
+  const storedFile =
+    isEditMode && field.value && 'storedFile' in field.value ? field.value.storedFile : '';
 
-const LogCoverImgInput = () => {
-  const { control, setValue, formState } = useFormContext<LogWriteFormData>();
   const { presignedUrlObj, imagePreview, handleFileChange, handleClearImage, isUploading } =
-    useImageUpload();
+    useImageUpload(storedFile);
   const fileInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (presignedUrlObj) setValue('coverImgSrc', presignedUrlObj, { shouldValidate: true });
