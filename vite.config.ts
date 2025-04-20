@@ -9,13 +9,12 @@ export default ({ mode }: ConfigEnv) => {
 
   const isDevelop: boolean = env.VITE_DEVELOP === 'true';
   const isVercel: boolean = !!process.env.VERCEL; // Vercel 환경인지 확인
-  const isProduction = mode === 'production';
 
   return defineConfig({
     plugins: [
       react(),
-      isProduction &&
-        (stripImport as any)({
+      !isDevelop &&
+        stripImport({
           include: ['**/*.ts', '**/*.tsx'],
           functions: ['console.log', 'console.warn', 'console.debug', 'console.error'],
           debugger: true,
