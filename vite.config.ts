@@ -9,16 +9,18 @@ export default ({ mode }: ConfigEnv) => {
 
   const isDevelop: boolean = env.VITE_DEVELOP === 'true';
   const isVercel: boolean = !!process.env.VERCEL; // Vercel 환경인지 확인
+  const isProduction = mode === 'production';
 
   return defineConfig({
     plugins: [
       react(),
-      (stripImport as any)({
-        include: ['**/*.ts', '**/*.tsx'], // TypeScript 파일만 대상
-        functions: ['console.log', 'console.warn', 'console.debug'], // 제거할 함수들
-        debugger: true, // debugger 문도 제거
-      }),
-    ],
+      isProduction &&
+        (stripImport as any)({
+          include: ['**/*.ts', '**/*.tsx'],
+          functions: ['console.log', 'console.warn', 'console.debug', 'console.error'],
+          debugger: true,
+        }),
+    ].filter(Boolean),
     define: {
       global: {}, // 웹소켓 'global is not defined' 해결
     },

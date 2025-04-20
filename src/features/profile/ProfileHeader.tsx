@@ -11,6 +11,7 @@ import FollowingListButton from '../follow/FollowingListButton';
 import ProfileFollowingButton from '../follow/ProfileFollowingButton';
 
 function ProfileHeader() {
+  console.log('진짜 안 나오나');
   const { userId } = useParams();
   const { data: user, isLoading: userLoading } = useUser();
 
