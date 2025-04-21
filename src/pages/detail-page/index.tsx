@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import OtherUserProfileSection from '@/features/profile/OtherUserProfileSection';
+import LogAuthorInfo from '@/features/profile/LogAuthorInfo';
 import useLogBookmarkMutation from '@/hooks/mutations/log/useLogBookmarkMutation';
 import useLog from '@/hooks/queries/log/useLog';
 import useLogBookMark from '@/hooks/queries/log/useLogBookMark';
@@ -61,7 +61,7 @@ const DetailPage = () => {
 
   /* handlers */
   const onClickLogBookmark = () => {
-    if (LogBookmark === undefined) {
+    if (!user) {
       openLoginModal();
       return;
     }
@@ -90,22 +90,23 @@ const DetailPage = () => {
             {/* 배너에 있는 버튼 */}
             <div>
               <div className="absolute flex flex-col top-4 left-2.5 web:left-4 space-y-2">
-                <div className="icon-button top-0 left-2.5 " onClick={onClickBack}>
+                <button className="icon-button top-0 left-2.5 " onClick={onClickBack}>
                   <ArrowLeft size={20} />
-                </div>
+                </button>
               </div>
               <div className="absolute flex flex-col top-4 right-2.5 web:right-4 space-y-2">
-                <div className="icon-button top-[14px] right-2.5" onClick={onClickShare}>
+                <button className="icon-button top-[14px] right-2.5" onClick={onClickShare}>
                   <Share2 size={20} />
-                </div>
+                </button>
                 {isOwner && (
-                  <div className="icon-button top-[14px] right-2.5" onClick={onClickPencil}>
+                  <button className="icon-button top-[14px] right-2.5" onClick={onClickPencil}>
                     <PencilLine size={20} />
-                  </div>
+                  </button>
                 )}
               </div>
             </div>
 
+            {/* 제목란 */}
             <div className="absolute top-0 left-0 w-full h-full bg-cover-gradient"></div>
             <div className="flex flex-col absolute bottom-0 px-4 py-6 gap-2 web:px-[50px] web:py-8">
               {isPrivate && (
@@ -137,13 +138,13 @@ const DetailPage = () => {
       <div className="flex flex-col px-4 py-2.5 gap-[15px] web:px-[50px] web:py-5">
         <div className="web:grid web:grid-cols-[1fr_3fr] gap-5">
           {/* 프로필  */}
-          <OtherUserProfileSection userId={Number(logData?.userId)} />
+          <LogAuthorInfo userId={Number(logData?.userId)} />
 
           {/* 설명 */}
           {isDataReady ? (
             <Skeleton className="h-5 w-[400px]" />
           ) : (
-            <p className="text-light-400 text-text-sm web:grow web:text-text-lg web:py-1.5">
+            <p className="text-light-400 text-text-sm web:grow web:text-text-lg flex items-center">
               {description}
             </p>
           )}
