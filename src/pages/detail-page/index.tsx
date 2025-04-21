@@ -36,14 +36,14 @@ const DetailPage = () => {
   /* query */
   const numericPlaceLogId = Number(placeLogId);
   const { data: logData, isPending: isLogPending } = useLog(numericPlaceLogId);
-  const { data: LogBookmark, isPending: isLogBookmarkPending } = useLogBookMark(numericPlaceLogId);
-  const { data: placeBookmark, isPending: isPlaceBookmarkPending } =
-    usePlaceBookMark(numericPlaceLogId);
+  const { data: LogBookmark } = useLogBookMark(numericPlaceLogId);
+  const { data: placeBookmark } = usePlaceBookMark(numericPlaceLogId);
   const { data: user } = useUser();
   const { openLoginModal } = useLoginModalStore();
 
   /* state */
-  const isDataReady = isLogPending || isPlaceBookmarkPending || isLogBookmarkPending;
+  // const isDataReady = isLogPending || isPlaceBookmarkPending || isLogBookmarkPending;
+  const isDataReady = isLogPending;
 
   const name = logData?.name ?? '';
   const description = logData?.description ?? '';
@@ -90,26 +90,17 @@ const DetailPage = () => {
             {/* 배너에 있는 버튼 */}
             <div>
               <div className="absolute flex flex-col top-4 left-2.5 web:left-4 space-y-2">
-                <div
-                  className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-0 left-2.5 cursor-pointer z-10 hover:bg-white"
-                  onClick={onClickBack}
-                >
-                  <ArrowLeft />
+                <div className="icon-button top-0 left-2.5 " onClick={onClickBack}>
+                  <ArrowLeft size={20} />
                 </div>
               </div>
               <div className="absolute flex flex-col top-4 right-2.5 web:right-4 space-y-2">
-                <div
-                  className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
-                  onClick={onClickShare}
-                >
-                  <Share2 />
+                <div className="icon-button top-[14px] right-2.5" onClick={onClickShare}>
+                  <Share2 size={20} />
                 </div>
                 {isOwner && (
-                  <div
-                    className=" bg-white/70 border border-primary-100 rounded-full p-2.5 top-[14px] right-2.5 cursor-pointer z-10 hover:bg-white"
-                    onClick={onClickPencil}
-                  >
-                    <PencilLine />
+                  <div className="icon-button top-[14px] right-2.5" onClick={onClickPencil}>
+                    <PencilLine size={20} />
                   </div>
                 )}
               </div>
