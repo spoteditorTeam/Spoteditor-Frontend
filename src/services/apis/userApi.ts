@@ -54,7 +54,9 @@ export class OtherUserAPI {
       profileImage: {
         ...data.profileImage,
         imageUrl:
-          data.profileImage.imageId === null
+          data.profileImage.imageUrl === null
+            ? userDefaultAvatar
+            : data.profileImage.imageId === null
             ? data.profileImage.imageUrl
             : getImgFromCloudFront(data.profileImage.imageUrl),
       },
