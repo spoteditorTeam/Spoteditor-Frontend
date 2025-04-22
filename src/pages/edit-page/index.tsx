@@ -32,6 +32,7 @@ export interface LogEditFormData {
   coverImgSrc: Image | PresignUrlResponse | null;
   places: { [placeName: string]: PlaceItem } | null;
   tags: TagsItem | null;
+  status: 'public' | 'private';
 }
 
 export interface TagsItem {
@@ -68,6 +69,7 @@ const EditPage = () => {
       coverImgSrc: null,
       places: {},
       tags: null,
+      status: 'public',
     },
   });
 
@@ -94,6 +96,7 @@ const EditPage = () => {
         coverImgSrc: logData?.image,
         places: placesData,
         tags: { defaultTags: logData?.tags.map((tag) => tag.name), addTags: [], deleteTags: [] },
+        status: logData?.status,
       });
 
       return () => {
@@ -151,9 +154,13 @@ const EditPage = () => {
       if (addTags?.length) updateData.addTags = addTags;
       if (deleteTags?.length) updateData.deleteTags = deleteTags;
     }
+    if (dirtyFields.status) {
+      updateData.status = values.status;
+    }
     // updateData에 데이터가 있으면 한 번에 API 호출
     if (Object.keys(updateData).length > 0) {
       try {
+        console.log('>>>>>>>', updateData);
         await mutate({
           placeLogId: numbericPlaceLogId,
           data: updateData,
@@ -165,9 +172,9 @@ const EditPage = () => {
   };
   return (
     <div className="h-full flex flex-col">
-      <LogEditBar logTitle={form.watch('title')} />
-
       <FormProvider {...form}>
+        <LogEditBar logTitle={form.watch('title')} />
+
         <form
           className="flex flex-col items-center grow min-h-0 overflow-y-auto scrollbar-hide "
           onSubmit={form.handleSubmit(onSubmit)}
@@ -233,28 +240,34 @@ const EditPage = () => {
             <OptionEditSection title="하루 스타일" storeKey="selectedMoods" form={form} />
           </div>
         </form>
-      </FormProvider>
 
-      {/* 버튼 */}
-      <div className="pt-2 pb-3 px-4 ">
-        <ModifyDrawer />
-        <div className="grid grid-cols-2 gap-2.5">
-          <Button variant={'outline'} onClick={() => navi(-1)}>
-            취소
-          </Button>
+        {/* <Button
+          onClick={() =>
+            console.log(form.formState.errors, form.watch(), form.formState.dirtyFields)
+          }
+        >
+          확인용
+        </Button> */}
 
-          <ConfirmDialog
-            title="로그를 등록하시겠어요?"
-            showCheckbox={true}
-            checkboxLabel="비공개"
-            onConfirm={form.handleSubmit(onSubmit)}
-            disabled={
-              Object.values(form.formState.errors).length > 0 || // 에러가 있을때
-              (!form.formState.isDirty && deletePlaceIds.length === 0) // 폼이 변경되지 않았고 삭제된 것이 없을 때
-            }
-          />
+        {/* 버튼 */}
+        <div className="pt-2 pb-3 px-4 ">
+          <ModifyDrawer />
+          <div className="grid grid-cols-2 gap-2.5">
+            <Button variant={'outline'} onClick={() => navi(-1)}>
+              취소
+            </Button>
+
+            <ConfirmDialog
+              title="로그를 등록하시겠어요?"
+              onConfirm={form.handleSubmit(onSubmit)}
+              disabled={
+                Object.values(form.formState.errors).length > 0 || // 에러가 있을때
+                (!form.formState.isDirty && deletePlaceIds.length === 0) // 폼이 변경되지 않았고 삭제된 것이 없을 때
+              }
+            />
+          </div>
         </div>
-      </div>
+      </FormProvider>
     </div>
   );
 };
