@@ -28,6 +28,7 @@ export const LogWriteFormSchema = z.object({
     .max(500, '설명은 500자를 초과할 수 없습니다.'),
   coverImgSrc: PresignUrlSchema,
   places: z.array(PlaceSchema).min(1, '장소는 최소 1개 이상 입력해야 합니다.'),
+  status: z.enum(['public', 'private']).optional(),
 });
 
 export const LogEditFormSchema = z.object({
