@@ -15,7 +15,7 @@ const PlaceEditImagesInput = ({ placeName }: PlaceEditImagesInputProps) => {
       <Controller
         name={`places.${placeName}.photos` as Path<LogEditFormData>}
         render={() => (
-          <div className="flex overflow-x-auto mb-2.5 mt-[15px]">
+          <div className="flex overflow-x-auto scrollbar-hide mb-2.5 mt-[15px]">
             {imagePreviews.map((previewURL, previewIdx) => (
               <div className="relative m-1 shrink-0" key={previewIdx}>
                 <img

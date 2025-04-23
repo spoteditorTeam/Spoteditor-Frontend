@@ -56,6 +56,7 @@ const LogWritePage = () => {
 
   const onSubmit = async (values: LogWriteFormData) => {
     const formattedLog = format(values);
+    // console.log(formattedLog);
     const { status } = await logCreateMutation(formattedLog);
     if (status === 201) resetSelectedPlaces();
   };
@@ -98,7 +99,7 @@ const LogWritePage = () => {
             name="description"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="px-4 w-full">
                 <FormControl>
                   <Textarea
                     {...field}
@@ -125,7 +126,7 @@ const LogWritePage = () => {
             </div>
           </div>
         </form>
-        <Button onClick={() => console.log(form.formState.errors, form.watch())}>확인용</Button>
+        {/* <Button onClick={() => console.log(form.formState.errors, form.watch())}>확인용</Button> */}
 
         {/* 버튼 */}
         <div className="pt-2 pb-3 px-4 ">

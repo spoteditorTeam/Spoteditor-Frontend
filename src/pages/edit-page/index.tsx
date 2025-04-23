@@ -118,17 +118,21 @@ const EditPage = () => {
     const numbericPlaceLogId = Number(placeLogId);
     const updateData: UpdateRequest = {};
 
+    /* 제목 */
     if (dirtyFields.title) {
       updateData.name = values.title;
     }
+    /* 로그 설명 */
     if (dirtyFields.description) {
       updateData.description = values.description;
     }
+    /* 로그 커버 */
     if (dirtyFields.coverImgSrc) {
       const newCover = values.coverImgSrc as PresignUrlResponse;
       updateData.originalFile = newCover?.originalFile;
       updateData.uuid = newCover?.uuid;
     }
+    /* 장소 */
     if (dirtyFields.places) {
       const changedPlaces = Object.keys(dirtyFields.places).reduce((acc, placeName) => {
         acc[placeName] = {
@@ -146,21 +150,23 @@ const EditPage = () => {
       });
       if (updatedPlaces.length > 0) updateData.updatePlaces = updatedPlaces;
     }
+    /* 장소 삭제 */
     if (deletePlaceIds.length > 0) updateData.deletePlaceIds = deletePlaceIds;
+    /* 태그 */
     if (dirtyFields.tags) {
       const addTags = form.getValues('tags.addTags');
       const deleteTags = form.getValues('tags.deleteTags');
-
       if (addTags?.length) updateData.addTags = addTags;
       if (deleteTags?.length) updateData.deleteTags = deleteTags;
     }
+    /* 공개/비공개 */
     if (dirtyFields.status) {
       updateData.status = values.status;
     }
-    // updateData에 데이터가 있으면 한 번에 API 호출
+
     if (Object.keys(updateData).length > 0) {
       try {
-        console.log('>>>>>>>', updateData);
+        // console.log('>>>>>>>', updateData);
         await mutate({
           placeLogId: numbericPlaceLogId,
           data: updateData,
@@ -210,7 +216,7 @@ const EditPage = () => {
             name="description"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="px-4 w-full">
                 <FormControl>
                   <Textarea
                     {...field}
@@ -259,6 +265,7 @@ const EditPage = () => {
 
             <ConfirmDialog
               title="로그를 등록하시겠어요?"
+              triggerText="완료"
               onConfirm={form.handleSubmit(onSubmit)}
               disabled={
                 Object.values(form.formState.errors).length > 0 || // 에러가 있을때
