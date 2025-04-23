@@ -43,8 +43,7 @@ const PlaceImagesInput = ({ idx }: PlaceImagesInputProps) => {
           <div className="flex overflow-x-auto mb-2.5">
             {imagePreviews.map((previewObj, previewIdx) => (
               <div className="relative m-1 shrink-0" key={previewIdx}>
-                <Input
-                  type="image"
+                <img
                   src={previewObj.previewUrl}
                   alt="장소 이미지"
                   className="h-[300px] object-cover p-0 "
