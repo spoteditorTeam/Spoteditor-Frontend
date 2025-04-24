@@ -5,7 +5,7 @@ import MainHero from '@/features/home-page/MainHero';
 import TypingText from '@/features/home-page/TypingText';
 import { MoveUpRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import MainPageLogCardList from '../detail-page/components/MainPageLogCardList';
+import MainPageLogCardList from './components/MainPageLogCardList';
 
 const HomePage = () => {
   const navi = useNavigate();
